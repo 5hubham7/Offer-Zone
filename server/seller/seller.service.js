@@ -10,8 +10,6 @@ async function signup(params) {
         .auth()
         .createUserWithEmailAndPassword(params.email, params.password)
         .then(() => {
-            console.log("created user!");
-
             let user = firebase.auth().currentUser;
             let uid;
 
