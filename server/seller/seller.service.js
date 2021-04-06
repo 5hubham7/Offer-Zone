@@ -1,4 +1,4 @@
-const firebase = require("../config");
+const firebase = require("../firebaseConfig");
 const db = firebase.default.firestore();
 
 module.exports = { signup: signup };
