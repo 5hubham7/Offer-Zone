@@ -1,9 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { height } = Dimensions.get("screen");
 const { width } = Dimensions.get("screen").width;
-
-const height_logo = height * 0.3;
 
 const styles = StyleSheet.create({
     container: {

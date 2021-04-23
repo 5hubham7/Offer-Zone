@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -13,14 +13,14 @@ import Feather from "react-native-vector-icons/Feather";
 import axios from "axios";
 
 import { firebase } from "../helper/FirebaseConfig";
-import { AuthContext } from "../components/context/Store";
-import { CustomerLoginContext } from "../components/context/CustomerLoginContext";
-import CustomerForogtPassword from "../components/CustomerForgotPassword";
+import { AuthContext } from "./context/Store";
+import { LoginContext } from "./context/LoginContext";
+import ForogtPassword from "../components/ForgotPassword";
 import axiosURL from "../helper/AxiosURL";
-import styles from "../styles/CustomerLoginStyles";
+import styles from "../styles/LoginStyles";
 
-const CustomerLoginWithEmailInput = (navigation) => {
-    const [CustomerDetails, setCustomerDetails] = useState({
+const LoginWithEmail = (navigation) => {
+    const [userDetails, setUserDetails] = useState({
         email: "",
         password: "",
     });
@@ -36,7 +36,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
         isForogotPassword: false,
     });
     const { startLoading, stopLoading, signIn } = React.useContext(AuthContext);
-    const { goBack } = React.useContext(CustomerLoginContext);
+    const { goBack } = React.useContext(LoginContext);
 
     const handelEmailChange = (text) => {
         //console.log(text);
@@ -46,8 +46,8 @@ const CustomerLoginWithEmailInput = (navigation) => {
             setTrigger({ ...Trigger, isValidEmail: false });
         } else {
             setTrigger({ ...Trigger, isValidEmail: true });
-            setCustomerDetails({
-                ...CustomerDetails,
+            setUserDetails({
+                ...userDetails,
                 email: text,
             });
             //alert("Email is Correct");
@@ -56,8 +56,8 @@ const CustomerLoginWithEmailInput = (navigation) => {
 
     const handlePasswordChange = (val) => {
         if (val.trim().length >= 8) {
-            setCustomerDetails({
-                ...CustomerDetails,
+            setUserDetails({
+                ...userDetails,
                 password: val,
             });
             setTrigger({
@@ -76,7 +76,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
 
     const updateShowPassword = () => {
         setTrigger({ ...Trigger, showPassword: !Trigger.showPassword });
-        //console.log(CustomerDetails)
+        //console.log(userDetails)
     };
 
     const handleForgotPassword = () => {
@@ -89,7 +89,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then((response) => {
-                getCustomerData(response.user.uid);
+                getUserData(response.user.uid);
             })
             .catch((error) => {
                 stopLoading();
@@ -97,7 +97,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
             });
     };
 
-    const getCustomerData = (uid) => {
+    const getUserData = (uid) => {
         console.log(uid);
         console.log(`${axiosURL}/customer/getCustomerData/${uid}`);
         axios
@@ -123,7 +123,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
     return (
         <View>
             {Trigger.isForogotPassword ? (
-                <CustomerForogtPassword />
+                <ForogtPassword />
             ) : (
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Animatable.View animation="bounceIn" duration={1500}>
@@ -213,8 +213,8 @@ const CustomerLoginWithEmailInput = (navigation) => {
                             <TouchableOpacity
                                 onPress={() => {
                                     onContinuePress(
-                                        CustomerDetails.email,
-                                        CustomerDetails.password
+                                        userDetails.email,
+                                        userDetails.password
                                     );
                                 }}
                             >
@@ -228,7 +228,8 @@ const CustomerLoginWithEmailInput = (navigation) => {
                                             color="#fff"
                                             size={20}
                                         />
-                                        {"   "}Continue
+                                        {"  "}
+                                        Continue
                                     </Text>
                                 </LinearGradient>
                             </TouchableOpacity>
@@ -244,7 +245,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
                             ]}
                         >
                             <Text style={styles.signupTextColor}>
-                                Login with another method ?
+                                Login with another method?
                             </Text>
                             <TouchableOpacity onPress={() => goBack()}>
                                 <Text
@@ -253,7 +254,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
                                         { fontWeight: "bold", width: 100 },
                                     ]}
                                 >
-                                    {" "}
+                                    {"  "}
                                     Go Back
                                 </Text>
                             </TouchableOpacity>
@@ -274,7 +275,7 @@ const CustomerLoginWithEmailInput = (navigation) => {
                                     },
                                 ]}
                             >
-                                Forgot Password ?
+                                Forgotton password?
                             </Text>
                         </TouchableOpacity>
                     </Animatable.View>
@@ -284,4 +285,4 @@ const CustomerLoginWithEmailInput = (navigation) => {
     );
 };
 
-export default CustomerLoginWithEmailInput;
+export default LoginWithEmail;

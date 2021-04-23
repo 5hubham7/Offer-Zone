@@ -104,7 +104,7 @@ const OfferDetails = ({ navigation, route }) => {
                         <View>
                             <Text
                                 style={[
-                                    styles.offer_subTitle,
+                                    styles.offerSubtitle,
                                     { color: colors.text },
                                 ]}
                             >
@@ -118,7 +118,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: "#00BB84" },
                                     ]}
                                 >
-                                    Status :{" "}
+                                    Status :{"  "}
                                 </Text>
                                 <Text
                                     style={[
@@ -143,7 +143,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "green" },
                                             ]}
                                         >
-                                            Start Date :{" "}
+                                            Start Date :{"  "}
                                         </Text>
                                         <Text
                                             style={[
@@ -168,7 +168,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "red" },
                                             ]}
                                         >
-                                            End Date :{" "}
+                                            End Date :{"  "}
                                         </Text>
                                         <Text
                                             style={[
@@ -193,7 +193,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "#0063D6" },
                                             ]}
                                         >
-                                            Post Time :{" "}
+                                            Post Time :{"  "}
                                         </Text>
                                         <Text
                                             style={[
@@ -207,7 +207,8 @@ const OfferDetails = ({ navigation, route }) => {
                                             {dateFormatter(
                                                 route.params.offer_data.offer
                                                     .post_time
-                                            )}{" "}
+                                            )}
+                                            {"  "}
                                             ago
                                         </Text>
                                     </View>
@@ -247,7 +248,7 @@ const OfferDetails = ({ navigation, route }) => {
                         <View>
                             <Text
                                 style={[
-                                    styles.offer_subTitle,
+                                    styles.offerSubtitle,
                                     { color: colors.text },
                                 ]}
                             >
@@ -260,7 +261,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: colors.text },
                                     ]}
                                 >
-                                    Name :{" "}
+                                    Name :{"  "}
                                     <Text
                                         style={[
                                             styles.offerDetails,
@@ -282,7 +283,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: colors.text },
                                     ]}
                                 >
-                                    Address :{" "}
+                                    Address :{"  "}
                                     <Text
                                         style={[
                                             styles.offerDetails,
@@ -306,7 +307,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: colors.text },
                                             ]}
                                         >
-                                            Owner Name :{" "}
+                                            Owner Name :{"  "}
                                             <Text
                                                 style={[
                                                     styles.offerDetails,
@@ -328,7 +329,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: colors.text },
                                             ]}
                                         >
-                                            Phone :{" "}
+                                            Phone :{"  "}
                                             <Text
                                                 style={[
                                                     styles.offerDetails,
@@ -381,11 +382,12 @@ const OfferDetails = ({ navigation, route }) => {
                         <View>
                             <Text
                                 style={[
-                                    styles.offer_subTitle,
+                                    styles.offerSubtitle,
                                     { color: colors.text },
                                 ]}
                             >
-                                <FontAwesome5 name="map-marked-alt" size={18} />{" "}
+                                <FontAwesome5 name="map-marked-alt" size={18} />
+                                {"  "}
                                 Map
                             </Text>
                             <View style={{ alignItems: "center" }}>

@@ -53,7 +53,9 @@ const SelectRole = ({ navigation }) => {
                         <View>
                             <TouchableOpacity
                                 onPress={() =>
-                                    navigation.navigate("CustomerLogin")
+                                    navigation.navigate("Login", {
+                                        role: "Customer",
+                                    })
                                 }
                                 activeOpacity={0.6}
                             >
@@ -67,13 +69,16 @@ const SelectRole = ({ navigation }) => {
                                             color="#fff"
                                             size={20}
                                         />
-                                        {"   "}Customer
+                                        {"  "}
+                                        Customer
                                     </Text>
                                 </LinearGradient>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() =>
-                                    navigation.navigate("SellerLogin")
+                                    navigation.navigate("Login", {
+                                        role: "Seller",
+                                    })
                                 }
                                 activeOpacity={0.6}
                             >
@@ -87,7 +92,8 @@ const SelectRole = ({ navigation }) => {
                                             color="#fff"
                                             size={20}
                                         />
-                                        {"   "}Seller
+                                        {"  "}
+                                        Seller
                                     </Text>
                                 </LinearGradient>
                             </TouchableOpacity>

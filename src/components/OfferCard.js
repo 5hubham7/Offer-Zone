@@ -34,8 +34,8 @@ const wait = (timeout) => {
 
 const OfferCard = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
-    const [LikeDoubleTap, setDobleTap] = React.useState(null);
-    const [SaveList, setSaveList] = React.useState([]);
+    const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
+    const [saveList, setSaveList] = React.useState([]);
     const [offerDislike, setofferDislike] = React.useState(null);
     const { startLoading, stopLoading } = React.useContext(AuthContext);
 
@@ -67,7 +67,7 @@ const OfferCard = (props) => {
             //console.log(response)
             setUser(response);
         });
-        getCustomerData();
+        getUserData();
     }, []);
     const dateFormatter = (postdate) => {
         const today = new Date();
@@ -96,15 +96,15 @@ const OfferCard = (props) => {
         setRefreshing(true);
         //console.log(latitude, longitude)
         props.getOffers(props.location.latitude, props.location.longitude);
-        getCustomerData();
+        getUserData();
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
     const onDoubleTap = React.useCallback(
         (offer_id, User, latitude, longitude) => {
-            setDobleTap(offer_id);
+            setLikeDobleTap(offer_id);
             like(offer_id, User, latitude, longitude);
-            wait(2000).then(() => setDobleTap(null));
+            wait(2000).then(() => setLikeDobleTap(null));
         },
         []
     );
@@ -119,7 +119,7 @@ const OfferCard = (props) => {
             });
     };
 
-    const getCustomerData = () => {
+    const getUserData = () => {
         axios
             .get(`${axiosURL}/customer/getCustomerData/${User}`)
             .then((response) => {
@@ -146,7 +146,7 @@ const OfferCard = (props) => {
             .post(`${axiosURL}/customer/saveList/${offer_id}/${User}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    getCustomerData();
+                    getUserData();
                     notifyMessage("Offer Added to save list.");
                 }
             });
@@ -157,7 +157,7 @@ const OfferCard = (props) => {
             .post(`${axiosURL}/customer/removeList/${offer_id}/${User}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    getCustomerData();
+                    getUserData();
                     notifyMessage("Offer Deleted from save list.");
                 }
             });
@@ -253,7 +253,7 @@ const OfferCard = (props) => {
                                     </LinearGradient>
                                 </ImageBackground>
                             </View>
-                            {LikeDoubleTap == element.offer_id ? (
+                            {likeDoubleTap == element.offer_id ? (
                                 <Animatable.View
                                     animation="bounceIn"
                                     style={{ alignItems: "center" }}
@@ -304,7 +304,8 @@ const OfferCard = (props) => {
                                     {dateFormatter(element.post_time)} ago
                                 </Text>
                                 <Text style={styles.offerLikeCount}>
-                                    {numberWithCommas(element.likes.length)}{" "}
+                                    {numberWithCommas(element.likes.length)}
+                                    {"  "}
                                     Likes
                                 </Text>
                                 <View style={styles.lineStyle} />
@@ -377,7 +378,7 @@ const OfferCard = (props) => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={() => {
-                                            SaveList.includes(element.offer_id)
+                                            saveList.includes(element.offer_id)
                                                 ? removeOffer(element.offer_id)
                                                 : saveOffer(element.offer_id);
                                         }}
@@ -385,7 +386,7 @@ const OfferCard = (props) => {
                                             marginLeft: windowWidth * 0.08,
                                         }}
                                     >
-                                        {SaveList.includes(element.offer_id) ? (
+                                        {saveList.includes(element.offer_id) ? (
                                             <View
                                                 style={{ flexDirection: "row" }}
                                             >

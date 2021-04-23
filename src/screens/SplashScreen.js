@@ -2,6 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { View, StatusBar } from "react-native";
 import * as Animatable from "react-native-animatable";
+
 import RoleSelection from "../screens/RoleSelection";
 import styles from "../styles/SplashScreenStyles";
 

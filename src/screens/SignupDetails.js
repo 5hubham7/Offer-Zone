@@ -12,9 +12,10 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import styles from "../styles/SellerSignupStyles";
 import { AuthContext } from "../components/context/Store";
+import styles from "../styles/SignupStyles";
 
 try {
     firebase.initializeApp({
@@ -29,9 +30,8 @@ try {
     });
 } catch (err) {}
 
-const SellerDetails = ({ navigation, route }) => {
+const userDetails = ({ navigation, route }) => {
     const recaptchaVerifier = React.useRef(null);
-
     const firebaseConfig = firebase.apps.length
         ? firebase.app().options
         : undefined;
@@ -44,7 +44,7 @@ const SellerDetails = ({ navigation, route }) => {
     //         : undefined
     // );
 
-    const [sellerDetails, setSellerDetails] = useState({
+    const [userDetails, setuserDetails] = useState({
         firstName: "",
         lastName: "",
         phoneNo: "",
@@ -59,23 +59,23 @@ const SellerDetails = ({ navigation, route }) => {
     });
 
     const handelFirstNameChange = (val) => {
-        setSellerDetails({ ...sellerDetails, firstName: val });
+        setuserDetails({ ...userDetails, firstName: val });
     };
 
     const handelLastNameChange = (val) => {
-        setSellerDetails({ ...sellerDetails, lastName: val });
+        setuserDetails({ ...userDetails, lastName: val });
     };
 
     const handelPhoneNoChange = (val) => {
         if (val.trim().length == 10) {
-            setSellerDetails({ ...sellerDetails, phoneNo: val });
+            setuserDetails({ ...userDetails, phoneNo: val });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: false,
                 errorMessage: "",
             });
         } else {
-            setSellerDetails({ ...sellerDetails, phoneNo: "" });
+            setuserDetails({ ...userDetails, phoneNo: "" });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: true,
@@ -83,58 +83,60 @@ const SellerDetails = ({ navigation, route }) => {
             });
         }
     };
-
     const handelAddressChange = (val) => {
-        setSellerDetails({ ...sellerDetails, address: val });
+        setuserDetails({ ...userDetails, address: val });
     };
 
     const onContinuePress = async () => {
-        startLoading();
+        // startLoading();
+
         try {
+            const role = await AsyncStorage.getItem("userRole");
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
-                `+91${sellerDetails.phoneNo}`,
+                `+91${userDetails.phoneNo}`,
                 recaptchaVerifier.current
             );
-            const Id = verificationId;
+
+            const id = verificationId;
+
             const method = "Signup";
+
             const SignUpViaMethod = route.params.SignUpViaMethod;
 
             if (route.params.userCredential) {
-                const sellerData = {
+                const userData = {
                     email: route.params.userCredential.email,
                     password: route.params.userCredential.password,
-                    role: "Seller",
-                    name:
-                        sellerDetails.firstName + " " + sellerDetails.lastName,
-                    phone: `+91${sellerDetails.phoneNo}`,
-                    address: sellerDetails.address,
+                    role: role,
+                    name: userDetails.firstName + " " + userDetails.lastName,
+                    phone: `+91${userDetails.phoneNo}`,
+                    address: userDetails.address,
                 };
-                console.log(sellerData);
+                console.log(userData);
                 stopLoading();
-                alert("Verification code has been sent to your phone!");
-                navigation.navigate("SellerOTPVerification", {
-                    SellerData: sellerData,
-                    Id,
+                alert("Verification code has been sent to your phone.");
+                navigation.navigate("OTPVerification", {
+                    userData: userData,
+                    Id: id,
                     method,
                     SignUpViaMethod,
                 });
             } else if (route.params.result) {
-                const sellerData = {
+                const userData = {
                     email: route.params.result.user.email,
-                    role: "Seller",
-                    name:
-                        sellerDetails.firstName + " " + sellerDetails.lastName,
-                    phone: `+91${sellerDetails.phoneNo}`,
-                    address: sellerDetails.address,
+                    role: role,
+                    name: userDetails.firstName + " " + userDetails.lastName,
+                    phone: `+91${userDetails.phoneNo}`,
+                    address: userDetails.address,
                 };
                 const googleUser = route.params.result;
                 stopLoading();
-                console.log(sellerData);
-                alert("Verification code has been sent to your phone!");
-                navigation.navigate("SellerOTPVerification", {
-                    SellerData: sellerData,
-                    Id,
+                console.log(userData);
+                alert("Verification code has been sent to your phone.");
+                navigation.navigate("OTPVerification", {
+                    userData: userData,
+                    Id: id,
                     method,
                     SignUpViaMethod,
                     googleUser,
@@ -161,7 +163,7 @@ const SellerDetails = ({ navigation, route }) => {
             </TouchableOpacity>
             <View style={styles.header}>
                 <Animatable.View animation="fadeInLeftBig" duration={1500}>
-                    <Text style={styles.headerText}>Seller Details</Text>
+                    <Text style={styles.headerText}>Details</Text>
                 </Animatable.View>
             </View>
             <Animatable.View
@@ -231,7 +233,7 @@ const SellerDetails = ({ navigation, route }) => {
                             />
                         </View>
                         {Trigger.isValidPhoneNo ? (
-                            <Text style={styles.errorMsg}>
+                            <Text style={styles.errorMessage}>
                                 {Trigger.errorMessage}
                             </Text>
                         ) : null}
@@ -267,7 +269,8 @@ const SellerDetails = ({ navigation, route }) => {
                                     color="#fff"
                                     size={20}
                                 />
-                                {"   "}Continue
+                                {"  "}
+                                Continue
                             </Text>
                         </LinearGradient>
                     </TouchableOpacity>
@@ -277,4 +280,4 @@ const SellerDetails = ({ navigation, route }) => {
     );
 };
 
-export default SellerDetails;
+export default userDetails;

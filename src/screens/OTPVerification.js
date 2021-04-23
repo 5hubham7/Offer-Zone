@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     StatusBar,
     ScrollView,
+    Alert,
 } from "react-native";
 
 import * as Animatable from "react-native-animatable";
@@ -15,13 +16,15 @@ import * as firebase from "firebase";
 import axios from "axios";
 
 import { AuthContext } from "../components/context/Store";
-import { verificationContext } from "../components/context/VerificationContext";
-import SellerOTPInputBox from "../components/OTPInputBox";
+import { VerificationContext } from "../components/context/VerificationContext";
+import OTPInputBox from "../components/OTPInputBox";
 import TimerText from "../components/TimerText";
 import axiosURL from "../helper/AxiosURL";
-import styles from "../styles/SellerOTPVerificationStyles";
+import styles from "../styles/OTPVerificationStyles";
 
 const RESEND_OTP_TIME_LIMIT = 60; // 30 secs
+const AUTO_SUBMIT_OTP_TIME_LIMIT = 4; // 4 secs
+
 let resendOtpTimerInterval;
 
 // Initialize Firebase JS SDK
@@ -41,7 +44,7 @@ try {
     // ignore app already initialized error in snack
 }
 
-const SellerOTPVerification = ({ navigation, route }) => {
+const OTPVerification = ({ navigation, route }) => {
     // in secs, if value is greater than 0 then button will be disabled
     const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
         RESEND_OTP_TIME_LIMIT
@@ -52,9 +55,9 @@ const SellerOTPVerification = ({ navigation, route }) => {
     );
 
     // useEffect(() => {
-    //     console.log("SellerOTPVerification", route)
+    //     console.log("OTPVerification", route)
     // }, [])
-    const [AutoOTPEnter, setAutoOTPEnter] = useState(false);
+    const [autoOTPEnter, setAutoOTPEnter] = useState(false);
     const [verificationCode, setVerificationCode] = React.useState();
     const [verificationId, setVerificationId] = React.useState(route.params.Id);
     const recaptchaVerifier = React.useRef(null);
@@ -81,7 +84,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
         try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
-                route.params.SellerData.phone,
+                route.params.userData.phone,
                 recaptchaVerifier.current
             );
             setVerificationId(verificationId);
@@ -129,7 +132,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
 
                     firebase.auth().signOut();
                     const googleUser = route.params.googleUser;
-                    const SellerData = route.params.SellerData;
+                    const userData = route.params.userData;
 
                     // We need to register an Observer on Firebase Auth to make sure auth is initialized.
                     var unsubscribe = firebase
@@ -148,21 +151,21 @@ const SellerOTPVerification = ({ navigation, route }) => {
                                 .signInWithCredential(credential)
                                 .then((response) => {
                                     //console.log(response.user.uid)
-                                    let sellerData = {
+                                    let data = {
                                         id: response.user.uid,
-                                        role: SellerData.role,
-                                        name: SellerData.name,
-                                        email: SellerData.email,
-                                        phone: SellerData.phone,
-                                        address: SellerData.address,
+                                        role: userData.role,
+                                        name: userData.name,
+                                        email: userData.email,
+                                        phone: userData.phone,
+                                        address: userData.address,
                                     };
-                                    const data = firebase
+                                    const data2 = firebase
                                         .firestore()
                                         .collection("offer_zone_data")
                                         .doc(response.user.uid)
-                                        .set(sellerData);
-                                    if (data) {
-                                        signUp(sellerData.id, sellerData.name);
+                                        .set(data);
+                                    if (data2) {
+                                        signUp(data.id, data.name);
                                     }
                                 })
                                 .catch((err) => {
@@ -183,31 +186,31 @@ const SellerOTPVerification = ({ navigation, route }) => {
 
                     firebase.auth().signOut();
 
-                    const SellerData = route.params.SellerData;
+                    const userData = route.params.userData;
                     await firebase
                         .auth()
                         .createUserWithEmailAndPassword(
-                            SellerData.email,
-                            SellerData.password
+                            userData.email,
+                            userData.password
                         )
                         .then((response) => {
-                            let sellerData = {
+                            let data = {
                                 id: response.user.uid,
-                                role: SellerData.role,
-                                name: SellerData.name,
-                                email: SellerData.email,
-                                phone: SellerData.phone,
-                                address: SellerData.address,
+                                role: userData.role,
+                                name: userData.name,
+                                email: userData.email,
+                                phone: userData.phone,
+                                address: userData.address,
                             };
 
-                            const data = firebase
+                            const data2 = firebase
                                 .firestore()
                                 .collection("offer_zone_data")
                                 .doc(response.user.uid)
-                                .set(JSON.parse(JSON.stringify(sellerData)));
-                            if (data) {
-                                //console.log("sellerData", sellerData)
-                                signUp(sellerData.id, sellerData.name);
+                                .set(JSON.parse(JSON.stringify(data)));
+                            if (data2) {
+                                //console.log("userData", userData)
+                                signUp(data.id, data.name);
                             }
                         })
                         .catch((err) => {
@@ -227,7 +230,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
                 );
                 await firebase.auth().signInWithCredential(credential);
                 //console.log(userData.user.uid)
-                getSellerDataViaPhone(route.params.SellerData.phone);
+                getUserDataViaPhone(route.params.userData.phone);
                 //alert("Login successful 👍");
                 stopLoading();
             } catch (err) {
@@ -237,10 +240,10 @@ const SellerOTPVerification = ({ navigation, route }) => {
         }
     };
 
-    const getSellerDataViaPhone = (phone) => {
+    const getUserDataViaPhone = (phone) => {
         //console.log(phone)
         axios
-            .get(`${axiosURL}/seller/getSellerDataViaPhone/${phone}`)
+            .get(`${axiosURL}/customer/getCustomerDataViaPhone/${phone}`)
             .then((response) => {
                 //console.log(response.data)
                 if (response.data.status === 200) {
@@ -266,7 +269,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
     }, [resendButtonDisabledTime]);
 
     return (
-        <verificationContext.Provider value={authContext}>
+        <VerificationContext.Provider value={authContext}>
             <View style={styles.container}>
                 <StatusBar backgroundColor="#000" barStyle="light-content" />
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -281,7 +284,9 @@ const SellerOTPVerification = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <View style={styles.header}>
                     <Animatable.View animation="fadeInDownBig" duration={1500}>
-                        <Text style={styles.headerText}>Verification Code</Text>
+                        <Text style={styles.text_header}>
+                            Verification Code
+                        </Text>
                     </Animatable.View>
                 </View>
                 <Animatable.View
@@ -300,18 +305,18 @@ const SellerOTPVerification = ({ navigation, route }) => {
                             firebaseConfig={firebaseConfig}
                         />
                         <View style={{ flexDirection: "row" }}>
-                            <Text style={styles.footerText}>
-                                Please enter the verification code sent to{" "}
+                            <Text style={styles.text_footer}>
+                                Please enter the verification code sent to{"  "}
                                 <Text style={{ color: "red" }}>
-                                    {route.params.SellerData.phone}
+                                    {route.params.userData.phone}
                                 </Text>
                             </Text>
                         </View>
 
-                        {AutoOTPEnter ? (
-                            <SellerOTPInputBox data={"otp"} />
+                        {autoOTPEnter ? (
+                            <OTPInputBox data={"otp"} />
                         ) : (
-                            <SellerOTPInputBox data={[]} />
+                            <OTPInputBox data={[]} />
                         )}
                         <View>
                             <TouchableOpacity
@@ -377,7 +382,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
                     </ScrollView>
                 </Animatable.View>
             </View>
-        </verificationContext.Provider>
+        </VerificationContext.Provider>
     );
 };
-export default SellerOTPVerification;
+export default OTPVerification;

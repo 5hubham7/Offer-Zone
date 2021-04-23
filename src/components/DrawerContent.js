@@ -10,24 +10,40 @@ import {
     Switch,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { LinearGradient } from "expo-linear-gradient";
 
-import { AuthContext } from "./context/Store";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
+import axiosURL from "../helper/AxiosURL";
+import { AuthContext } from "../components/context/Store";
 import styles from "../styles/DrawerContentStyles";
 
 export function DrawerContent(props) {
-    const [userName, setuserName] = React.useState({
+    const [user, setUser] = React.useState({
         name: "",
+        role: "",
     });
 
+    const getUserData = (uid) => {
+        axios
+            .get(`${axiosURL}/customer/getCustomerData/${uid}`)
+            .then((response) => {
+                if (response.data.status === 200) {
+                    setUser({ ...user, role: response.data.response.role });
+                }
+            });
+    };
     React.useEffect(() => {
         setTimeout(async () => {
             let UserName;
             try {
                 UserName = await AsyncStorage.getItem("userName");
-                setuserName({ ...userName, name: UserName });
+                setUser({ ...user, name: UserName });
+                await AsyncStorage.getItem("userToken").then((response) => {
+                    getUserData(response);
+                });
             } catch (e) {
                 console.log(e);
             }
@@ -68,7 +84,7 @@ export function DrawerContent(props) {
                                         }}
                                     >
                                         <Title style={styles.title}>
-                                            {userName.name}
+                                            {user.name}
                                         </Title>
                                     </View>
                                 </View>
@@ -90,32 +106,38 @@ export function DrawerContent(props) {
                                 props.navigation.navigate("Home");
                             }}
                         />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="account-outline"
-                                    color={color}
-                                    size={size}
+                        {user.role === "Customer" ? (
+                            <View>
+                                <DrawerItem
+                                    icon={({ color, size }) => (
+                                        <Icon
+                                            name="account-outline"
+                                            color={color}
+                                            size={size}
+                                        />
+                                    )}
+                                    label="Profile"
+                                    onPress={() => {
+                                        props.navigation.navigate("profile");
+                                    }}
                                 />
-                            )}
-                            label="Profile"
-                            onPress={() => {
-                                props.navigation.navigate("profile");
-                            }}
-                        />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="plus-box-multiple-outline"
-                                    color={color}
-                                    size={size}
+                                <DrawerItem
+                                    icon={({ color, size }) => (
+                                        <Icon
+                                            name="plus-box-multiple-outline"
+                                            color={color}
+                                            size={size}
+                                        />
+                                    )}
+                                    label="Save Offer"
+                                    onPress={() => {
+                                        props.navigation.navigate(
+                                            "BookmarkScreen"
+                                        );
+                                    }}
                                 />
-                            )}
-                            label="Save Offer"
-                            onPress={() => {
-                                props.navigation.navigate("BookmarkScreen");
-                            }}
-                        />
+                            </View>
+                        ) : null}
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple

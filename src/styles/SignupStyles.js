@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         color: "#05375a",
         fontSize: 18,
     },
-    errorMsg: {
+    errorMessage: {
         color: "#FF0000",
         fontSize: 14,
         textAlign: "center",

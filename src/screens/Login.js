@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StatusBar } from "react-native";
 import * as Animatable from "react-native-animatable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { CustomerLoginContext } from "../components/context/CustomerLoginContext";
-import CustomerLoginButtons from "../components/CustomerLoginButtons";
-import CustomerLoginEmail from "../components/CustomerLoginEmail";
-import CustomerLoginPhone from "../components/CustomerLoginPhone";
-import styles from "../styles/SellerLoginStyles";
+import { LoginContext } from "../components/context/LoginContext";
+import LoginButtons from "../components/LoginButtons";
+import LoginEmail from "../components/LoginEmail";
+import LoginPhone from "../components/LoginPhone";
+import styles from "../styles/LoginStyles";
 import { AuthContext } from "../components/context/Store";
 import * as Google from "expo-google-app-auth";
 import { firebase } from "../helper/FirebaseConfig";
 
-const CustomerLogin = ({ navigation }) => {
+const Login = ({ navigation, route }) => {
     const initialState = {
         isEmailLogin: false,
         isPhoneLogin: false,
+    };
+
+    const setRole = async () => {
+        try {
+            await AsyncStorage.setItem("userRole", route.params.role);
+        } catch (error) {
+            alert("Application error.Try Again!");
+        }
     };
 
     const { startLoading, stopLoading, signIn } = React.useContext(AuthContext);
@@ -89,8 +98,14 @@ const CustomerLogin = ({ navigation }) => {
                     isEmailLogin: false,
                     isPhoneLogin: false,
                 };
+            case "SET_ROLE":
+                return setRole();
         }
     };
+
+    useEffect(() => {
+        dispatch({ type: "SET_ROLE" });
+    }, []);
 
     const [State, dispatch] = React.useReducer(StateReducer, initialState);
 
@@ -131,7 +146,7 @@ const CustomerLogin = ({ navigation }) => {
         []
     );
     return (
-        <CustomerLoginContext.Provider value={authContext}>
+        <LoginContext.Provider value={authContext}>
             <StatusBar backgroundColor="#000" barStyle="light-content" />
             <View style={styles.container}>
                 <LinearGradient
@@ -151,9 +166,9 @@ const CustomerLogin = ({ navigation }) => {
                 </LinearGradient>
                 <View>
                     <Animatable.View animation="fadeInLeftBig" duration={1500}>
-                        <Text style={styles.headerText}>Customer Login</Text>
+                        <Text style={styles.headerText}>Login</Text>
                         <Text style={[styles.headerTextMini, { fontSize: 24 }]}>
-                            Welcome Back!
+                            Welcome!
                         </Text>
                     </Animatable.View>
                 </View>
@@ -168,16 +183,16 @@ const CustomerLogin = ({ navigation }) => {
                     ]}
                 >
                     {State.isEmailLogin ? (
-                        <CustomerLoginEmail data={navigation} />
+                        <LoginEmail data={navigation} />
                     ) : State.isPhoneLogin ? (
-                        <CustomerLoginPhone data={navigation} />
+                        <LoginPhone data={navigation} />
                     ) : (
-                        <CustomerLoginButtons data={navigation} />
+                        <LoginButtons data={navigation} />
                     )}
                 </Animatable.View>
             </View>
-        </CustomerLoginContext.Provider>
+        </LoginContext.Provider>
     );
 };
 
-export default CustomerLogin;
+export default Login;

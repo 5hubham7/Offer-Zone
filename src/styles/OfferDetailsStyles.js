@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         borderColor: "#C8C8C8",
         marginTop: 10,
     },
-    offer_subTitle: {
+    offerSubtitle: {
         fontSize: 20,
         fontWeight: "bold",
         color: "#000",

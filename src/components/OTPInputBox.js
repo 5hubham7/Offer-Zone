@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, TextInput } from "react-native";
-import styles from "../styles/CustomerOTPVerificationStyles";
-import { verificationContext } from "../components/context/VerificationContext";
+
+import { VerificationContext } from "../components/context/VerificationContext";
+import styles from "../styles/OTPVerificationStyles";
+
 var otpArray = [];
 
 const OTPInputBox = (props) => {
@@ -12,7 +14,7 @@ const OTPInputBox = (props) => {
     //     console.log("OTPInputbox Veri", verificationContext)
     // }, [])
 
-    const { verifyOTP, setOTP } = React.useContext(verificationContext);
+    const { verifyOTP, setOTP } = React.useContext(VerificationContext);
 
     // TextInput refs to focus programmatically while entering OTP
     const firstTextInputRef = useRef(null);

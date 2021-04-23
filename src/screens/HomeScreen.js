@@ -34,14 +34,14 @@ const HomeScreen = ({ navigation }) => {
         latitude: "",
         longitude: "",
     });
-    const [errorMsg, setErrorMsg] = React.useState(null);
+    const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
-    const [EmailVerified, setEmailVerified] = React.useState(false);
-    const [OfferLike, setOfferLike] = React.useState({
+    const [emailVerified, setEmailVerified] = React.useState(false);
+    const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
-    const [CurrentOffers, setCurrentOffers] = React.useState([
+    const [currentOffers, setCurrentOffers] = React.useState([
         {
             data: "demo",
             likes: [1, 2, 3, 4],
@@ -114,14 +114,14 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         (async () => {
             if (Platform.OS === "android" && !Constants.isDevice) {
-                setErrorMsg(
+                setErrorMessage(
                     "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
                 );
                 return;
             }
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
-                setErrorMsg("Permission to access location was denied");
+                setErrorMessage("Permission to access location was denied");
                 return;
             }
 
@@ -190,7 +190,7 @@ const HomeScreen = ({ navigation }) => {
             </Animatable.View>
 
             <OfferCard
-                offerData={CurrentOffers}
+                offerData={currentOffers}
                 getOffers={getOffers}
                 navigation={navigation}
                 location={location}
@@ -201,7 +201,7 @@ const HomeScreen = ({ navigation }) => {
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />
 
             <Modal
-                isVisible={!EmailVerified}
+                isVisible={!emailVerified}
                 animationIn="slideInUp"
                 animationOut="bounceOut"
             >

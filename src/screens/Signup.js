@@ -7,16 +7,16 @@ import * as Google from "expo-google-app-auth";
 
 import { AuthContext } from "../components/context/Store";
 import { firebase } from "../helper/FirebaseConfig";
-import styles from "../styles/SellerSignupStyles";
-import SellerSignupEmail from "../components/SellerSignupEmail";
+import styles from "../styles/SignupStyles";
+import SignupEmail from "../components/SignupEmail";
 
-const SellerSignup = ({ navigation }) => {
-    const [SignUp, setSignUp] = useState({
+const Signup = ({ navigation }) => {
+    const [Signup, setSignup] = useState({
         isEmail: false,
     });
 
     const handelSignUpEmail = () => {
-        setSignUp({ ...SignUp, isEmail: true });
+        setSignup({ ...Signup, isEmail: true });
     };
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
@@ -35,7 +35,7 @@ const SellerSignup = ({ navigation }) => {
             if (result.type === "success") {
                 stopLoading();
                 const SignUpViaMethod = "Google";
-                navigation.navigate("SellerSignupDetails", {
+                navigation.navigate("SignupDetails", {
                     result,
                     SignUpViaMethod,
                 });
@@ -63,7 +63,7 @@ const SellerSignup = ({ navigation }) => {
                 .signInWithCredential(credential)
                 .then((response) => {
                     stopLoading();
-                    navigation.navigate("SellerSignupDetails", {
+                    navigation.navigate("SignupDetails", {
                         uid: response.user.uid,
                     });
                 })
@@ -91,7 +91,7 @@ const SellerSignup = ({ navigation }) => {
             </TouchableOpacity>
             <View style={styles.header}>
                 <Animatable.View animation="fadeInDownBig" duration={1500}>
-                    <Text style={styles.headerText}>Seller Signup</Text>
+                    <Text style={styles.headerText}>Signup</Text>
                 </Animatable.View>
             </View>
             <Animatable.View
@@ -104,7 +104,7 @@ const SellerSignup = ({ navigation }) => {
                     },
                 ]}
             >
-                {SignUp.isEmail == false ? (
+                {Signup.isEmail == false ? (
                     <View>
                         <View>
                             <TouchableOpacity
@@ -149,9 +149,7 @@ const SellerSignup = ({ navigation }) => {
                                 Already have an account?
                             </Text>
                             <TouchableOpacity
-                                onPress={() =>
-                                    navigation.navigate("SellerLogin")
-                                }
+                                onPress={() => navigation.navigate("Login")}
                             >
                                 <Text
                                     style={[
@@ -159,18 +157,18 @@ const SellerSignup = ({ navigation }) => {
                                         { fontWeight: "bold", width: 100 },
                                     ]}
                                 >
-                                    {" "}
+                                    {"  "}
                                     Log In
                                 </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 ) : (
-                    <SellerSignupEmail data={navigation} />
+                    <SignupEmail data={navigation} />
                 )}
             </Animatable.View>
         </View>
     );
 };
 
-export default SellerSignup;
+export default Signup;

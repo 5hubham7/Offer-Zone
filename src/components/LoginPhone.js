@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -14,10 +14,10 @@ import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 import axios from "axios";
 
-import { AuthContext } from "../components/context/Store";
-import { SellerLoginContext } from "../components/context/SellerLoginContext";
+import { AuthContext } from "./context/Store";
+import { LoginContext } from "./context/LoginContext";
 import axiosURL from "../helper/AxiosURL";
-import styles from "../styles/SellerLoginStyles";
+import styles from "../styles/LoginStyles";
 
 try {
     firebase.initializeApp({
@@ -34,8 +34,8 @@ try {
     // ignore app already initialized error in snack
 }
 
-const SellerLoginPhone = (navigation) => {
-    const [SellerDetails, setSellerDetails] = useState({
+const LoginPhone = (navigation) => {
+    const [userDetails, setUserDetails] = useState({
         phoneNo: "",
     });
 
@@ -50,41 +50,41 @@ const SellerLoginPhone = (navigation) => {
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
 
-    const { goBack } = React.useContext(SellerLoginContext);
+    const { goBack } = React.useContext(LoginContext);
 
     const handelPhoneChange = (text) => {
         if (text.length > 10 || text.length < 10) {
             setTrigger({ ...Trigger, isValidPhoneNo: false });
         } else {
             setTrigger({ ...Trigger, isValidPhoneNo: true });
-            setSellerDetails({
-                ...SellerDetails,
+            setUserDetails({
+                ...userDetails,
                 phoneNo: text,
             });
         }
     };
 
     const sendOTP = async () => {
-        if (SellerDetails.phoneNo.length !== 10) {
+        if (userDetails.phoneNo.length !== 10) {
             stopLoading();
             alert("Enter Valid Phone Number");
         } else {
             try {
                 const phoneProvider = new firebase.auth.PhoneAuthProvider();
                 const verificationId = await phoneProvider.verifyPhoneNumber(
-                    `+91${SellerDetails.phoneNo}`,
+                    `+91${userDetails.phoneNo}`,
                     recaptchaVerifier.current
                 );
-                const SellerData = {
-                    phone: `+91${SellerDetails.phoneNo}`,
+                const userData = {
+                    phone: `+91${userDetails.phoneNo}`,
                 };
 
                 const method = "Login";
                 const Id = verificationId;
                 stopLoading();
                 alert("Verification code has been sent to your phone.");
-                navigation.data.navigate("SellerOTPVerification", {
-                    SellerData,
+                navigation.data.navigate("OTPVerification", {
+                    userData: userData,
                     Id,
                     method,
                 });
@@ -99,7 +99,7 @@ const SellerLoginPhone = (navigation) => {
         try {
             axios
                 .get(
-                    `${axiosURL}/customer/getSellerDataViaPhone/+91${SellerDetails.phoneNo}`
+                    `${axiosURL}/customer/getCustomerDataViaPhone/+91${userDetails.phoneNo}`
                 )
                 .then((response) => {
                     if (
@@ -172,7 +172,8 @@ const SellerLoginPhone = (navigation) => {
                                         color="#fff"
                                         size={20}
                                     />
-                                    {"   "}Send OTP
+                                    {"  "}
+                                    Send OTP
                                 </Text>
                             </LinearGradient>
                         </TouchableOpacity>
@@ -197,7 +198,7 @@ const SellerLoginPhone = (navigation) => {
                                     { fontWeight: "bold", width: 100 },
                                 ]}
                             >
-                                {" "}
+                                {"  "}
                                 Go Back
                             </Text>
                         </TouchableOpacity>
@@ -208,4 +209,4 @@ const SellerLoginPhone = (navigation) => {
     );
 };
 
-export default SellerLoginPhone;
+export default LoginPhone;

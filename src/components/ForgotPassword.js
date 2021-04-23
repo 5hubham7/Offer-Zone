@@ -12,19 +12,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 
 import { firebase } from "../helper/FirebaseConfig";
-import { AuthContext } from "../components/context/Store";
-import { CustomerLoginContext } from "../components/context/CustomerLoginContext";
-import styles from "../styles/CustomerSignupStyles";
+import { AuthContext } from "./context/Store";
+import { LoginContext } from "./context/LoginContext";
+import styles from "../styles/SignupStyles";
 
-const CustomerForgotPassword = (navigation) => {
-    const [CustomerDetails, setCustomerDetails] = useState({
+const ForgotPassword = (navigation) => {
+    const [userDetails, setUserDetails] = useState({
         email: "",
     });
     const [Trigger, setTrigger] = useState({
         isValidEmail: false,
     });
     const { startLoading, stopLoading } = React.useContext(AuthContext);
-    const { goBack } = React.useContext(CustomerLoginContext);
+    const { goBack } = React.useContext(LoginContext);
 
     const handelEmailChange = (text) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -32,8 +32,8 @@ const CustomerForgotPassword = (navigation) => {
             setTrigger({ ...Trigger, isValidEmail: false });
         } else {
             setTrigger({ ...Trigger, isValidEmail: true });
-            setCustomerDetails({
-                ...CustomerDetails,
+            setUserDetails({
+                ...userDetails,
                 email: text,
             });
         }
@@ -42,7 +42,7 @@ const CustomerForgotPassword = (navigation) => {
     const handlePasswordReset = async () => {
         startLoading();
         try {
-            await firebase.auth().sendPasswordResetEmail(CustomerDetails.email);
+            await firebase.auth().sendPasswordResetEmail(userDetails.email);
             stopLoading();
             alert("Password reset email sent successfully!");
             goBack();
@@ -56,7 +56,7 @@ const CustomerForgotPassword = (navigation) => {
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Animatable.View animation="bounceIn" duration={1500}>
-                    <Text style={[styles.text_mini_header, { color: "#000" }]}>
+                    <Text style={[styles.headerTextMini, { color: "#000" }]}>
                         Forgot Password
                     </Text>
                     <View style={styles.InputBox}>
@@ -100,7 +100,8 @@ const CustomerForgotPassword = (navigation) => {
                                         name="paper-plane"
                                         color="#fff"
                                         size={20}
-                                    />{" "}
+                                    />
+                                    {"  "}
                                     Send Email
                                 </Text>
                             </LinearGradient>
@@ -126,7 +127,7 @@ const CustomerForgotPassword = (navigation) => {
                                     { fontWeight: "bold", width: 100 },
                                 ]}
                             >
-                                {" "}
+                                {"  "}
                                 Go Back
                             </Text>
                         </TouchableOpacity>
@@ -137,4 +138,4 @@ const CustomerForgotPassword = (navigation) => {
     );
 };
 
-export default CustomerForgotPassword;
+export default ForgotPassword;

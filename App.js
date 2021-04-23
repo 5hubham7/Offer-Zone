@@ -4,6 +4,7 @@ import {
     ActivityIndicator,
     StatusBar,
     TouchableOpacity,
+    LogBox,
 } from "react-native";
 import {
     NavigationContainer,
@@ -30,6 +31,10 @@ import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
+
+LogBox.ignoreLogs([
+    "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
+]);
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -144,6 +149,7 @@ const App = () => {
                 try {
                     await AsyncStorage.removeItem("userToken");
                     await AsyncStorage.removeItem("userName");
+                    await AsyncStorage.removeItem("userRole");
                     firebase
                         .auth()
                         .signOut()
@@ -192,7 +198,7 @@ const App = () => {
     return (
         <PaperProvider theme={theme}>
             <AuthContext.Provider value={authContext}>
-                <StatusBar backgroundColor="#2E2E2E" barStyle="light-content" />
+                <StatusBar backgroundColor="#000" barStyle="light-content" />
                 <NavigationContainer theme={theme}>
                     {State.userToken !== null ? (
                         <Drawer.Navigator
@@ -208,7 +214,6 @@ const App = () => {
                                 name="OfferDetails"
                                 component={OfferDetails}
                             />
-
                             {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
               <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
               <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
@@ -218,7 +223,12 @@ const App = () => {
                     )}
                 </NavigationContainer>
                 {State.isLoading ? (
-                    <View style={styles.loader}>
+                    <View
+                        style={styles.loader}
+                        onMagicTap={() => {
+                            dispatch({ type: "STOP_LOADING" });
+                        }}
+                    >
                         <TouchableOpacity
                             onPress={() => {
                                 dispatch({ type: "STOP_LOADING" });
