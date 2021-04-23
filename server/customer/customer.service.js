@@ -1,7 +1,24 @@
 const firebase = require("../firebaseConfig");
 const db = firebase.default.firestore();
 
-module.exports = { signup: signup };
+module.exports = { signup: signup, login: login };
+
+async function login(params) {
+    await firebase
+        .auth()
+        .signInWithEmailAndPassword(params.email, params.password)
+        .then(() => {
+            console.log("Login Successful!");
+        });
+    let user = await firebase.auth().currentUser;
+    let uid;
+
+    if (user != "") {
+        uid = user.uid;
+        console.log(uid);
+    }
+    return await user;
+}
 
 async function signup(params) {
     var userData = "";
@@ -17,8 +34,6 @@ async function signup(params) {
                 uid = user.uid;
                 console.log(uid);
             }
-
-            firebase.auth().signOut();
 
             let customerData = {
                 id: uid,

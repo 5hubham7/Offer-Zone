@@ -9,8 +9,9 @@ import {
 import * as Animatable from "react-native-animatable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
-import styles from "../styles/CustomerSignupStyles";
 import Feather from "react-native-vector-icons/Feather";
+
+import styles from "../styles/CustomerSignupStyles";
 
 const CustomerSignupEmail = (navigation) => {
     return (
@@ -119,11 +120,11 @@ const CustomerSignupEmail = (navigation) => {
                 </View>
                 <View
                     style={[
-                        styles.textPrivate,
+                        styles.loginText,
                         { marginLeft: 20, alignItems: "center" },
                     ]}
                 >
-                    <Text style={styles.loginText}>
+                    <Text style={styles.loginTextColor}>
                         Already have an account?
                     </Text>
                     <TouchableOpacity
@@ -137,7 +138,6 @@ const CustomerSignupEmail = (navigation) => {
                                 { fontWeight: "bold", width: 100 },
                             ]}
                         >
-                            {" "}
                             Log In
                         </Text>
                     </TouchableOpacity>

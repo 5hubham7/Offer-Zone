@@ -9,10 +9,11 @@ import {
 import * as Animatable from "react-native-animatable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
-import styles from "../styles/CustomerSignupStyles";
 import Feather from "react-native-vector-icons/Feather";
 
-const CustomerSignupEmail = (navigation) => {
+import styles from "../styles/SellerSignupStyles";
+
+const SellerSignupEmail = (navigation) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <Animatable.View animation="bounceIn" duration={1500}>
@@ -123,7 +124,7 @@ const CustomerSignupEmail = (navigation) => {
                         { marginLeft: 20, alignItems: "center" },
                     ]}
                 >
-                    <Text style={styles.loginText}>
+                    <Text style={styles.loginTextColor}>
                         Already have an account?
                     </Text>
                     <TouchableOpacity
@@ -135,7 +136,6 @@ const CustomerSignupEmail = (navigation) => {
                                 { fontWeight: "bold", width: 100 },
                             ]}
                         >
-                            {" "}
                             Log In
                         </Text>
                     </TouchableOpacity>
@@ -145,4 +145,4 @@ const CustomerSignupEmail = (navigation) => {
     );
 };
 
-export default CustomerSignupEmail;
+export default SellerSignupEmail;

@@ -1,7 +1,37 @@
 const firebase = require("../firebaseConfig");
 const db = firebase.default.firestore();
 
-module.exports = { signup: signup };
+module.exports = { signup: signup, login: login };
+
+let captcha = new firebase.auth.RecaptchaVerifier("sign-in-button", {
+    size: "invisible",
+    callback: (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
+    },
+});
+
+async function login(params) {
+    await firebase
+        .auth()
+        .signInWithEmailAndPassword(params.email, params.password)
+        .then(() => {
+            let confirmation = firebase.default
+                .auth()
+                .signInWithPhoneNumber("+918407969492", captcha);
+            console.log(confirmation);
+            console.log("Login Successful!");
+        });
+
+    let user = await firebase.auth().currentUser;
+    let uid;
+
+    if (user !== "") {
+        uid = user.uid;
+        console.log(uid);
+    }
+    return await user;
+}
 
 async function signup(params) {
     var userData = "";
@@ -17,8 +47,6 @@ async function signup(params) {
                 uid = user.uid;
                 console.log(uid);
             }
-
-            firebase.auth().signOut();
 
             let sellerData = {
                 id: uid,
