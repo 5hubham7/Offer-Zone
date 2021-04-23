@@ -31,6 +31,7 @@ try {
 
 const SellerDetails = ({ navigation, route }) => {
     const recaptchaVerifier = React.useRef(null);
+
     const firebaseConfig = firebase.apps.length
         ? firebase.app().options
         : undefined;
@@ -43,7 +44,7 @@ const SellerDetails = ({ navigation, route }) => {
     //         : undefined
     // );
 
-    const [SellerDetails, setSellerDetails] = useState({
+    const [sellerDetails, setSellerDetails] = useState({
         firstName: "",
         lastName: "",
         phoneNo: "",
@@ -58,23 +59,23 @@ const SellerDetails = ({ navigation, route }) => {
     });
 
     const handelFirstNameChange = (val) => {
-        setSellerDetails({ ...SellerDetails, firstName: val });
+        setSellerDetails({ ...sellerDetails, firstName: val });
     };
 
     const handelLastNameChange = (val) => {
-        setSellerDetails({ ...SellerDetails, lastName: val });
+        setSellerDetails({ ...sellerDetails, lastName: val });
     };
 
     const handelPhoneNoChange = (val) => {
         if (val.trim().length == 10) {
-            setSellerDetails({ ...SellerDetails, phoneNo: val });
+            setSellerDetails({ ...sellerDetails, phoneNo: val });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: false,
                 errorMessage: "",
             });
         } else {
-            setSellerDetails({ ...SellerDetails, phoneNo: "" });
+            setSellerDetails({ ...sellerDetails, phoneNo: "" });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: true,
@@ -82,60 +83,57 @@ const SellerDetails = ({ navigation, route }) => {
             });
         }
     };
+
     const handelAddressChange = (val) => {
-        setSellerDetails({ ...SellerDetails, address: val });
+        setSellerDetails({ ...sellerDetails, address: val });
     };
 
     const onContinuePress = async () => {
         startLoading();
-
         try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
-                `+91${SellerDetails.phoneNo}`,
+                `+91${sellerDetails.phoneNo}`,
                 recaptchaVerifier.current
             );
-
             const Id = verificationId;
-
             const method = "Signup";
-
             const SignUpViaMethod = route.params.SignUpViaMethod;
 
             if (route.params.userCredential) {
-                const SellerData = {
+                const sellerData = {
                     email: route.params.userCredential.email,
                     password: route.params.userCredential.password,
                     role: "Seller",
                     name:
-                        SellerDetails.firstName + " " + SellerDetails.lastName,
-                    phone: `+91${SellerDetails.phoneNo}`,
-                    address: SellerDetails.address,
+                        sellerDetails.firstName + " " + sellerDetails.lastName,
+                    phone: `+91${sellerDetails.phoneNo}`,
+                    address: sellerDetails.address,
                 };
-                console.log(SellerData);
+                console.log(sellerData);
                 stopLoading();
-                alert("Verification code has been sent to your phone.");
+                alert("Verification code has been sent to your phone!");
                 navigation.navigate("SellerOTPVerification", {
-                    SellerData,
+                    SellerData: sellerData,
                     Id,
                     method,
                     SignUpViaMethod,
                 });
             } else if (route.params.result) {
-                const SellerData = {
+                const sellerData = {
                     email: route.params.result.user.email,
                     role: "Seller",
                     name:
-                        SellerDetails.firstName + " " + SellerDetails.lastName,
-                    phone: `+91${SellerDetails.phoneNo}`,
-                    address: SellerDetails.address,
+                        sellerDetails.firstName + " " + sellerDetails.lastName,
+                    phone: `+91${sellerDetails.phoneNo}`,
+                    address: sellerDetails.address,
                 };
                 const googleUser = route.params.result;
                 stopLoading();
-                console.log(SellerData);
-                alert("Verification code has been sent to your phone.");
+                console.log(sellerData);
+                alert("Verification code has been sent to your phone!");
                 navigation.navigate("SellerOTPVerification", {
-                    SellerData,
+                    SellerData: sellerData,
                     Id,
                     method,
                     SignUpViaMethod,

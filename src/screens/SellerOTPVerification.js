@@ -125,9 +125,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
                         verificationId,
                         verificationCode
                     );
-                    const userData = await firebase
-                        .auth()
-                        .signInWithCredential(credential);
+                    await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
                     const googleUser = route.params.googleUser;
@@ -181,9 +179,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
                         verificationId,
                         verificationCode
                     );
-                    const userData = await firebase
-                        .auth()
-                        .signInWithCredential(credential);
+                    await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
 
@@ -229,9 +225,7 @@ const SellerOTPVerification = ({ navigation, route }) => {
                     verificationId,
                     verificationCode
                 );
-                const userData = await firebase
-                    .auth()
-                    .signInWithCredential(credential);
+                await firebase.auth().signInWithCredential(credential);
                 //console.log(userData.user.uid)
                 getSellerDataViaPhone(route.params.SellerData.phone);
                 //alert("Login successful 👍");

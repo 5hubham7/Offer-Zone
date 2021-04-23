@@ -100,9 +100,7 @@ const CustomerOTPVerification = ({ navigation, route }) => {
                         verificationId,
                         verificationCode
                     );
-                    const user = await firebase
-                        .auth()
-                        .signInWithCredential(credential);
+                    await firebase.auth().signInWithCredential(credential);
                     alert("Phone authentication successful 👍");
                 } catch (err) {
                     alert(`Error: ${err.message}`);
@@ -125,9 +123,7 @@ const CustomerOTPVerification = ({ navigation, route }) => {
                         verificationId,
                         verificationCode
                     );
-                    const userData = await firebase
-                        .auth()
-                        .signInWithCredential(credential);
+                    await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
                     const googleUser = route.params.googleUser;
@@ -184,9 +180,7 @@ const CustomerOTPVerification = ({ navigation, route }) => {
                         verificationId,
                         verificationCode
                     );
-                    const userData = await firebase
-                        .auth()
-                        .signInWithCredential(credential);
+                    await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
 
@@ -232,9 +226,7 @@ const CustomerOTPVerification = ({ navigation, route }) => {
                     verificationId,
                     verificationCode
                 );
-                const userData = await firebase
-                    .auth()
-                    .signInWithCredential(credential);
+                await firebase.auth().signInWithCredential(credential);
                 //console.log(userData.user.uid)
                 getCustomerDataViaPhone(route.params.CustomerData.phone);
                 //alert("Login successful 👍");

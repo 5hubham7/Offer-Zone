@@ -43,7 +43,7 @@ const CustomerDetails = ({ navigation, route }) => {
     //         : undefined
     // );
 
-    const [CustomerDetails, setCustomerDetails] = useState({
+    const [customerDetails, setCustomerDetails] = useState({
         firstName: "",
         lastName: "",
         phoneNo: "",
@@ -58,23 +58,23 @@ const CustomerDetails = ({ navigation, route }) => {
     });
 
     const handelFirstNameChange = (val) => {
-        setCustomerDetails({ ...CustomerDetails, firstName: val });
+        setCustomerDetails({ ...customerDetails, firstName: val });
     };
 
     const handelLastNameChange = (val) => {
-        setCustomerDetails({ ...CustomerDetails, lastName: val });
+        setCustomerDetails({ ...customerDetails, lastName: val });
     };
 
     const handelPhoneNoChange = (val) => {
         if (val.trim().length == 10) {
-            setCustomerDetails({ ...CustomerDetails, phoneNo: val });
+            setCustomerDetails({ ...customerDetails, phoneNo: val });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: false,
                 errorMessage: "",
             });
         } else {
-            setCustomerDetails({ ...CustomerDetails, phoneNo: "" });
+            setCustomerDetails({ ...customerDetails, phoneNo: "" });
             setTrigger({
                 ...Trigger,
                 isValidPhoneNo: true,
@@ -83,7 +83,7 @@ const CustomerDetails = ({ navigation, route }) => {
         }
     };
     const handelAddressChange = (val) => {
-        setCustomerDetails({ ...CustomerDetails, address: val });
+        setCustomerDetails({ ...customerDetails, address: val });
     };
 
     const onContinuePress = async () => {
@@ -92,55 +92,55 @@ const CustomerDetails = ({ navigation, route }) => {
         try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             const verificationId = await phoneProvider.verifyPhoneNumber(
-                `+91${CustomerDetails.phoneNo}`,
+                `+91${customerDetails.phoneNo}`,
                 recaptchaVerifier.current
             );
 
-            const Id = verificationId;
+            const id = verificationId;
 
             const method = "Signup";
 
             const SignUpViaMethod = route.params.SignUpViaMethod;
 
             if (route.params.userCredential) {
-                const CustomerData = {
+                const customerData = {
                     email: route.params.userCredential.email,
                     password: route.params.userCredential.password,
                     role: "Customer",
                     name:
-                        CustomerDetails.firstName +
+                        customerDetails.firstName +
                         " " +
-                        CustomerDetails.lastName,
-                    phone: `+91${CustomerDetails.phoneNo}`,
-                    address: CustomerDetails.address,
+                        customerDetails.lastName,
+                    phone: `+91${customerDetails.phoneNo}`,
+                    address: customerDetails.address,
                 };
-                console.log(CustomerData);
+                console.log(customerData);
                 stopLoading();
                 alert("Verification code has been sent to your phone.");
                 navigation.navigate("CustomerOTPVerification", {
-                    CustomerData,
-                    Id,
+                    CustomerData: customerData,
+                    Id: id,
                     method,
                     SignUpViaMethod,
                 });
             } else if (route.params.result) {
-                const CustomerData = {
+                const customerData = {
                     email: route.params.result.user.email,
                     role: "Customer",
                     name:
-                        CustomerDetails.firstName +
+                        customerDetails.firstName +
                         " " +
-                        CustomerDetails.lastName,
-                    phone: `+91${CustomerDetails.phoneNo}`,
-                    address: CustomerDetails.address,
+                        customerDetails.lastName,
+                    phone: `+91${customerDetails.phoneNo}`,
+                    address: customerDetails.address,
                 };
                 const googleUser = route.params.result;
                 stopLoading();
-                console.log(CustomerData);
+                console.log(customerData);
                 alert("Verification code has been sent to your phone.");
                 navigation.navigate("CustomerOTPVerification", {
-                    CustomerData,
-                    Id,
+                    CustomerData: customerData,
+                    Id: id,
                     method,
                     SignUpViaMethod,
                     googleUser,
