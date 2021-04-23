@@ -44,7 +44,7 @@ const SellerForgotPassword = (navigation) => {
         try {
             await firebase.auth().sendPasswordResetEmail(SellerDetails.email);
             stopLoading();
-            alert("Password reset email sent successfully");
+            alert("Password reset email sent successfully!");
             goBack();
         } catch (error) {
             stopLoading();
@@ -100,8 +100,8 @@ const SellerForgotPassword = (navigation) => {
                                         name="paper-plane"
                                         color="#fff"
                                         size={20}
-                                    />
-                                    {"   "}Send Email
+                                    />{" "}
+                                    Send Email
                                 </Text>
                             </LinearGradient>
                         </TouchableOpacity>
@@ -117,7 +117,7 @@ const SellerForgotPassword = (navigation) => {
                         ]}
                     >
                         <Text style={styles.loginTextColor}>
-                            Login with another method ?
+                            Login with another method?
                         </Text>
                         <TouchableOpacity onPress={() => goBack()}>
                             <Text
