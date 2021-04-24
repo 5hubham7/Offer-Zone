@@ -10,7 +10,6 @@ import {
     Switch,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,17 +20,15 @@ import { AuthContext } from "../components/context/Store";
 import styles from "../styles/DrawerContentStyles";
 
 export function DrawerContent(props) {
-    const [user, setUser] = React.useState({
-        name: "",
-        role: "",
-    });
+    const [userName, setUserName] = React.useState("");
+    const [userRole, setUserRole] = React.useState("");
 
     const getUserData = (uid) => {
         axios
             .get(`${axiosURL}/customer/getCustomerData/${uid}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    setUser({ ...user, role: response.data.response.role });
+                    setUserRole(response.data.response.role);
                 }
             });
     };
@@ -40,7 +37,7 @@ export function DrawerContent(props) {
             let UserName;
             try {
                 UserName = await AsyncStorage.getItem("userName");
-                setUser({ ...user, name: UserName });
+                setUserName(UserName);
                 await AsyncStorage.getItem("userToken").then((response) => {
                     getUserData(response);
                 });
@@ -84,7 +81,7 @@ export function DrawerContent(props) {
                                         }}
                                     >
                                         <Title style={styles.title}>
-                                            {user.name}
+                                            {userName}
                                         </Title>
                                     </View>
                                 </View>
@@ -106,7 +103,7 @@ export function DrawerContent(props) {
                                 props.navigation.navigate("Home");
                             }}
                         />
-                        {user.role === "Customer" ? (
+                        {userRole === "Customer" ? (
                             <View>
                                 <DrawerItem
                                     icon={({ color, size }) => (
