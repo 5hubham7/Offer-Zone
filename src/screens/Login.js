@@ -23,6 +23,7 @@ const Login = ({ navigation, route }) => {
     const setRole = async () => {
         try {
             await AsyncStorage.setItem("userRole", route.params.role);
+            console.log(route.params.role);
         } catch (error) {
             alert("Application error.Try Again!");
         }

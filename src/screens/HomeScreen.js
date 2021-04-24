@@ -86,6 +86,7 @@ const HomeScreen = ({ navigation }) => {
                 `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
             )
             .then((response) => {
+                // console.log(response);
                 if (response.data.status === 200) {
                     setCurrentOffers(response.data.response);
                     response.data.response.map((element) => {
@@ -121,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
             }
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
-                setErrorMessage("Permission to access location was denied");
+                setErrorMessage("Permission to access location was denied!");
                 return;
             }
 
@@ -137,14 +138,14 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Animatable.View
-                style={{ width: "100%", backgroundColor: "#000", height: 40 }}
+                style={{ width: "100%", backgroundColor: "#000", height: 50 }}
                 animation="fadeInRight"
             >
                 <Searchbar
-                    placeholder="Search Here ..."
+                    placeholder="Search Here..."
                     style={{
                         width: windowWidth * 0.9,
-                        height: 35,
+                        height: 40,
                         marginLeft: "auto",
                         marginRight: "auto",
                         borderRadius: 10,
@@ -208,12 +209,13 @@ const HomeScreen = ({ navigation }) => {
                 <View
                     style={{
                         backgroundColor: "#fff",
-                        height: windowHeight * 0.33,
+                        height: 230,
+                        borderRadius: 20,
                     }}
                 >
                     <LinearGradient
                         colors={["#0054E9", "#018CF0", "#00BEF6"]}
-                        style={{ height: windowHeight * 0.33 }}
+                        style={{ height: 230, borderRadius: 20 }}
                     >
                         <Text
                             style={{
@@ -231,7 +233,7 @@ const HomeScreen = ({ navigation }) => {
                                 fontSize: 16,
                                 textAlign: "center",
                                 color: "#fff",
-                                marginTop: 10,
+                                margin: 10,
                             }}
                         >
                             To verify your email, the verification link is send

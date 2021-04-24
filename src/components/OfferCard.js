@@ -33,6 +33,8 @@ const wait = (timeout) => {
 };
 
 const OfferCard = (props) => {
+    console.log(props.offerData);
+
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
     const [saveList, setSaveList] = React.useState([]);
@@ -96,6 +98,7 @@ const OfferCard = (props) => {
         setRefreshing(true);
         //console.log(latitude, longitude)
         props.getOffers(props.location.latitude, props.location.longitude);
+
         getUserData();
         wait(2000).then(() => setRefreshing(false));
     }, []);
@@ -184,7 +187,7 @@ const OfferCard = (props) => {
                     //setOfferDetails(response.data.response)
                     stopLoading();
                     props.navigation.navigate("OfferDetails", {
-                        offer_data: response.data.response,
+                        offerData: response.data.response,
                         location: props.location,
                     });
                 }

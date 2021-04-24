@@ -31,6 +31,7 @@ import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
+import MyOffers from "./src/screens/MyOffers";
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -38,6 +39,7 @@ LogBox.ignoreLogs([
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
+const MyOffersStack = createStackNavigator();
 
 const App = () => {
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -214,6 +216,10 @@ const App = () => {
                                 name="OfferDetails"
                                 component={OfferDetails}
                             />
+                            <Drawer.Screen
+                                name="MyOffers"
+                                component={MyOffersStackScreen}
+                            />
                             {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
               <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
               <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
@@ -256,8 +262,9 @@ const HomeStackScreen = ({ navigation }) => (
             headerTintColor: "#fff",
             headerTitleStyle: {
                 fontWeight: "bold",
-                width: "80%",
+                marginRight: 50,
                 textAlign: "center",
+                fontSize: 25,
             },
         }}
     >
@@ -266,6 +273,7 @@ const HomeStackScreen = ({ navigation }) => (
             component={HomeScreen}
             options={{
                 title: "Offer Zone",
+
                 headerLeft: () => (
                     <Icon.Button
                         name="ios-menu"
@@ -277,4 +285,37 @@ const HomeStackScreen = ({ navigation }) => (
             }}
         />
     </HomeStack.Navigator>
+);
+
+const MyOffersStackScreen = ({ navigation }) => (
+    <MyOffersStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                fontWeight: "bold",
+                marginRight: 50,
+                textAlign: "center",
+                fontSize: 25,
+            },
+        }}
+    >
+        <MyOffersStack.Screen
+            name="MyOffers"
+            component={MyOffers}
+            options={{
+                title: "My Offers",
+                headerLeft: () => (
+                    <Icon.Button
+                        name="ios-menu"
+                        size={30}
+                        backgroundColor="#000"
+                        onPress={() => navigation.openDrawer()}
+                    ></Icon.Button>
+                ),
+            }}
+        />
+    </MyOffersStack.Navigator>
 );

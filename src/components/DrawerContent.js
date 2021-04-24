@@ -137,7 +137,23 @@ export function DrawerContent(props) {
                                     }}
                                 />
                             </View>
-                        ) : null}
+                        ) : (
+                            <View>
+                                <DrawerItem
+                                    icon={({ color, size }) => (
+                                        <Icon
+                                            name="account-outline"
+                                            color={color}
+                                            size={size}
+                                        />
+                                    )}
+                                    label="My Offers"
+                                    onPress={() => {
+                                        props.navigation.navigate("MyOffers");
+                                    }}
+                                />
+                            </View>
+                        )}
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple

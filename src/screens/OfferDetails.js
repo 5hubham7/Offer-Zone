@@ -25,7 +25,7 @@ const OfferDetails = ({ navigation, route }) => {
     const [HideDetails, setHideDetails] = React.useState(false);
     const [HideShopDetails, setHideShopDetails] = React.useState(false);
     const dateFormatter = (postdate) => {
-        //console.log(route.params.offer_data)
+        //console.log(route.params.offerData)
         const today = new Date();
         const endDate = new Date(postdate);
         const days = parseInt((today - endDate) / (1000 * 60 * 60 * 24));
@@ -46,7 +46,7 @@ const OfferDetails = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            {route.params.offer_data !== null ? (
+            {route.params.offerData !== null ? (
                 <View>
                     <ImageBackground
                         source={{
@@ -76,7 +76,7 @@ const OfferDetails = ({ navigation, route }) => {
                                 </Animatable.View>
                             </TouchableOpacity>
                             <Text style={styles.imageTitle}>
-                                {route.params.offer_data.offer.offer_title}
+                                {route.params.offerData.offer.offerTitle}
                             </Text>
                         </LinearGradient>
                     </ImageBackground>
@@ -89,7 +89,7 @@ const OfferDetails = ({ navigation, route }) => {
                                     { color: colors.text },
                                 ]}
                             >
-                                {route.params.offer_data.offer.offer_title}
+                                {route.params.offerData.offer.offerTitle}
                             </Text>
                             <Text
                                 style={[
@@ -97,7 +97,7 @@ const OfferDetails = ({ navigation, route }) => {
                                     { color: colors.text },
                                 ]}
                             >
-                                {route.params.offer_data.offer.details}
+                                {route.params.offerData.offer.details}
                             </Text>
                         </View>
                         <View style={styles.lineStyle} />
@@ -131,7 +131,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         },
                                     ]}
                                 >
-                                    {route.params.offer_data.offer.status}
+                                    {route.params.offerData.offer.status}
                                 </Text>
                             </View>
                             {HideDetails ? (
@@ -155,7 +155,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             ]}
                                         >
                                             {dateFormat(
-                                                route.params.offer_data.offer
+                                                route.params.offerData.offer
                                                     .start_date,
                                                 "dddd, mmmm dS, yyyy"
                                             )}
@@ -180,7 +180,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             ]}
                                         >
                                             {dateFormat(
-                                                route.params.offer_data.offer
+                                                route.params.offerData.offer
                                                     .end_date,
                                                 "dddd, mmmm dS, yyyy"
                                             )}
@@ -205,7 +205,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             ]}
                                         >
                                             {dateFormatter(
-                                                route.params.offer_data.offer
+                                                route.params.offerData.offer
                                                     .post_time
                                             )}
                                             {"  "}
@@ -272,7 +272,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         ]}
                                         lineBreakMode="tail"
                                     >
-                                        {route.params.offer_data.shop_name}
+                                        {route.params.offerData.shop_name}
                                     </Text>
                                 </Text>
                             </View>
@@ -294,7 +294,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         ]}
                                         lineBreakMode="tail"
                                     >
-                                        {route.params.offer_data.shop_address}
+                                        {route.params.offerData.shop_address}
                                     </Text>
                                 </Text>
                             </View>
@@ -318,7 +318,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 ]}
                                                 lineBreakMode="tail"
                                             >
-                                                {route.params.offer_data.name}
+                                                {route.params.offerData.name}
                                             </Text>
                                         </Text>
                                     </View>
@@ -340,7 +340,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 ]}
                                                 lineBreakMode="tail"
                                             >
-                                                {route.params.offer_data.phone}
+                                                {route.params.offerData.phone}
                                             </Text>
                                         </Text>
                                     </View>
@@ -414,12 +414,11 @@ const OfferDetails = ({ navigation, route }) => {
                                                 longitude: 74.48754119873047,
                                             }}
                                             title={
-                                                route.params.offer_data
-                                                    .shop_name
+                                                route.params.offerData.shop_name
                                             }
                                             description={
-                                                route.params.offer_data.offer
-                                                    .offer_title
+                                                route.params.offerData.offer
+                                                    .offerTitle
                                             }
                                         />
                                         <Marker

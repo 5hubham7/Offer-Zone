@@ -52,10 +52,14 @@ const styles = StyleSheet.create({
     },
     cardView: {
         backgroundColor: "#DADADA",
-        borderRadius: 10,
+        borderRadius: 20,
         overflow: "hidden",
-        marginTop: 10,
-        marginBottom: 10,
+        margin: 10,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 2,
     },
     cardImageView: {
         height: windowHeight * 0.17,
