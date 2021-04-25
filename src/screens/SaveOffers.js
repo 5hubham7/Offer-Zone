@@ -12,13 +12,14 @@ import * as Animatable from "react-native-animatable";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../styles/HomeScreenStyles";
-import OfferCard from "../components/OfferCard";
+import SavedOfferCard from "../components/SavedOfferCard";
 import axiosURL from "../helper/AxiosURL";
+import { useTheme } from "@react-navigation/native";
 
 const SaveOffers = ({ navigation }) => {
-    const { colors } = useTheme();
 
     const [User, setUser] = React.useState(null);
+    const { colors } = useTheme();
 
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
@@ -65,15 +66,10 @@ const SaveOffers = ({ navigation }) => {
                     response.data.response.map((element) => {
                         data.push(element.offer_id);
                         options.push(false);
-                        //setOfferLike({ ...data })
                     });
-                    //console.log("final result", result)
-                    setOfferLike({ ...result });
                 }
             });
     };
-
-    const theme = useTheme();
 
     useEffect(() => {
         _retrieveData()
@@ -81,9 +77,9 @@ const SaveOffers = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <OfferCard
+            <SavedOfferCard
                 offerData={currentOffers}
-                getOffers={getOffers}
+                getSaveOffers={getSaveOffers}
                 navigation={navigation}
                 User={User}
             />

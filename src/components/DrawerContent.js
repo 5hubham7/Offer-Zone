@@ -13,6 +13,7 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -153,6 +154,19 @@ export function DrawerContent(props) {
                                 />
                             </View>
                         )}
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <FontAwesome5
+                                    name="list-alt"
+                                    color={color}
+                                    size={size}
+                                />
+                            )}
+                            label="Saved Offers"
+                            onPress={() => {
+                                props.navigation.navigate("SaveOffers");
+                            }}
+                        />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple

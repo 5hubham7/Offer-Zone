@@ -32,6 +32,7 @@ import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
 import MyOffers from "./src/screens/MyOffers";
+import SaveOffers from './src/screens/SaveOffers';
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -40,6 +41,7 @@ LogBox.ignoreLogs([
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
 const MyOffersStack = createStackNavigator();
+const SaveOffersStack = createStackNavigator();
 
 const App = () => {
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -220,9 +222,10 @@ const App = () => {
                                 name="MyOffers"
                                 component={MyOffersStackScreen}
                             />
-                            {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-              <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
+                            <Drawer.Screen
+                                name="SaveOffers"
+                                component={SaveOfferStackScreen}
+                            />
                         </Drawer.Navigator>
                     ) : (
                         <RootStackScreen />
@@ -318,4 +321,37 @@ const MyOffersStackScreen = ({ navigation }) => (
             }}
         />
     </MyOffersStack.Navigator>
+);
+
+const SaveOfferStackScreen = ({ navigation }) => (
+    <SaveOffersStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                fontWeight: "bold",
+                marginRight: 50,
+                textAlign: "center",
+                fontSize: 20,
+            },
+        }}
+    >
+        <SaveOffersStack.Screen
+            name="SaveOffers"
+            component={SaveOffers}
+            options={{
+                title: "Saved Offers",
+                headerLeft: () => (
+                    <Icon.Button
+                        name="ios-menu"
+                        size={30}
+                        backgroundColor="#000"
+                        onPress={() => navigation.openDrawer()}
+                    ></Icon.Button>
+                ),
+            }}
+        />
+    </SaveOffersStack.Navigator>
 );
