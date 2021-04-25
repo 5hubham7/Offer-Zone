@@ -264,7 +264,7 @@ const HomeStackScreen = ({ navigation }) => (
                 fontWeight: "bold",
                 marginRight: 50,
                 textAlign: "center",
-                fontSize: 25,
+                fontSize: 22,
             },
         }}
     >
@@ -272,7 +272,7 @@ const HomeStackScreen = ({ navigation }) => (
             name="Home"
             component={HomeScreen}
             options={{
-                title: "Offer Zone",
+                title: "OFFER ZONE",
 
                 headerLeft: () => (
                     <Icon.Button
@@ -298,7 +298,7 @@ const MyOffersStackScreen = ({ navigation }) => (
                 fontWeight: "bold",
                 marginRight: 50,
                 textAlign: "center",
-                fontSize: 25,
+                fontSize: 20,
             },
         }}
     >

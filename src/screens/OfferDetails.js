@@ -76,7 +76,7 @@ const OfferDetails = ({ navigation, route }) => {
                                 </Animatable.View>
                             </TouchableOpacity>
                             <Text style={styles.imageTitle}>
-                                {route.params.offerData.offer.offerTitle}
+                                {route.params.offerData.offer.offer_title}
                             </Text>
                         </LinearGradient>
                     </ImageBackground>
@@ -89,7 +89,7 @@ const OfferDetails = ({ navigation, route }) => {
                                     { color: colors.text },
                                 ]}
                             >
-                                {route.params.offerData.offer.offerTitle}
+                                {route.params.offerData.offer.offer_title}
                             </Text>
                             <Text
                                 style={[
@@ -418,7 +418,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             }
                                             description={
                                                 route.params.offerData.offer
-                                                    .offerTitle
+                                                    .offer_title
                                             }
                                         />
                                         <Marker

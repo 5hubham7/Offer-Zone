@@ -33,7 +33,6 @@ const wait = (timeout) => {
 };
 
 const OfferCard = (props) => {
-    console.log(props.offerData);
 
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
@@ -41,7 +40,7 @@ const OfferCard = (props) => {
     const [offerDislike, setofferDislike] = React.useState(null);
     const { startLoading, stopLoading } = React.useContext(AuthContext);
 
-    const [User, setUser] = React.useState(false);
+    const [User, setUser] = React.useState(null);
 
     const _retrieveData = async () => {
         try {
@@ -49,6 +48,7 @@ const OfferCard = (props) => {
             if (value !== null) {
                 // We have data!!
                 //console.log(value);
+                setUser(value)
                 return value;
             }
         } catch (error) {
@@ -68,8 +68,8 @@ const OfferCard = (props) => {
         _retrieveData().then((response) => {
             //console.log(response)
             setUser(response);
+            getUserData(response);
         });
-        getUserData();
     }, []);
     const dateFormatter = (postdate) => {
         const today = new Date();
@@ -94,12 +94,11 @@ const OfferCard = (props) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    const onRefresh = React.useCallback((latitude, longitude) => {
+    const onRefresh = React.useCallback((latitude, longitude, user) => {
         setRefreshing(true);
         //console.log(latitude, longitude)
-        props.getOffers(props.location.latitude, props.location.longitude);
-
-        getUserData();
+        props.getOffers(latitude, longitude);
+        getUserData(user);
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
@@ -122,10 +121,12 @@ const OfferCard = (props) => {
             });
     };
 
-    const getUserData = () => {
+    const getUserData = (user) => {
+        //console.log(User)
         axios
-            .get(`${axiosURL}/customer/getCustomerData/${User}`)
+            .get(`${axiosURL}/customer/getCustomerData/${user}`)
             .then((response) => {
+                //console.log(response.data.response)
                 if (response.data.status === 200) {
                     setSaveList(response.data.response.saveList);
                 }
@@ -144,23 +145,23 @@ const OfferCard = (props) => {
             });
     };
 
-    const saveOffer = (offer_id) => {
+    const saveOffer = (offer_id, user) => {
         axios
             .post(`${axiosURL}/customer/saveList/${offer_id}/${User}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    getUserData();
+                    getUserData(user);
                     notifyMessage("Offer Added to save list.");
                 }
             });
     };
 
-    const removeOffer = (offer_id) => {
+    const removeOffer = (offer_id, user) => {
         axios
             .post(`${axiosURL}/customer/removeList/${offer_id}/${User}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    getUserData();
+                    getUserData(user);
                     notifyMessage("Offer Deleted from save list.");
                 }
             });
@@ -208,7 +209,8 @@ const OfferCard = (props) => {
                         onRefresh={() => {
                             onRefresh(
                                 props.location.latitude,
-                                props.location.longitude
+                                props.location.longitude,
+                                props.User
                             );
                         }}
                         colors={["#fff", "red", "yellow"]}
@@ -229,7 +231,8 @@ const OfferCard = (props) => {
                                     element.offer_id,
                                     User,
                                     props.location.latitude,
-                                    props.location.longitude
+                                    props.location.longitude,
+
                                 );
                             }}
                             delay={500}
@@ -322,17 +325,17 @@ const OfferCard = (props) => {
                                         onPress={() => {
                                             element.likes.includes(User)
                                                 ? disLike(
-                                                      element.offer_id,
-                                                      User,
-                                                      props.location.latitude,
-                                                      props.location.longitude
-                                                  )
+                                                    element.offer_id,
+                                                    User,
+                                                    props.location.latitude,
+                                                    props.location.longitude
+                                                )
                                                 : like(
-                                                      element.offer_id,
-                                                      User,
-                                                      props.location.latitude,
-                                                      props.location.longitude
-                                                  );
+                                                    element.offer_id,
+                                                    User,
+                                                    props.location.latitude,
+                                                    props.location.longitude
+                                                );
                                         }}
                                         style={{
                                             marginLeft: windowWidth * 0.03,
@@ -382,8 +385,8 @@ const OfferCard = (props) => {
                                     <TouchableOpacity
                                         onPress={() => {
                                             saveList.includes(element.offer_id)
-                                                ? removeOffer(element.offer_id)
-                                                : saveOffer(element.offer_id);
+                                                ? removeOffer(element.offer_id, props.User)
+                                                : saveOffer(element.offer_id, props.User);
                                         }}
                                         style={{
                                             marginLeft: windowWidth * 0.08,

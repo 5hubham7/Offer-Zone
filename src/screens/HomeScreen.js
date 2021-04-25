@@ -16,7 +16,7 @@ import Modal from "react-native-modal";
 import axios from "axios";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { firebase } from "../helper/FirebaseConfig";
 import styles from "../styles/HomeScreenStyles";
 import OfferCard from "../components/OfferCard";
@@ -30,6 +30,7 @@ const windowHeight = Dimensions.get("screen").height;
 const HomeScreen = ({ navigation }) => {
     const { colors } = useTheme();
 
+    const [User, setUser] = React.useState(null);
     const [location, setLocation] = React.useState({
         latitude: "",
         longitude: "",
@@ -37,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
-    const [emailVerified, setEmailVerified] = React.useState(false);
+    const [emailVerified, setEmailVerified] = React.useState(true);
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
@@ -77,16 +78,30 @@ const HomeScreen = ({ navigation }) => {
         });
     };
 
+    const _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem("userToken");
+            if (value !== null) {
+                // We have data!!
+                //console.log(value);
+                setUser(value)
+                return value;
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    };
+
     const getOffers = (lat, long) => {
         var data = [];
         var options = [];
         axios
-            // .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
-            .get(
-                `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
-            )
+            .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
+            // .get(
+            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
+            // )
             .then((response) => {
-                // console.log(response);
+                //console.log(response.data.response);
                 if (response.data.status === 200) {
                     setCurrentOffers(response.data.response);
                     response.data.response.map((element) => {
@@ -103,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
                         result[data[index]] = field;
                         return result;
                     },
-                    {});
+                        {});
                     //console.log("final result", result)
                     setOfferLike({ ...result });
                 }
@@ -114,6 +129,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         (async () => {
+            _retrieveData()
             if (Platform.OS === "android" && !Constants.isDevice) {
                 setErrorMessage(
                     "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
@@ -122,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
             }
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
-                setErrorMessage("Permission to access location was denied!");
+                alert("Permission to access location was denied!");
                 return;
             }
 
@@ -195,6 +211,7 @@ const HomeScreen = ({ navigation }) => {
                 getOffers={getOffers}
                 navigation={navigation}
                 location={location}
+                User={User}
             />
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
