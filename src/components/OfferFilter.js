@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { View, Text, Dimensions, TouchableOpacity, StyleSheet, Pic } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from 'react-native-modal';
 import styles from '../styles/OfferFilterStyle'
 import Slider from "react-native-slider-x";
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
+import axios from 'axios'
 
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
@@ -23,10 +24,19 @@ const offerFilter = (props) => {
         color: '#9EA0A4',
     };
 
-    const [selectValue, setSelectValue] = React.useState({
-        value: "All"
-    })
+    const [selectCatogory, setSelectCatogory] = React.useState("All")
+    const [selectCity, setSelectCity] = React.useState("Current")
 
+    const resetFilters = () => {
+        console.log("Hello")
+        setSelectCatogory("All")
+        setSelectCity("Current")
+        setValue({
+            distance: 5,
+            minDistance: 1,
+            maxDistance: 20
+        })
+    }
 
     return (
         <Modal
@@ -48,39 +58,72 @@ const offerFilter = (props) => {
                         onPress={() => { props.toggleModal() }}
                     />
                     <Text style={styles.title}>Filters</Text>
-                    <Text
-                        style={styles.resetButton}
+                    <TouchableOpacity
+                        onPress={() => {
+                            resetFilters()
+                        }}
                     >
-                        Reset
-                    </Text>
+                        <Text
+                            style={styles.resetButton}
+                        >
+                            Reset
+                        </Text>
+                    </TouchableOpacity>
                 </View>
                 <View>
                     <Text style={styles.subTitle}>Category</Text>
                     <View style={{ width: "90%", marginLeft: 20 }}>
                         <RNPickerSelect
                             placeholder={placeholder}
-                            value={selectValue.value}
+                            value={selectCatogory}
+
                             items={[
+                                { label: 'All', value: 'All' },
                                 { label: 'Cloth Shop', value: 'Cloth Shop' },
                                 { label: 'Cosmatic Shop', value: 'Cosmatic Shop' },
                                 { label: 'Movie Theater', value: 'Movie Theater' },
                             ]}
 
                             onValueChange={value => {
-                                console.log(value)
+                                setSelectCatogory(value)
                             }}
                             style={pickerSelectStyles}
                             useNativeAndroidPickerStyle={false}
-                        // ref={el => {
-                        //   this.inputRefs.favSport1 = el;
-                        // }}
+                            Icon={() => {
+                                return <FontAwesome name="angle-down" size={24} color="gray" style={{ marginTop: 20, marginRight: 20 }} />;
+                            }}
+                        />
+                    </View>
+                </View>
+                <View>
+                    <Text style={styles.subTitle}>City</Text>
+                    <View style={{ width: "90%", marginLeft: 20 }}>
+                        <RNPickerSelect
+                            placeholder={placeholder}
+                            value={selectCity}
+
+                            items={[
+                                { label: 'Current', value: 'Current' },
+                                { label: 'Pune', value: 'Pune' },
+                                { label: 'Mumbai', value: 'Mumbai' },
+                                { label: 'Nashik', value: 'Nashik' },
+                            ]}
+
+                            onValueChange={value => {
+                                setSelectCity(value)
+                            }}
+                            style={pickerSelectStyles}
+                            useNativeAndroidPickerStyle={false}
+                            Icon={() => {
+                                return <FontAwesome name="angle-down" size={24} color="gray" style={{ marginTop: 20, marginRight: 20 }} />;
+                            }}
                         />
                     </View>
                 </View>
                 <View>
                     <Text style={styles.subTitle}>Distance</Text>
                     <Slider
-                        value={2}
+                        value={value.distance}
                         onValueChange={value => { setValue({ ...value, distance: value, minDistance: 1, maxDistance: 20 }) }}
                         minimumValue={1}
                         maximumValue={20}
@@ -89,7 +132,6 @@ const offerFilter = (props) => {
                         minimumTrackTintColor="#006BFF"
                         trackStyle={{ height: 10, width: "90%" }}
                         thumbStyle={{ width: 30, height: 30 }}
-                        //thumbImage={ require('../assets/arrows.png')}
                         style={{ marginLeft: 20 }}
                     />
                     <View style={styles.textCon}>
@@ -100,8 +142,9 @@ const offerFilter = (props) => {
                         <Text style={styles.colorGrey}>{value.maxDistance} km</Text>
                     </View>
                 </View>
-                <View>
-                    <TouchableOpacity style={styles.applyButton} activeOpacity={0.7}>
+
+                <View style={styles.bottomView}>
+                    <TouchableOpacity style={styles.applyButton} activeOpacity={0.7} >
                         <Text style={styles.buttonText}>Apply Filter</Text>
                     </TouchableOpacity>
                 </View>

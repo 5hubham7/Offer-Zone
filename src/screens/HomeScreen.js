@@ -98,24 +98,30 @@ const HomeScreen = ({ navigation }) => {
             .then((response) => {
                 //console.log(response.data.response);
                 if (response.data.status === 200) {
-                    setCurrentOffers(response.data.response);
-                    response.data.response.map((element) => {
-                        data.push(element.offer_id);
-                        options.push(false);
-                        //setOfferLike({ ...data })
-                    });
 
-                    var result = options.reduce(function (
-                        result,
-                        field,
-                        index
-                    ) {
-                        result[data[index]] = field;
-                        return result;
-                    },
-                        {});
-                    //console.log("final result", result)
-                    setOfferLike({ ...result });
+                    if (response.data.response.length > 0) {
+                        setCurrentOffers(response.data.response);
+                        response.data.response.map((element) => {
+                            data.push(element.offer_id);
+                            options.push(false);
+                            //setOfferLike({ ...data })
+                        });
+
+                        var result = options.reduce(function (
+                            result,
+                            field,
+                            index
+                        ) {
+                            result[data[index]] = field;
+                            return result;
+                        },
+                            {});
+                        //console.log("final result", result)
+                        setOfferLike({ ...result });
+                    }
+                    else {
+                        setCurrentOffers("No Offers")
+                    }
                 }
             });
     };

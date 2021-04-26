@@ -51,8 +51,12 @@ const styles = StyleSheet.create({
     },
     applyButton: {
         backgroundColor: "#5B5B5B",
-        height: "16%",
-        marginTop: windowHeight * 0.44
+        height: "151%",
+    },
+    bottomView: {
+        position: "absolute",
+        bottom: 15,
+        width: "100%",
     },
     buttonText: {
         color: '#fff',

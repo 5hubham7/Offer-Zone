@@ -10,6 +10,7 @@ import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
     DarkTheme as NavigationDarkTheme,
+    useTheme
 } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -342,7 +343,7 @@ const SaveOfferStackScreen = ({ navigation }) => (
             name="SaveOffers"
             component={SaveOffers}
             options={{
-                title: "Saved Offers",
+                title: "WISHLIST",
                 headerLeft: () => (
                     <Icon.Button
                         name="ios-menu"
