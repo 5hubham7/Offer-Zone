@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     ImageBackground,
     ToastAndroid,
+    Image
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -41,6 +42,10 @@ const OfferCard = (props) => {
     const { startLoading, stopLoading } = React.useContext(AuthContext);
 
     const [User, setUser] = React.useState(null);
+
+    const setData = () => {
+        console.log("hello")
+    }
 
     const _retrieveData = async () => {
         try {
@@ -201,227 +206,237 @@ const OfferCard = (props) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={() => {
-                            onRefresh(
-                                props.location.latitude,
-                                props.location.longitude,
-                                props.User
-                            );
-                        }}
-                        colors={["#fff", "red", "yellow"]}
-                        progressBackgroundColor={"#000"}
-                    />
-                }
-                style={{ marginBottom: 60 }}
-                animation="fadeInRightBig"
-            >
-                {props.offerData.map((element, index) => (
-                    <View style={styles.cardView} elevation={3} key={index}>
-                        <DoubleClick
-                            singleTap={() => {
-                                onSingleTap(element.offer_id);
-                            }}
-                            doubleTap={() => {
-                                onDoubleTap(
-                                    element.offer_id,
-                                    User,
+            {props.offerData != null ?
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={() => {
+                                onRefresh(
                                     props.location.latitude,
                                     props.location.longitude,
-
+                                    props.User
                                 );
                             }}
-                            delay={500}
-                        >
-                            <View style={styles.cardImageView}>
-                                <ImageBackground
-                                    source={{
-                                        uri:
-                                            "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
-                                    }}
-                                    style={styles.cardImage}
-                                >
-                                    <LinearGradient
-                                        locations={[0, 0]}
-                                        colors={[
-                                            "rgba(0,0,0,0.00)",
-                                            "rgba(0,0,0,0.70)",
-                                        ]}
-                                        style={styles.linearGradient}
+                            colors={["#fff", "red", "yellow"]}
+                            progressBackgroundColor={"#000"}
+                        />
+                    }
+                    style={{ marginBottom: 60 }}
+                    animation="fadeInRightBig"
+                >
+                    {props.offerData.map((element, index) => (
+                        <View style={styles.cardView} elevation={3} key={index}>
+                            <DoubleClick
+                                singleTap={() => {
+                                    onSingleTap(element.offer_id);
+                                }}
+                                doubleTap={() => {
+                                    onDoubleTap(
+                                        element.offer_id,
+                                        User,
+                                        props.location.latitude,
+                                        props.location.longitude,
+
+                                    );
+                                }}
+                                delay={500}
+                            >
+                                <View style={styles.cardImageView}>
+                                    <ImageBackground
+                                        source={{
+                                            uri:
+                                                "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                        }}
+                                        style={styles.cardImage}
                                     >
-                                        <Text style={styles.imageTitle}>
-                                            {element.offer_title}
-                                        </Text>
-                                    </LinearGradient>
-                                </ImageBackground>
-                            </View>
-                            {likeDoubleTap == element.offer_id ? (
-                                <Animatable.View
-                                    animation="bounceIn"
-                                    style={{ alignItems: "center" }}
-                                >
-                                    <FontAwesome
-                                        name="heart"
-                                        color="#FF0000"
-                                        size={windowHeight * 0.1}
-                                        style={{
-                                            position: "absolute",
-                                            marginTop: -30,
-                                        }}
-                                    />
-                                </Animatable.View>
-                            ) : null}
-                            {offerDislike == element.offer_id ? (
-                                <Animatable.View
-                                    animation="bounceIn"
-                                    style={{ alignItems: "center" }}
-                                >
-                                    <FontAwesome5
-                                        name="heart-broken"
-                                        color="#FF0000"
-                                        size={windowHeight * 0.1}
-                                        style={{
-                                            position: "absolute",
-                                            marginTop: -30,
-                                        }}
-                                    />
-                                </Animatable.View>
-                            ) : null}
-                            <View style={styles.cardData}>
-                                <Text
-                                    style={styles.offerTitle}
-                                    numberOfLines={1}
-                                    ellipsizeMode="tail"
-                                >
-                                    {element.offer_title}
+                                        <LinearGradient
+                                            locations={[0, 0]}
+                                            colors={[
+                                                "rgba(0,0,0,0.00)",
+                                                "rgba(0,0,0,0.70)",
+                                            ]}
+                                            style={styles.linearGradient}
+                                        >
+                                            <Text style={styles.imageTitle}>
+                                                {element.offer_title}
+                                            </Text>
+                                        </LinearGradient>
+                                    </ImageBackground>
+                                </View>
+                                {likeDoubleTap == element.offer_id ? (
+                                    <Animatable.View
+                                        animation="bounceIn"
+                                        style={{ alignItems: "center" }}
+                                    >
+                                        <FontAwesome
+                                            name="heart"
+                                            color="#FF0000"
+                                            size={windowHeight * 0.1}
+                                            style={{
+                                                position: "absolute",
+                                                marginTop: -30,
+                                            }}
+                                        />
+                                    </Animatable.View>
+                                ) : null}
+                                {offerDislike == element.offer_id ? (
+                                    <Animatable.View
+                                        animation="bounceIn"
+                                        style={{ alignItems: "center" }}
+                                    >
+                                        <FontAwesome5
+                                            name="heart-broken"
+                                            color="#FF0000"
+                                            size={windowHeight * 0.1}
+                                            style={{
+                                                position: "absolute",
+                                                marginTop: -30,
+                                            }}
+                                        />
+                                    </Animatable.View>
+                                ) : null}
+                                <View style={styles.cardData}>
+                                    <Text
+                                        style={styles.offerTitle}
+                                        numberOfLines={1}
+                                        ellipsizeMode="tail"
+                                    >
+                                        {element.offer_title}
+                                    </Text>
+                                    <Text
+                                        style={styles.offerDetails}
+                                        numberOfLines={1}
+                                        ellipsizeMode="tail"
+                                    >
+                                        {element.details}
+                                    </Text>
+                                    <Text style={styles.offerTime}>
+                                        {dateFormatter(element.post_time)} ago
                                 </Text>
-                                <Text
-                                    style={styles.offerDetails}
-                                    numberOfLines={1}
-                                    ellipsizeMode="tail"
-                                >
-                                    {element.details}
-                                </Text>
-                                <Text style={styles.offerTime}>
-                                    {dateFormatter(element.post_time)} ago
-                                </Text>
-                                <Text style={styles.offerLikeCount}>
-                                    {numberWithCommas(element.likes.length)}
-                                    {"  "}
+                                    <Text style={styles.offerLikeCount}>
+                                        {numberWithCommas(element.likes.length)}
+                                        {"  "}
                                     Likes
                                 </Text>
-                                <View style={styles.lineStyle} />
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginTop: 10,
-                                    }}
-                                >
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            element.likes.includes(User)
-                                                ? disLike(
-                                                    element.offer_id,
-                                                    User,
-                                                    props.location.latitude,
-                                                    props.location.longitude
-                                                )
-                                                : like(
-                                                    element.offer_id,
-                                                    User,
-                                                    props.location.latitude,
-                                                    props.location.longitude
-                                                );
-                                        }}
+                                    <View style={styles.lineStyle} />
+                                    <View
                                         style={{
-                                            marginLeft: windowWidth * 0.03,
+                                            flexDirection: "row",
+                                            marginTop: 10,
                                         }}
                                     >
-                                        {element.likes.includes(User) ? (
-                                            <View
-                                                style={{ flexDirection: "row" }}
-                                            >
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                element.likes.includes(User)
+                                                    ? disLike(
+                                                        element.offer_id,
+                                                        User,
+                                                        props.location.latitude,
+                                                        props.location.longitude
+                                                    )
+                                                    : like(
+                                                        element.offer_id,
+                                                        User,
+                                                        props.location.latitude,
+                                                        props.location.longitude
+                                                    );
+                                            }}
+                                            style={{
+                                                marginLeft: windowWidth * 0.03,
+                                            }}
+                                        >
+                                            {element.likes.includes(User) ? (
+                                                <View
+                                                    style={{ flexDirection: "row" }}
+                                                >
+                                                    <FontAwesome
+                                                        name="heart"
+                                                        color="grey"
+                                                        size={25}
+                                                        style={{ color: "red" }}
+                                                    />
+                                                </View>
+                                            ) : (
+                                                <View
+                                                    style={{ flexDirection: "row" }}
+                                                >
+                                                    <FontAwesome
+                                                        name="heart-o"
+                                                        color="grey"
+                                                        size={25}
+                                                        style={{ color: "black" }}
+                                                    />
+                                                </View>
+                                            )}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                share("First");
+                                            }}
+                                            style={{
+                                                marginLeft: windowWidth * 0.08,
+                                            }}
+                                        >
+                                            <View style={{ flexDirection: "row" }}>
                                                 <FontAwesome
-                                                    name="heart"
+                                                    name="share"
                                                     color="grey"
                                                     size={25}
-                                                    style={{ color: "red" }}
+                                                    style={{ color: "#004d3d" }}
                                                 />
                                             </View>
-                                        ) : (
-                                            <View
-                                                style={{ flexDirection: "row" }}
-                                            >
-                                                <FontAwesome
-                                                    name="heart-o"
-                                                    color="grey"
-                                                    size={25}
-                                                    style={{ color: "black" }}
-                                                />
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            share("First");
-                                        }}
-                                        style={{
-                                            marginLeft: windowWidth * 0.08,
-                                        }}
-                                    >
-                                        <View style={{ flexDirection: "row" }}>
-                                            <FontAwesome
-                                                name="share"
-                                                color="grey"
-                                                size={25}
-                                                style={{ color: "#004d3d" }}
-                                            />
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            saveList.includes(element.offer_id)
-                                                ? removeOffer(element.offer_id, props.User)
-                                                : saveOffer(element.offer_id, props.User);
-                                        }}
-                                        style={{
-                                            marginLeft: windowWidth * 0.08,
-                                        }}
-                                    >
-                                        {saveList.includes(element.offer_id) ? (
-                                            <View
-                                                style={{ flexDirection: "row" }}
-                                            >
-                                                <FontAwesome
-                                                    name="check-square"
-                                                    color="grey"
-                                                    size={25}
-                                                    style={{ color: "#000" }}
-                                                />
-                                            </View>
-                                        ) : (
-                                            <View
-                                                style={{ flexDirection: "row" }}
-                                            >
-                                                <Icon
-                                                    name="plus-box-multiple"
-                                                    color="grey"
-                                                    size={25}
-                                                    style={{ color: "#000" }}
-                                                />
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                saveList.includes(element.offer_id)
+                                                    ? removeOffer(element.offer_id, props.User)
+                                                    : saveOffer(element.offer_id, props.User);
+                                            }}
+                                            style={{
+                                                marginLeft: windowWidth * 0.08,
+                                            }}
+                                        >
+                                            {saveList.includes(element.offer_id) ? (
+                                                <View
+                                                    style={{ flexDirection: "row" }}
+                                                >
+                                                    <FontAwesome
+                                                        name="check-square"
+                                                        color="grey"
+                                                        size={25}
+                                                        style={{ color: "#000" }}
+                                                    />
+                                                </View>
+                                            ) : (
+                                                <View
+                                                    style={{ flexDirection: "row" }}
+                                                >
+                                                    <Icon
+                                                        name="plus-box-multiple"
+                                                        color="grey"
+                                                        size={25}
+                                                        style={{ color: "#000" }}
+                                                    />
+                                                </View>
+                                            )}
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            </View>
-                        </DoubleClick>
-                    </View>
-                ))}
-            </ScrollView>
+                            </DoubleClick>
+                        </View>
+                    ))}
+                </ScrollView>
+                :
+                <View>
+                    <Image
+                        source={require("../../assets/tenor.gif")}
+                        style={{ width: 200, height: 200 }}
+                        resizeMode="stretch"
+                    />
+                </View>
+            }
         </View>
     );
 };

@@ -21,6 +21,7 @@ import axiosURL from "../helper/AxiosURL";
 import { AuthContext } from "../components/context/Store";
 import styles from "../styles/DrawerContentStyles";
 
+
 export function DrawerContent(props) {
     const [userRole, setUserRole] = React.useState("")
 
@@ -156,13 +157,13 @@ export function DrawerContent(props) {
                         )}
                         <DrawerItem
                             icon={({ color, size }) => (
-                                <FontAwesome5
-                                    name="list-alt"
+                                <Icon
+                                    name="bookmark-multiple-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
-                            label="Saved Offers"
+                            label="Wishlist"
                             onPress={() => {
                                 props.navigation.navigate("SaveOffers");
                             }}

@@ -42,12 +42,7 @@ const HomeScreen = ({ navigation }) => {
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
-    const [currentOffers, setCurrentOffers] = React.useState([
-        {
-            data: "demo",
-            likes: [1, 2, 3, 4],
-        },
-    ]);
+    const [currentOffers, setCurrentOffers] = React.useState(null);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -153,9 +148,8 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Animatable.View
+            <View
                 style={{ width: "100%", backgroundColor: "#000", height: 50 }}
-                animation="fadeInRight"
             >
                 <Searchbar
                     placeholder="Search Here..."
@@ -169,11 +163,9 @@ const HomeScreen = ({ navigation }) => {
                     //onChangeText={(text) => (alert(text))}
                     clearButtonMode="while-editing"
                 />
-            </Animatable.View>
-            <Animatable.View
+            </View>
+            <View
                 style={styles.footerNav}
-                animation="fadeInLeftBig"
-                duraton="2000"
             >
                 <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity
@@ -204,7 +196,7 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={{ color: "#fff" }}>Sort</Text>
                     </TouchableOpacity>
                 </View>
-            </Animatable.View>
+            </View>
 
             <OfferCard
                 offerData={currentOffers}

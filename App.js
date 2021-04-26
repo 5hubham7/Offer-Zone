@@ -21,12 +21,12 @@ import {
     DarkTheme as PaperDarkTheme,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { DrawerContent } from "./src/components/DrawerContent";
 import NoInternetError from "./src/components/NoInternetError";
 import RootStackScreen from "./src/navigation/StackNavigation";
 import { AuthContext } from "./src/components/context/Store";
 import { createStackNavigator } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
 import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";

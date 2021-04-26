@@ -29,12 +29,7 @@ const SaveOffers = ({ navigation }) => {
         1234: false,
     });
 
-    const [currentOffers, setCurrentOffers] = React.useState([
-        {
-            data: "demo",
-            likes: [1, 2, 3, 4],
-        },
-    ]);
+    const [currentOffers, setCurrentOffers] = React.useState(null);
 
 
     const _retrieveData = async () => {
