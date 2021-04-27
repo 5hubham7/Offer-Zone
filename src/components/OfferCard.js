@@ -211,7 +211,7 @@ const OfferCard = (props) => {
                 <View>
                     {props.offerData === "No Offers" ?
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.errorMessageText}>
+                            <Text style={[styles.errorMessageText, { width: windowWidth * 0.9 }]}>
                                 Sorry ! your current location doesn't have any offers. try with another location
                             </Text>
                             <Image

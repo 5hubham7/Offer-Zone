@@ -186,8 +186,8 @@ const SavedOfferCard = (props) => {
                 <View>
                     {props.offerData === "No Offers" ?
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.errorMessageText}>
-                                Sorry ! your current location doesn't have any offers. try with another location
+                            <Text style={[styles.errorMessageText, { width: windowWidth * 0.9 }]}>
+                                Sorry ! your don't any offers in your wishlist
                             </Text>
                             <Image
                                 source={require("../../assets/sad_folder.png")}
