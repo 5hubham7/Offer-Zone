@@ -10,8 +10,11 @@ import {
     Switch,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Entypo from "react-native-vector-icons/Entypo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -20,8 +23,9 @@ import { AuthContext } from "../components/context/Store";
 import styles from "../styles/DrawerContentStyles";
 
 export function DrawerContent(props) {
-    const [userName, setUserName] = React.useState("");
     const [userRole, setUserRole] = React.useState("");
+
+    const [userName, setUserName] = React.useState("");
 
     const getUserData = (uid) => {
         axios
@@ -92,8 +96,8 @@ export function DrawerContent(props) {
                     <Drawer.Section style={styles.drawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
-                                <Icon
-                                    name="home-outline"
+                                <MaterialIcons
+                                    name="home"
                                     color={color}
                                     size={size}
                                 />
@@ -107,7 +111,7 @@ export function DrawerContent(props) {
                             <View>
                                 <DrawerItem
                                     icon={({ color, size }) => (
-                                        <Icon
+                                        <MaterialCommunityIcons
                                             name="account-outline"
                                             color={color}
                                             size={size}
@@ -118,39 +122,58 @@ export function DrawerContent(props) {
                                         props.navigation.navigate("profile");
                                     }}
                                 />
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <Icon
-                                            name="plus-box-multiple-outline"
-                                            color={color}
-                                            size={size}
-                                        />
-                                    )}
-                                    label="Save Offer"
-                                    onPress={() => {
-                                        props.navigation.navigate(
-                                            "BookmarkScreen"
-                                        );
-                                    }}
-                                />
                             </View>
                         ) : (
                             <View>
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <Icon
-                                            name="account-outline"
-                                            color={color}
-                                            size={size}
-                                        />
-                                    )}
-                                    label="My Offers"
-                                    onPress={() => {
-                                        props.navigation.navigate("MyOffers");
-                                    }}
-                                />
+                                <View>
+                                    <DrawerItem
+                                        icon={({ color, size }) => (
+                                            <MaterialIcons
+                                                name="local-offer"
+                                                color={color}
+                                                size={size}
+                                            />
+                                        )}
+                                        label="My Offers"
+                                        onPress={() => {
+                                            props.navigation.navigate(
+                                                "MyOffers"
+                                            );
+                                        }}
+                                    />
+                                </View>
+                                <View>
+                                    <DrawerItem
+                                        icon={({ color, size }) => (
+                                            <Entypo
+                                                name="shop"
+                                                color={color}
+                                                size={size}
+                                            />
+                                        )}
+                                        label="My Shops"
+                                        onPress={() => {
+                                            props.navigation.navigate(
+                                                "MyShops"
+                                            );
+                                        }}
+                                    />
+                                </View>
                             </View>
                         )}
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <MaterialCommunityIcons
+                                    name="bookmark-multiple"
+                                    color={color}
+                                    size={size}
+                                />
+                            )}
+                            label="Wishlist"
+                            onPress={() => {
+                                props.navigation.navigate("SaveOffers");
+                            }}
+                        />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple
@@ -171,7 +194,11 @@ export function DrawerContent(props) {
             <Drawer.Section style={styles.bottomDrawerSection}>
                 <DrawerItem
                     icon={({ color, size }) => (
-                        <Icon name="exit-to-app" color={color} size={size} />
+                        <MaterialIcons
+                            name="logout"
+                            color={color}
+                            size={size}
+                        />
                     )}
                     label="Sign Out"
                     onPress={() => {

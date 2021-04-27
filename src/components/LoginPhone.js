@@ -129,7 +129,7 @@ const LoginPhone = (navigation) => {
                         ref={recaptchaVerifier}
                         firebaseConfig={firebaseConfig}
                     />
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Phone Number"

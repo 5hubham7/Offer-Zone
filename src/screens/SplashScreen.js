@@ -27,20 +27,15 @@ const SplashScreen = ({ navigation }) => {
             <StatusBar backgroundColor="#000" barStyle="light-content" />
 
             {state.isVisible ? (
-                <LinearGradient
-                    style={{ flex: 1 }}
-                    colors={["#2E2E2E", "#000000"]}
-                >
-                    <View style={styles.header}>
-                        <Animatable.Image
-                            animation="zoomIn"
-                            duraton="1500"
-                            source={require("../../assets/logo.png")}
-                            style={styles.logo}
-                            resizeMode="stretch"
-                        />
-                    </View>
-                </LinearGradient>
+                <View style={styles.header}>
+                    <Animatable.Image
+                        animation="zoomIn"
+                        duraton="1500"
+                        source={require("../../assets/logo.png")}
+                        style={styles.logo}
+                        resizeMode="stretch"
+                    />
+                </View>
             ) : (
                 <RoleSelection />
             )}

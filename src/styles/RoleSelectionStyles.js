@@ -42,10 +42,11 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 2,
-        //backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         borderTopLeftRadius: 60,
     },
     headerText: {
+        textTransform: "uppercase",
         color: "#fff",
         fontWeight: "bold",
         fontSize: 30,
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
         color: "#05375a",
         fontSize: 18,
     },
-    InputBox: {
+    inputBox: {
         marginTop: 5,
         borderWidth: 1,
         borderColor: "#f2f2f2",

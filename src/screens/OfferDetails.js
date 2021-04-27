@@ -5,7 +5,6 @@ import {
     ScrollView,
     TouchableOpacity,
     ImageBackground,
-    ToastAndroid,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -76,7 +75,7 @@ const OfferDetails = ({ navigation, route }) => {
                                 </Animatable.View>
                             </TouchableOpacity>
                             <Text style={styles.imageTitle}>
-                                {route.params.offerData.offer.offerTitle}
+                                {route.params.offerData.offer.offer_title}
                             </Text>
                         </LinearGradient>
                     </ImageBackground>
@@ -89,7 +88,7 @@ const OfferDetails = ({ navigation, route }) => {
                                     { color: colors.text },
                                 ]}
                             >
-                                {route.params.offerData.offer.offerTitle}
+                                {route.params.offerData.offer.offer_title}
                             </Text>
                             <Text
                                 style={[
@@ -118,7 +117,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: "#00BB84" },
                                     ]}
                                 >
-                                    Status :{"  "}
+                                    Status:{" "}
                                 </Text>
                                 <Text
                                     style={[
@@ -143,7 +142,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "green" },
                                             ]}
                                         >
-                                            Start Date :{"  "}
+                                            Start Date:{" "}
                                         </Text>
                                         <Text
                                             style={[
@@ -168,7 +167,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "red" },
                                             ]}
                                         >
-                                            End Date :{"  "}
+                                            End Date:{" "}
                                         </Text>
                                         <Text
                                             style={[
@@ -193,7 +192,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: "#0063D6" },
                                             ]}
                                         >
-                                            Post Time :{"  "}
+                                            Post Time:{" "}
                                         </Text>
                                         <Text
                                             style={[
@@ -207,8 +206,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             {dateFormatter(
                                                 route.params.offerData.offer
                                                     .post_time
-                                            )}
-                                            {"  "}
+                                            )}{" "}
                                             ago
                                         </Text>
                                     </View>
@@ -261,7 +259,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: colors.text },
                                     ]}
                                 >
-                                    Name :{"  "}
+                                    Name:{" "}
                                     <Text
                                         style={[
                                             styles.offerDetails,
@@ -283,7 +281,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         { color: colors.text },
                                     ]}
                                 >
-                                    Address :{"  "}
+                                    Address:{" "}
                                     <Text
                                         style={[
                                             styles.offerDetails,
@@ -307,7 +305,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: colors.text },
                                             ]}
                                         >
-                                            Owner Name :{"  "}
+                                            Owner Name:{" "}
                                             <Text
                                                 style={[
                                                     styles.offerDetails,
@@ -329,7 +327,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                 { color: colors.text },
                                             ]}
                                         >
-                                            Phone :{"  "}
+                                            Phone:{" "}
                                             <Text
                                                 style={[
                                                     styles.offerDetails,
@@ -386,8 +384,7 @@ const OfferDetails = ({ navigation, route }) => {
                                     { color: colors.text },
                                 ]}
                             >
-                                <FontAwesome5 name="map-marked-alt" size={18} />
-                                {"  "}
+                                <FontAwesome5 name="map-marked-alt" size={18} />{" "}
                                 Map
                             </Text>
                             <View style={{ alignItems: "center" }}>
@@ -418,7 +415,7 @@ const OfferDetails = ({ navigation, route }) => {
                                             }
                                             description={
                                                 route.params.offerData.offer
-                                                    .offerTitle
+                                                    .offer_title
                                             }
                                         />
                                         <Marker

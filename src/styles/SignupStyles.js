@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         paddingVertical: 30,
     },
     headerText: {
+        textTransform: "uppercase",
         color: "#fff",
         fontWeight: "bold",
         fontSize: 30,
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    InputBox: {
+    inputBox: {
         marginTop: 5,
         borderWidth: 1,
         borderColor: "#c9c9c9",

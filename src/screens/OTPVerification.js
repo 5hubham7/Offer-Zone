@@ -158,6 +158,8 @@ const OTPVerification = ({ navigation, route }) => {
                                         email: userData.email,
                                         phone: userData.phone,
                                         address: userData.address,
+                                        saveList: userData.saveList,
+                                        shop: userData.shop,
                                     };
                                     const data2 = firebase
                                         .firestore()
@@ -201,6 +203,8 @@ const OTPVerification = ({ navigation, route }) => {
                                 email: userData.email,
                                 phone: userData.phone,
                                 address: userData.address,
+                                saveList: userData.saveList,
+                                shop: userData.shop,
                             };
 
                             const data2 = firebase

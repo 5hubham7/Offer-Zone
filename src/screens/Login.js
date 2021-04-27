@@ -23,7 +23,7 @@ const Login = ({ navigation, route }) => {
     const setRole = async () => {
         try {
             await AsyncStorage.setItem("userRole", route.params.role);
-            console.log(route.params.role);
+            // console.log(route.params.role);
         } catch (error) {
             alert("Application error.Try Again!");
         }
@@ -150,21 +150,16 @@ const Login = ({ navigation, route }) => {
         <LoginContext.Provider value={authContext}>
             <StatusBar backgroundColor="#000" barStyle="light-content" />
             <View style={styles.container}>
-                <LinearGradient
-                    style={{ flex: 1 }}
-                    colors={["#2E2E2E", "#000000"]}
-                >
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Animatable.View animation="fadeIn">
-                            <FontAwesome
-                                name="arrow-circle-left"
-                                color="#fff"
-                                size={30}
-                                style={{ marginLeft: 20, marginTop: 20 }}
-                            />
-                        </Animatable.View>
-                    </TouchableOpacity>
-                </LinearGradient>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Animatable.View animation="fadeIn">
+                        <FontAwesome
+                            name="arrow-circle-left"
+                            color="#fff"
+                            size={30}
+                            style={{ marginLeft: 20, marginTop: 20 }}
+                        />
+                    </Animatable.View>
+                </TouchableOpacity>
                 <View>
                     <Animatable.View animation="fadeInLeftBig" duration={1500}>
                         <Text style={styles.headerText}>Login</Text>

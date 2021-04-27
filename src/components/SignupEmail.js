@@ -185,7 +185,7 @@ const SignupEmail = (navigation) => {
         <View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Animatable.View animation="bounceIn" duration={1500}>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Email"
@@ -213,7 +213,7 @@ const SignupEmail = (navigation) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Password"
@@ -260,7 +260,7 @@ const SignupEmail = (navigation) => {
                             </Text>
                         ) : null}
                     </View>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Confirm Password"

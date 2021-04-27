@@ -16,6 +16,7 @@ import Modal from "react-native-modal";
 import axios from "axios";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { firebase } from "../helper/FirebaseConfig";
 import styles from "../styles/HomeScreenStyles";
@@ -30,6 +31,7 @@ const windowHeight = Dimensions.get("screen").height;
 const HomeScreen = ({ navigation }) => {
     const { colors } = useTheme();
 
+    const [User, setUser] = React.useState(null);
     const [location, setLocation] = React.useState({
         latitude: "",
         longitude: "",
@@ -37,16 +39,11 @@ const HomeScreen = ({ navigation }) => {
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
-    const [emailVerified, setEmailVerified] = React.useState(false);
+    const [emailVerified, setEmailVerified] = React.useState(true);
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
-    const [currentOffers, setCurrentOffers] = React.useState([
-        {
-            data: "demo",
-            likes: [1, 2, 3, 4],
-        },
-    ]);
+    const [currentOffers, setCurrentOffers] = React.useState(null);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -77,35 +74,53 @@ const HomeScreen = ({ navigation }) => {
         });
     };
 
+    const _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem("userToken");
+            if (value !== null) {
+                // We have data!!
+                //console.log(value);
+                setUser(value);
+                return value;
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    };
+
     const getOffers = (lat, long) => {
         var data = [];
         var options = [];
         axios
-            // .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
-            .get(
-                `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
-            )
+            .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
+            // .get(
+            //     `${axiosURL}/customer/getOffers/20.042818069458008/73.48754119873047`
+            // )
             .then((response) => {
-                // console.log(response);
+                //console.log(response.data.response);
                 if (response.data.status === 200) {
-                    setCurrentOffers(response.data.response);
-                    response.data.response.map((element) => {
-                        data.push(element.offer_id);
-                        options.push(false);
-                        //setOfferLike({ ...data })
-                    });
+                    if (response.data.response.length > 0) {
+                        setCurrentOffers(response.data.response);
+                        response.data.response.map((element) => {
+                            data.push(element.offer_id);
+                            options.push(false);
+                            //setOfferLike({ ...data })
+                        });
 
-                    var result = options.reduce(function (
-                        result,
-                        field,
-                        index
-                    ) {
-                        result[data[index]] = field;
-                        return result;
-                    },
-                    {});
-                    //console.log("final result", result)
-                    setOfferLike({ ...result });
+                        var result = options.reduce(function (
+                            result,
+                            field,
+                            index
+                        ) {
+                            result[data[index]] = field;
+                            return result;
+                        },
+                        {});
+                        //console.log("final result", result)
+                        setOfferLike({ ...result });
+                    } else {
+                        setCurrentOffers("No Offers");
+                    }
                 }
             });
     };
@@ -114,6 +129,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         (async () => {
+            _retrieveData();
             if (Platform.OS === "android" && !Constants.isDevice) {
                 setErrorMessage(
                     "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
@@ -122,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
             }
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
-                setErrorMessage("Permission to access location was denied!");
+                alert("Permission to access location was denied!");
                 return;
             }
 
@@ -137,12 +153,11 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Animatable.View
+            <View
                 style={{ width: "100%", backgroundColor: "#000", height: 50 }}
-                animation="fadeInRight"
             >
                 <Searchbar
-                    placeholder="Search Here..."
+                    placeholder="Search Offers..."
                     style={{
                         width: windowWidth * 0.9,
                         height: 40,
@@ -153,12 +168,8 @@ const HomeScreen = ({ navigation }) => {
                     //onChangeText={(text) => (alert(text))}
                     clearButtonMode="while-editing"
                 />
-            </Animatable.View>
-            <Animatable.View
-                style={styles.footerNav}
-                animation="fadeInLeftBig"
-                duraton="2000"
-            >
+            </View>
+            <View style={styles.footerNav}>
                 <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity
                         onPress={toggleModal}
@@ -188,17 +199,17 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={{ color: "#fff" }}>Sort</Text>
                     </TouchableOpacity>
                 </View>
-            </Animatable.View>
+            </View>
 
             <OfferCard
                 offerData={currentOffers}
                 getOffers={getOffers}
                 navigation={navigation}
                 location={location}
+                User={User}
             />
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
-
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />
 
             <Modal
@@ -226,7 +237,7 @@ const HomeScreen = ({ navigation }) => {
                                 color: "yellow",
                             }}
                         >
-                            Your Email Is Not Verified !
+                            Your email is not verified!
                         </Text>
                         <Text
                             style={{

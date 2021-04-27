@@ -7,17 +7,19 @@ import {
     Platform,
 } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { Searchbar } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import Modal from "react-native-modal";
 import axios from "axios";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Entypo from "react-native-vector-icons/Entypo";
 
 import { firebase } from "../helper/FirebaseConfig";
 import styles from "../styles/HomeScreenStyles";
-import OfferCard from "../components/OfferCard";
+import MyOfferCard from "../components/MyOfferCard";
 import axiosURL from "../helper/AxiosURL";
 
 const windowWidth = Dimensions.get("screen").width;
@@ -31,63 +33,35 @@ const MyOffers = ({ navigation }) => {
         longitude: "",
     });
     const [errorMessage, setErrorMessage] = React.useState(null);
-    const [isModalVisible, setModalVisible] = React.useState(true);
-    const [isModalVisible1, setModalVisible1] = React.useState(true);
-    const [emailVerified, setEmailVerified] = React.useState(false);
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
-    const [myOffers, setMyOffers] = React.useState([
+    const [offerData, setOfferData] = React.useState([
         {
-            data: "demo",
-            likes: [1, 2, 3, 4],
+            offer_title: "[Offer Title]",
+            details: "[Offer Details]",
+            likes: [],
         },
     ]);
-
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-    };
-
-    const toggleModal1 = () => {
-        setModalVisible1(!isModalVisible1);
-    };
-
-    const emailVerification = () => {
-        firebase.auth().onAuthStateChanged(function (user) {
-            //console.log(user)
-            if (user && user.email !== null) {
-                setEmailVerified(user.emailVerified);
-                if (user.emailVerified === false) {
-                    user.sendEmailVerification()
-                        .then(function (res) {
-                            console.log(res);
-                        })
-                        .catch(function (error) {
-                            alert(error);
-                        });
-                }
-            } else {
-                //console.log("no current user")
-                setEmailVerified(true);
-            }
-        });
-    };
 
     const getMyOffers = (seller_id) => {
         var data = [];
         var options = [];
+        console.log(
+            `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
+        );
         axios
-            // .get(
-            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
-            // )
-            .get(`${axiosURL}/getMyOffers/seller_id`)
+            .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
+            // axios
+            //     .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
             .then((response) => {
+                console.log(response.data.response);
                 if (response.data.status === 200) {
-                    setMyOffers(response.data.response);
+                    console.log(response.data.response);
+                    setOfferData(response.data.response);
                     response.data.response.map((element) => {
                         data.push(element.offer_id);
                         options.push(false);
-                        //setOfferLike({ ...data })
                     });
 
                     var result = options.reduce(function (
@@ -102,7 +76,14 @@ const MyOffers = ({ navigation }) => {
                     //console.log("final result", result)
                     setOfferLike({ ...result });
                 }
+            })
+            .catch((error) => {
+                console.log(error);
             });
+    };
+
+    const addOffer = () => {
+        navigation.navigate("AddOffers");
     };
 
     const theme = useTheme();
@@ -121,26 +102,22 @@ const MyOffers = ({ navigation }) => {
                 return;
             }
 
-            await Location.getCurrentPositionAsync({}).then((data) => {
-                //console.log(data)
-                setLocation(data.coords);
-                getMyOffers(data.coords.latitude, data.coords.longitude);
-            });
+            const userID = await AsyncStorage.getItem("userToken");
+            getMyOffers(userID);
         })();
-        emailVerification();
     }, []);
 
     return (
         <View style={styles.container}>
             <Animatable.View
-                style={{ width: "100%", backgroundColor: "#000", height: 40 }}
+                style={{ width: "100%", backgroundColor: "#000", height: 50 }}
                 animation="fadeInRight"
             >
                 <Searchbar
-                    placeholder="Search here..."
+                    placeholder="Search offers..."
                     style={{
                         width: windowWidth * 0.9,
-                        height: 35,
+                        height: 40,
                         marginLeft: "auto",
                         marginRight: "auto",
                         borderRadius: 10,
@@ -150,78 +127,21 @@ const MyOffers = ({ navigation }) => {
                 />
             </Animatable.View>
 
-            <OfferCard
-                offerData={myOffers}
-                getOffers={getMyOffers}
+            <MyOfferCard
+                offerData={offerData}
+                getMyOffers={getMyOffers}
                 navigation={navigation}
                 location={location}
             />
-            <Modal
-                isVisible={!emailVerified}
-                animationIn="slideInUp"
-                animationOut="bounceOut"
-            >
-                <View
-                    style={{
-                        backgroundColor: "#fff",
-                        height: windowHeight * 0.33,
-                    }}
-                >
-                    <LinearGradient
-                        colors={["#0054E9", "#018CF0", "#00BEF6"]}
-                        style={{ height: windowHeight * 0.33 }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 25,
-                                fontWeight: "bold",
-                                textAlign: "center",
-                                marginTop: 20,
-                                color: "yellow",
-                            }}
-                        >
-                            Your Email Is Not Verified !
-                        </Text>
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                textAlign: "center",
-                                color: "#fff",
-                                marginTop: 10,
-                            }}
-                        >
-                            To verify your email, the verification link is send
-                            to youe email. Verify it as soon as possible to use
-                            the app.
-                        </Text>
-                        <TouchableOpacity
-                            style={{
-                                backgroundColor: "#000",
-                                width: "50%",
-                                height: 40,
-                                borderTopStartRadius: 20,
-                                marginLeft: windowWidth / 4.5,
-                                marginTop: 20,
-                            }}
-                            onPress={() => {
-                                setEmailVerified(true);
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    fontWeight: "bold",
-                                    color: "#fff",
-                                    textAlign: "center",
-                                    marginTop: 7,
-                                }}
-                            >
-                                Close
-                            </Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </View>
-            </Modal>
+            <FAB
+                style={styles.fab}
+                icon={({ color, size }) => (
+                    <Entypo name="add-to-list" color={color} size={size} />
+                )}
+                animated="true"
+                label="Add Offer"
+                onPress={addOffer}
+            ></FAB>
         </View>
     );
 };

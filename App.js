@@ -21,7 +21,6 @@ import {
     DarkTheme as PaperDarkTheme,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { DrawerContent } from "./src/components/DrawerContent";
 import NoInternetError from "./src/components/NoInternetError";
 import RootStackScreen from "./src/navigation/StackNavigation";
@@ -32,6 +31,9 @@ import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
 import MyOffers from "./src/screens/MyOffers";
+import MyShops from "./src/screens/MyShops";
+import SaveOffers from "./src/screens/SaveOffers";
+import AddOffers from "./src/screens/AddOffers";
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -40,6 +42,8 @@ LogBox.ignoreLogs([
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
 const MyOffersStack = createStackNavigator();
+const MyShopsStack = createStackNavigator();
+const SaveOffersStack = createStackNavigator();
 
 const App = () => {
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -220,9 +224,18 @@ const App = () => {
                                 name="MyOffers"
                                 component={MyOffersStackScreen}
                             />
-                            {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-              <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
+                            <Drawer.Screen
+                                name="AddOffers"
+                                component={AddOffers}
+                            />
+                            <Drawer.Screen
+                                name="MyShops"
+                                component={MyShopsStackScreen}
+                            />
+                            <Drawer.Screen
+                                name="SaveOffers"
+                                component={SaveOfferStackScreen}
+                            />
                         </Drawer.Navigator>
                     ) : (
                         <RootStackScreen />
@@ -264,7 +277,7 @@ const HomeStackScreen = ({ navigation }) => (
                 fontWeight: "bold",
                 marginRight: 50,
                 textAlign: "center",
-                fontSize: 25,
+                fontSize: 22,
             },
         }}
     >
@@ -272,7 +285,7 @@ const HomeStackScreen = ({ navigation }) => (
             name="Home"
             component={HomeScreen}
             options={{
-                title: "Offer Zone",
+                title: "OFFER ZONE",
 
                 headerLeft: () => (
                     <Icon.Button
@@ -298,7 +311,7 @@ const MyOffersStackScreen = ({ navigation }) => (
                 fontWeight: "bold",
                 marginRight: 50,
                 textAlign: "center",
-                fontSize: 25,
+                fontSize: 20,
             },
         }}
     >
@@ -306,7 +319,7 @@ const MyOffersStackScreen = ({ navigation }) => (
             name="MyOffers"
             component={MyOffers}
             options={{
-                title: "My Offers",
+                title: "MY OFFERS",
                 headerLeft: () => (
                     <Icon.Button
                         name="ios-menu"
@@ -318,4 +331,70 @@ const MyOffersStackScreen = ({ navigation }) => (
             }}
         />
     </MyOffersStack.Navigator>
+);
+
+const MyShopsStackScreen = ({ navigation }) => (
+    <MyShopsStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                fontWeight: "bold",
+                marginRight: 50,
+                textAlign: "center",
+                fontSize: 20,
+            },
+        }}
+    >
+        <MyShopsStack.Screen
+            name="MyShops"
+            component={MyShops}
+            options={{
+                title: "MY SHOPS",
+                headerLeft: () => (
+                    <Icon.Button
+                        name="ios-menu"
+                        size={30}
+                        backgroundColor="#000"
+                        onPress={() => navigation.openDrawer()}
+                    ></Icon.Button>
+                ),
+            }}
+        />
+    </MyShopsStack.Navigator>
+);
+
+const SaveOfferStackScreen = ({ navigation }) => (
+    <SaveOffersStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                fontWeight: "bold",
+                marginRight: 50,
+                textAlign: "center",
+                fontSize: 20,
+            },
+        }}
+    >
+        <SaveOffersStack.Screen
+            name="SaveOffers"
+            component={SaveOffers}
+            options={{
+                title: "WISHLIST",
+                headerLeft: () => (
+                    <Icon.Button
+                        name="ios-menu"
+                        size={30}
+                        backgroundColor="#000"
+                        onPress={() => navigation.openDrawer()}
+                    ></Icon.Button>
+                ),
+            }}
+        />
+    </SaveOffersStack.Navigator>
 );

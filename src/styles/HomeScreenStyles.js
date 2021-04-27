@@ -37,60 +37,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 10,
     },
-    lineStyle: {
-        borderWidth: 0.5,
-        borderColor: "gray",
-        marginTop: 10,
-    },
-    imageTitle: {
-        color: "#fff",
-        textAlign: "center",
-        marginTop: "auto",
-        marginBottom: "auto",
-        fontSize: 30,
-        fontWeight: "bold",
-    },
-    cardView: {
-        backgroundColor: "#DADADA",
-        borderRadius: 20,
-        overflow: "hidden",
-        margin: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    cardImageView: {
-        height: windowHeight * 0.17,
-        width: windowWidth * 0.9,
-        overflow: "hidden",
-    },
-    cardImage: {
-        height: windowHeight * 0.2,
-        width: windowWidth * 0.9,
-    },
-    cardData: {
-        padding: 10,
-        width: windowWidth * 0.9,
-    },
-    offerTitle: {
-        fontSize: 21,
-    },
-    offerDetails: {
-        color: "#000",
-        paddingTop: 5,
-        width: windowWidth * 0.8,
-    },
-    offerTime: {
-        fontSize: 12,
-        marginTop: 5,
-        color: "#595959",
-    },
-    offerLikeCount: {
-        fontSize: 14,
-        marginTop: 5,
-        fontWeight: "bold",
+    fab: {
+        position: "absolute",
+        margin: 16,
+        right: 10,
+        bottom: 10,
+        backgroundColor: "#2E7D32",
     },
 });
 

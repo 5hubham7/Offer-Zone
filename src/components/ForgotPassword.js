@@ -59,7 +59,7 @@ const ForgotPassword = (navigation) => {
                     <Text style={[styles.headerTextMini, { color: "#000" }]}>
                         Forgot Password
                     </Text>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Email"

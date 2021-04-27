@@ -16,20 +16,16 @@ const SelectRole = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#000" barStyle="light-content" />
-            <LinearGradient
-                style={styles.header}
-                colors={["#2E2E2E", "#000000"]}
-            >
-                <View>
-                    <Animatable.Image
-                        animation="fadeInUpBig"
-                        duraton="1500"
-                        source={require("../../assets/logo.png")}
-                        style={styles.logo}
-                        resizeMode="stretch"
-                    />
-                </View>
-            </LinearGradient>
+
+            <View>
+                <Animatable.Image
+                    animation="fadeInUpBig"
+                    duraton="1500"
+                    source={require("../../assets/logo.png")}
+                    style={styles.logo}
+                    resizeMode="stretch"
+                />
+            </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 duration={1500}
@@ -38,7 +34,9 @@ const SelectRole = ({ navigation }) => {
                 <ImageBackground
                     source={require("../../assets/backgrounds/shopping1.jpg")}
                     style={styles.BGImage}
-                    imageStyle={{ borderTopLeftRadius: 60 }}
+                    imageStyle={{
+                        borderTopLeftRadius: 60,
+                    }}
                 >
                     <LinearGradient
                         colors={["rgba(0,0,0,0.55)", "rgba(0,0,0,0.70)"]}

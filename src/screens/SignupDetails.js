@@ -112,8 +112,10 @@ const userDetails = ({ navigation, route }) => {
                     name: userDetails.firstName + " " + userDetails.lastName,
                     phone: `+91${userDetails.phoneNo}`,
                     address: userDetails.address,
+                    saveList: [],
+                    shop: [],
                 };
-                console.log(userData);
+                // console.log(userData);
                 stopLoading();
                 alert("Verification code has been sent to your phone.");
                 navigation.navigate("OTPVerification", {
@@ -129,10 +131,12 @@ const userDetails = ({ navigation, route }) => {
                     name: userDetails.firstName + " " + userDetails.lastName,
                     phone: `+91${userDetails.phoneNo}`,
                     address: userDetails.address,
+                    saveList: [],
+                    shop: [],
                 };
                 const googleUser = route.params.result;
                 stopLoading();
-                console.log(userData);
+                // console.log(userData);
                 alert("Verification code has been sent to your phone.");
                 navigation.navigate("OTPVerification", {
                     userData: userData,
@@ -181,7 +185,7 @@ const userDetails = ({ navigation, route }) => {
                         ref={recaptchaVerifier}
                         firebaseConfig={firebaseConfig}
                     />
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="First Name"
@@ -199,7 +203,7 @@ const userDetails = ({ navigation, route }) => {
                             />
                         </View>
                     </View>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Last Name"
@@ -217,7 +221,7 @@ const userDetails = ({ navigation, route }) => {
                             />
                         </View>
                     </View>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Phone Number"
@@ -238,7 +242,7 @@ const userDetails = ({ navigation, route }) => {
                             </Text>
                         ) : null}
                     </View>
-                    <View style={styles.InputBox}>
+                    <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Address"

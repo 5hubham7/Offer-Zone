@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import DoubleClick from "react-native-double-tap";
 import * as Animatable from "react-native-animatable";
@@ -31,17 +30,17 @@ const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const OfferCard = (props) => {
+const SavedOfferCard = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
-    const [saveList, setSaveList] = React.useState([]);
+    const [location, setlocation] = React.useState({
+        latitude: "20.042818069458008",
+        longitude: "74.48754119873047",
+    });
     const [offerDislike, setofferDislike] = React.useState(null);
     const { startLoading, stopLoading } = React.useContext(AuthContext);
-    const [User, setUser] = React.useState(null);
 
-    const setData = () => {
-        console.log("hello");
-    };
+    const [User, setUser] = React.useState(null);
 
     const _retrieveData = async () => {
         try {
@@ -66,10 +65,10 @@ const OfferCard = (props) => {
     };
 
     useEffect(() => {
+        //console.log(props)
         _retrieveData().then((response) => {
             //console.log(response)
             setUser(response);
-            getUserData(response);
         });
     }, []);
 
@@ -96,75 +95,48 @@ const OfferCard = (props) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    const onRefresh = React.useCallback((latitude, longitude, user) => {
+    const onRefresh = React.useCallback((user) => {
         setRefreshing(true);
         //console.log(latitude, longitude)
-        props.getOffers(latitude, longitude);
-        getUserData(user);
+        props.getSaveOffers(user);
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    const onDoubleTap = React.useCallback(
-        (offer_id, User, latitude, longitude) => {
-            setLikeDobleTap(offer_id);
-            like(offer_id, User, latitude, longitude);
-            wait(2000).then(() => setLikeDobleTap(null));
-        },
-        []
-    );
+    const onDoubleTap = React.useCallback((offer_id, User) => {
+        setLikeDobleTap(offer_id);
+        like(offer_id, User);
+        wait(2000).then(() => setLikeDobleTap(null));
+    }, []);
 
-    const like = (offer_id, cust_id, latitude, longitude) => {
+    const like = (offer_id, cust_id) => {
         axios
             .post(`${axiosURL}/customer/like/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
+                    props.getSaveOffers(cust_id);
                 }
             });
     };
 
-    const getUserData = (user) => {
-        //console.log(User)
-        axios
-            .get(`${axiosURL}/customer/getCustomerData/${user}`)
-            .then((response) => {
-                //console.log(response.data.response)
-                if (response.data.status === 200) {
-                    setSaveList(response.data.response.saveList);
-                }
-            });
-    };
-
-    const disLike = (offer_id, cust_id, latitude, longitude) => {
+    const disLike = (offer_id, cust_id) => {
         setofferDislike(offer_id);
         wait(2000).then(() => setofferDislike(null));
         axios
             .post(`${axiosURL}/customer/disLike/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
-                }
-            });
-    };
-
-    const saveOffer = (offer_id, user) => {
-        axios
-            .post(`${axiosURL}/customer/saveList/${offer_id}/${User}`)
-            .then((response) => {
-                if (response.data.status === 200) {
-                    getUserData(user);
-                    notifyMessage("Offer Added to save list.");
+                    props.getSaveOffers(cust_id);
                 }
             });
     };
 
     const removeOffer = (offer_id, user) => {
         axios
-            .post(`${axiosURL}/customer/removeList/${offer_id}/${User}`)
+            .post(`${axiosURL}/customer/removeList/${offer_id}/${user}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    getUserData(user);
                     notifyMessage("Offer Deleted from save list.");
+                    props.getSaveOffers(user);
                 }
             });
     };
@@ -191,7 +163,7 @@ const OfferCard = (props) => {
                     stopLoading();
                     props.navigation.navigate("OfferDetails", {
                         offerData: response.data.response,
-                        location: props.location,
+                        location: location,
                     });
                 }
             })
@@ -213,8 +185,8 @@ const OfferCard = (props) => {
                                     { width: windowWidth * 0.9 },
                                 ]}
                             >
-                                Sorry, your current location don't have any
-                                offers! Try with another location.
+                                Sorry, you don't have any offers in your
+                                Wishlist!
                             </Text>
                             <Image
                                 source={require("../../assets/sad_folder.png")}
@@ -229,17 +201,13 @@ const OfferCard = (props) => {
                                 <RefreshControl
                                     refreshing={refreshing}
                                     onRefresh={() => {
-                                        onRefresh(
-                                            props.location.latitude,
-                                            props.location.longitude,
-                                            props.User
-                                        );
+                                        onRefresh(props.User);
                                     }}
                                     colors={["#fff", "red", "yellow"]}
                                     progressBackgroundColor={"#000"}
                                 />
                             }
-                            style={{ marginBottom: 60 }}
+                            style={{ marginBottom: 10 }}
                             animation="fadeInRightBig"
                         >
                             {props.offerData.map((element, index) => (
@@ -255,9 +223,7 @@ const OfferCard = (props) => {
                                         doubleTap={() => {
                                             onDoubleTap(
                                                 element.offer_id,
-                                                User,
-                                                props.location.latitude,
-                                                props.location.longitude
+                                                props.User
                                             );
                                         }}
                                         delay={500}
@@ -364,19 +330,11 @@ const OfferCard = (props) => {
                                                         )
                                                             ? disLike(
                                                                   element.offer_id,
-                                                                  User,
-                                                                  props.location
-                                                                      .latitude,
-                                                                  props.location
-                                                                      .longitude
+                                                                  props.User
                                                               )
                                                             : like(
                                                                   element.offer_id,
-                                                                  User,
-                                                                  props.location
-                                                                      .latitude,
-                                                                  props.location
-                                                                      .longitude
+                                                                  props.User
                                                               );
                                                     }}
                                                     style={{
@@ -417,56 +375,6 @@ const OfferCard = (props) => {
 
                                                 <TouchableOpacity
                                                     onPress={() => {
-                                                        saveList.includes(
-                                                            element.offer_id
-                                                        )
-                                                            ? removeOffer(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              )
-                                                            : saveOffer(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              );
-                                                    }}
-                                                    style={{
-                                                        marginLeft:
-                                                            windowWidth * 0.09,
-                                                    }}
-                                                >
-                                                    {saveList.includes(
-                                                        element.offer_id
-                                                    ) ? (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <MaterialCommunityIcons
-                                                                name="checkbox-multiple-marked"
-                                                                color="#2E7D32"
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    ) : (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <MaterialCommunityIcons
-                                                                name="plus-box-multiple"
-                                                                color="#000"
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    )}
-                                                </TouchableOpacity>
-
-                                                <TouchableOpacity
-                                                    onPress={() => {
                                                         share("First");
                                                     }}
                                                     style={{
@@ -483,6 +391,32 @@ const OfferCard = (props) => {
                                                         <FontAwesome5
                                                             name="share-alt"
                                                             color="#0277BD"
+                                                            size={25}
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        removeOffer(
+                                                            element.offer_id,
+                                                            props.User
+                                                        );
+                                                    }}
+                                                    style={{
+                                                        marginLeft:
+                                                            windowWidth * 0.11,
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{
+                                                            flexDirection:
+                                                                "row",
+                                                        }}
+                                                    >
+                                                        <FontAwesome5
+                                                            name="trash"
+                                                            color="#C62828"
                                                             size={25}
                                                         />
                                                     </View>
@@ -508,4 +442,4 @@ const OfferCard = (props) => {
     );
 };
 
-export default OfferCard;
+export default SavedOfferCard;

@@ -98,8 +98,7 @@ const LoginWithEmail = (navigation) => {
     };
 
     const getUserData = (uid) => {
-        console.log(uid);
-        console.log(`${axiosURL}/customer/getCustomerData/${uid}`);
+        // console.log(`${axiosURL}/customer/getCustomerData/${uid}`);
         axios
             .get(`${axiosURL}/customer/getCustomerData/${uid}`)
             .then((response) => {
@@ -132,7 +131,7 @@ const LoginWithEmail = (navigation) => {
                         >
                             Login With Email & Password
                         </Text>
-                        <View style={styles.InputBox}>
+                        <View style={styles.inputBox}>
                             <View style={styles.action}>
                                 <TextInput
                                     placeholder="Email"
@@ -162,7 +161,7 @@ const LoginWithEmail = (navigation) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.InputBox}>
+                        <View style={styles.inputBox}>
                             <View style={styles.action}>
                                 <TextInput
                                     placeholder="Password"

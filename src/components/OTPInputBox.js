@@ -91,7 +91,7 @@ const OTPInputBox = (props) => {
                 sixthTextInputRef,
             ].map((textInputRef, index) => (
                 <TextInput
-                    style={[styles.textInput, styles.InputBox]}
+                    style={[styles.textInput, styles.inputBox]}
                     keyboardType="numeric"
                     maxLength={1}
                     value={OTPData[index]}
