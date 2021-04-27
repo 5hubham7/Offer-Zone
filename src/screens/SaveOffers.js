@@ -57,11 +57,16 @@ const SaveOffers = ({ navigation }) => {
             .then((response) => {
                 //console.log(response.data.response);
                 if (response.data.status === 200) {
-                    setCurrentOffers(response.data.response);
-                    response.data.response.map((element) => {
-                        data.push(element.offer_id);
-                        options.push(false);
-                    });
+                    if (response.data.response.length > 0) {
+                        setCurrentOffers(response.data.response);
+                        response.data.response.map((element) => {
+                            data.push(element.offer_id);
+                            options.push(false);
+                        });
+                    }
+                    else {
+                        setCurrentOffers("No Offers")
+                    }
                 }
             });
     };

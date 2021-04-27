@@ -92,6 +92,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         fontWeight: "bold",
     },
+    errorMessageText: {
+        fontSize: 22,
+        marginBottom: 20,
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+        color: 'red',
+        textAlign: 'center'
+    }
 });
 
 export default styles;

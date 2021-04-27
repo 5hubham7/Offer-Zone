@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
         axios
             .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
             // .get(
-            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
+            //     `${axiosURL}/customer/getOffers/20.042818069458008/73.48754119873047`
             // )
             .then((response) => {
                 //console.log(response.data.response);
@@ -125,6 +125,8 @@ const HomeScreen = ({ navigation }) => {
                 }
             });
     };
+
+
 
     const theme = useTheme();
 

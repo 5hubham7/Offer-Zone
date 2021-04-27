@@ -8,11 +8,15 @@ import styles from '../styles/OfferFilterStyle'
 import Slider from "react-native-slider-x";
 import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios'
+import axiosURL from "../helper/AxiosURL";
 
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
 
 const offerFilter = (props) => {
+    const [allCategories, setAllCategories] = React.useState([
+        { label: 'All', value: 'All' },
+    ])
     const [value, setValue] = React.useState({
         distance: 5,
         minDistance: 1,
@@ -28,7 +32,6 @@ const offerFilter = (props) => {
     const [selectCity, setSelectCity] = React.useState("Current")
 
     const resetFilters = () => {
-        console.log("Hello")
         setSelectCatogory("All")
         setSelectCity("Current")
         setValue({
@@ -37,6 +40,20 @@ const offerFilter = (props) => {
             maxDistance: 20
         })
     }
+
+    const getAllCatogories = () => {
+        axios.get(`${axiosURL}/customer/getAllCatogories`).then((response) => {
+            if (response.data.status == 200) {
+                response.data.response.map(element => {
+                    allCategories.push({ label: element, value: element })
+                })
+            }
+        })
+    }
+
+    useEffect(() => {
+        getAllCatogories()
+    }, [])
 
     return (
         <Modal
@@ -76,13 +93,7 @@ const offerFilter = (props) => {
                         <RNPickerSelect
                             placeholder={placeholder}
                             value={selectCatogory}
-
-                            items={[
-                                { label: 'All', value: 'All' },
-                                { label: 'Cloth Shop', value: 'Cloth Shop' },
-                                { label: 'Cosmatic Shop', value: 'Cosmatic Shop' },
-                                { label: 'Movie Theater', value: 'Movie Theater' },
-                            ]}
+                            items={allCategories}
 
                             onValueChange={value => {
                                 setSelectCatogory(value)
