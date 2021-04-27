@@ -10,6 +10,7 @@ import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
     DarkTheme as NavigationDarkTheme,
+    useTheme
 } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -26,6 +27,7 @@ import NoInternetError from "./src/components/NoInternetError";
 import RootStackScreen from "./src/navigation/StackNavigation";
 import { AuthContext } from "./src/components/context/Store";
 import { createStackNavigator } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
 import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";

@@ -71,7 +71,6 @@ const SavedOfferCard = (props) => {
             setUser(response);
         });
     }, []);
-
     const dateFormatter = (postdate) => {
         const today = new Date();
         const endDate = new Date(postdate);
@@ -372,7 +371,6 @@ const SavedOfferCard = (props) => {
                                                         </View>
                                                     )}
                                                 </TouchableOpacity>
-
                                                 <TouchableOpacity
                                                     onPress={() => {
                                                         share("First");

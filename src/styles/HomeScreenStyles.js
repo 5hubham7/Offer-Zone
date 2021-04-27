@@ -44,6 +44,14 @@ const styles = StyleSheet.create({
         bottom: 10,
         backgroundColor: "#2E7D32",
     },
+    errorMessageText: {
+        fontSize: 22,
+        marginBottom: 20,
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+        color: 'red',
+        textAlign: 'center'
+    }
 });
 
 export default styles;
