@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { View, Dimensions } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { FAB } from "react-native-paper";
-import * as Animatable from "react-native-animatable";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Entypo from "react-native-vector-icons/Entypo";
 
 import styles from "../styles/HomeScreenStyles";
 import MyShopCard from "../components/MyShopCard";
@@ -73,10 +73,11 @@ const MyShops = ({ navigation }) => {
                 getMyShops={getMyShops}
                 navigation={navigation}
             />
-
             <FAB
                 style={styles.fab}
-                icon="plus"
+                icon={({ color, size }) => (
+                    <Entypo name="add-to-list" color={color} size={size} />
+                )}
                 animated="true"
                 label="Add Shop"
                 onPress={addShop}

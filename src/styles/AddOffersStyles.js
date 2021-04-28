@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     addOfferButtonText: {
         fontSize: 18,
         fontWeight: "bold",
+        textTransform: "uppercase",
         textAlign: "center",
         color: "#fff",
         width: "100%",

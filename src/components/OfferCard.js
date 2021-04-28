@@ -206,22 +206,45 @@ const OfferCard = (props) => {
             {props.offerData != null ? (
                 <View>
                     {props.offerData === "No Offers" ? (
-                        <View style={{ alignItems: "center" }}>
-                            <Text
-                                style={[
-                                    styles.errorMessageText,
-                                    { width: windowWidth * 0.9 },
-                                ]}
-                            >
-                                Sorry, your current location don't have any
-                                offers! Try with another location.
-                            </Text>
-                            <Image
-                                source={require("../../assets/sad_folder.png")}
-                                style={{ width: 200, height: 200 }}
-                                resizeMode="stretch"
-                            />
-                        </View>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={() => {
+                                        onRefresh(
+                                            props.location.latitude,
+                                            props.location.longitude,
+                                            props.User
+                                        );
+                                    }}
+                                    colors={["#fff", "red", "yellow"]}
+                                    progressBackgroundColor={"#000"}
+                                />
+                            }
+                            animation="fadeInRightBig"
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                justifyContent: "center",
+                            }}
+                        >
+                            <View style={{ alignItems: "center" }}>
+                                <Text
+                                    style={[
+                                        styles.errorMessageText,
+                                        { width: windowWidth * 0.9 },
+                                    ]}
+                                >
+                                    Sorry, your current location don't have any
+                                    offers! Try with another location.
+                                </Text>
+                                <Image
+                                    source={require("../../assets/sad_folder.png")}
+                                    style={{ width: 200, height: 200 }}
+                                    resizeMode="stretch"
+                                />
+                            </View>
+                        </ScrollView>
                     ) : (
                         <ScrollView
                             showsVerticalScrollIndicator={false}

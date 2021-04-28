@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
         axios
             .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
             // .get(
-            //     `${axiosURL}/customer/getOffers/20.042818069458008/73.48754119873047`
+            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
             // )
             .then((response) => {
                 //console.log(response.data.response);
@@ -153,7 +153,11 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View
-                style={{ width: "100%", backgroundColor: "#000", height: 50 }}
+                style={{
+                    width: "100%",
+                    backgroundColor: "#006064",
+                    height: 50,
+                }}
             >
                 <Searchbar
                     placeholder="Search Offers..."
@@ -175,13 +179,11 @@ const HomeScreen = ({ navigation }) => {
                         style={styles.footerBtn}
                     >
                         <View style={{ flexDirection: "row" }}>
-                            <FontAwesome
-                                name="filter"
-                                size={20}
-                                style={{ color: "gray" }}
-                            />
+                            <FontAwesome name="filter" size={20} color="#fff" />
                         </View>
-                        <Text style={{ color: "#fff" }}>Filter</Text>
+                        <Text style={{ color: "#fff", fontSize: 16 }}>
+                            FILTER
+                        </Text>
                     </TouchableOpacity>
                     <Text style={styles.btnSaperator}></Text>
                     <TouchableOpacity
@@ -189,13 +191,11 @@ const HomeScreen = ({ navigation }) => {
                         style={styles.footerBtn}
                     >
                         <View style={{ flexDirection: "row" }}>
-                            <FontAwesome
-                                name="sort"
-                                size={20}
-                                style={{ color: "gray" }}
-                            />
+                            <FontAwesome name="sort" size={20} color="#fff" />
                         </View>
-                        <Text style={{ color: "#fff" }}>Sort</Text>
+                        <Text style={{ color: "#fff", fontSize: 16 }}>
+                            SORT
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

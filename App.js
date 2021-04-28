@@ -10,7 +10,7 @@ import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
     DarkTheme as NavigationDarkTheme,
-    useTheme
+    useTheme,
 } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -272,7 +272,8 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Navigator
         screenOptions={{
             headerStyle: {
-                backgroundColor: "#000",
+                backgroundColor: "#006064",
+                elevation: 0,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -293,7 +294,8 @@ const HomeStackScreen = ({ navigation }) => (
                     <Icon.Button
                         name="ios-menu"
                         size={30}
-                        backgroundColor="#000"
+                        backgroundColor="#006064"
+                        color="#fff"
                         onPress={() => navigation.openDrawer()}
                     ></Icon.Button>
                 ),
@@ -306,7 +308,8 @@ const MyOffersStackScreen = ({ navigation }) => (
     <MyOffersStack.Navigator
         screenOptions={{
             headerStyle: {
-                backgroundColor: "#000",
+                backgroundColor: "#006064",
+                elevation: 0,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -326,7 +329,8 @@ const MyOffersStackScreen = ({ navigation }) => (
                     <Icon.Button
                         name="ios-menu"
                         size={30}
-                        backgroundColor="#000"
+                        backgroundColor="#006064"
+                        color="#fff"
                         onPress={() => navigation.openDrawer()}
                     ></Icon.Button>
                 ),
@@ -339,7 +343,8 @@ const MyShopsStackScreen = ({ navigation }) => (
     <MyShopsStack.Navigator
         screenOptions={{
             headerStyle: {
-                backgroundColor: "#000",
+                backgroundColor: "#006064",
+                elevation: 0,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -359,7 +364,8 @@ const MyShopsStackScreen = ({ navigation }) => (
                     <Icon.Button
                         name="ios-menu"
                         size={30}
-                        backgroundColor="#000"
+                        backgroundColor="#006064"
+                        color="#fff"
                         onPress={() => navigation.openDrawer()}
                     ></Icon.Button>
                 ),
@@ -372,7 +378,8 @@ const SaveOfferStackScreen = ({ navigation }) => (
     <SaveOffersStack.Navigator
         screenOptions={{
             headerStyle: {
-                backgroundColor: "#000",
+                backgroundColor: "#006064",
+                elevation: 0,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -392,7 +399,8 @@ const SaveOfferStackScreen = ({ navigation }) => (
                     <Icon.Button
                         name="ios-menu"
                         size={30}
-                        backgroundColor="#000"
+                        backgroundColor="#006064"
+                        color="#fff"
                         onPress={() => navigation.openDrawer()}
                     ></Icon.Button>
                 ),

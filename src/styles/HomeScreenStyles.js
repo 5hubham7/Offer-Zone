@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     footerNav: {
         position: "absolute",
         bottom: 0,
-        backgroundColor: "#000",
+        backgroundColor: "#006064",
         width: "100%",
     },
     footerBtn: {
@@ -42,16 +42,16 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 10,
         bottom: 10,
-        backgroundColor: "#2E7D32",
+        backgroundColor: "#006064",
     },
     errorMessageText: {
         fontSize: 22,
         marginBottom: 20,
-        fontWeight: 'bold',
-        textTransform: 'capitalize',
-        color: 'red',
-        textAlign: 'center'
-    }
+        fontWeight: "bold",
+        textTransform: "capitalize",
+        color: "red",
+        textAlign: "center",
+    },
 });
 
 export default styles;

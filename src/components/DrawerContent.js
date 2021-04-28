@@ -22,7 +22,6 @@ import axiosURL from "../helper/AxiosURL";
 import { AuthContext } from "../components/context/Store";
 import styles from "../styles/DrawerContentStyles";
 
-
 export function DrawerContent(props) {
     const [userRole, setUserRole] = React.useState("");
 
@@ -99,14 +98,15 @@ export function DrawerContent(props) {
                             icon={({ color, size }) => (
                                 <MaterialIcons
                                     name="home"
-                                    color={color}
+                                    color="#006064"
                                     size={size}
                                 />
                             )}
-                            label="Home"
+                            label="HOME"
                             onPress={() => {
                                 props.navigation.navigate("Home");
                             }}
+                            pressColor="#006064"
                         />
                         {userRole === "Customer" ? (
                             <View>
@@ -114,14 +114,15 @@ export function DrawerContent(props) {
                                     icon={({ color, size }) => (
                                         <MaterialCommunityIcons
                                             name="account-outline"
-                                            color={color}
+                                            color="#006064"
                                             size={size}
                                         />
                                     )}
-                                    label="Profile"
+                                    label="PROFILE"
                                     onPress={() => {
                                         props.navigation.navigate("profile");
                                     }}
+                                    pressColor="#006064"
                                 />
                             </View>
                         ) : (
@@ -131,16 +132,17 @@ export function DrawerContent(props) {
                                         icon={({ color, size }) => (
                                             <MaterialIcons
                                                 name="local-offer"
-                                                color={color}
+                                                color="#006064"
                                                 size={size}
                                             />
                                         )}
-                                        label="My Offers"
+                                        label="MY OFFERS"
                                         onPress={() => {
                                             props.navigation.navigate(
                                                 "MyOffers"
                                             );
                                         }}
+                                        pressColor="#006064"
                                     />
                                 </View>
                                 <View>
@@ -148,16 +150,17 @@ export function DrawerContent(props) {
                                         icon={({ color, size }) => (
                                             <Entypo
                                                 name="shop"
-                                                color={color}
+                                                color="#006064"
                                                 size={size}
                                             />
                                         )}
-                                        label="My Shops"
+                                        label="MY SHOPS"
                                         onPress={() => {
                                             props.navigation.navigate(
                                                 "MyShops"
                                             );
                                         }}
+                                        pressColor="#006064"
                                     />
                                 </View>
                             </View>
@@ -166,14 +169,15 @@ export function DrawerContent(props) {
                             icon={({ color, size }) => (
                                 <MaterialCommunityIcons
                                     name="bookmark-multiple"
-                                    color={color}
+                                    color="#006064"
                                     size={size}
                                 />
                             )}
-                            label="Wishlist"
+                            label="WISHLIST"
                             onPress={() => {
                                 props.navigation.navigate("SaveOffers");
                             }}
+                            pressColor="#006064"
                         />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
@@ -181,11 +185,17 @@ export function DrawerContent(props) {
                             onPress={() => {
                                 toggleTheme();
                             }}
+                            rippleColor="#006064"
                         >
                             <View style={styles.preference}>
-                                <Text>Dark Theme</Text>
+                                <Text style={{ color: "#616161" }}>
+                                    DARK THEME
+                                </Text>
                                 <View pointerEvents="none">
-                                    <Switch value={paperTheme.dark} />
+                                    <Switch
+                                        value={paperTheme.dark}
+                                        color="#006064"
+                                    />
                                 </View>
                             </View>
                         </TouchableRipple>
@@ -197,11 +207,11 @@ export function DrawerContent(props) {
                     icon={({ color, size }) => (
                         <MaterialIcons
                             name="logout"
-                            color={color}
+                            color="#006064"
                             size={size}
                         />
                     )}
-                    label="Sign Out"
+                    label="LOGOUT"
                     onPress={() => {
                         signOut();
                     }}
