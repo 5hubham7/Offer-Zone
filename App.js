@@ -206,7 +206,7 @@ const App = () => {
     return (
         <PaperProvider theme={theme}>
             <AuthContext.Provider value={authContext}>
-                <StatusBar backgroundColor="#000" barStyle="light-content" />
+                <StatusBar backgroundColor="#006064" barStyle="light-content" />
                 <NavigationContainer theme={theme}>
                     {State.userToken !== null ? (
                         <Drawer.Navigator
@@ -388,7 +388,6 @@ const SaveOfferStackScreen = ({ navigation }) => (
                 textAlign: "center",
                 fontSize: 20,
             },
-
         }}
     >
         <SaveOffersStack.Screen

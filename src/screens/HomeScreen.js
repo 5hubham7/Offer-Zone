@@ -23,7 +23,7 @@ import OfferCard from "../components/OfferCard";
 import OfferFilter from "../components/OfferFilter";
 import OfferSort from "../components/OfferSort";
 import axiosURL from "../helper/AxiosURL";
-import SearchResultCard from '../components/SearchResultCard'
+import SearchResultCard from "../components/SearchResultCard";
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                         //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
@@ -201,15 +201,15 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* <OfferCard
+            <OfferCard
                 offerData={currentOffers}
                 getOffers={getOffers}
                 navigation={navigation}
                 location={location}
                 User={User}
-            /> */}
+            />
 
-            <SearchResultCard />
+            {/* <SearchResultCard /> */}
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />

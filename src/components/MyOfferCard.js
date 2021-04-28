@@ -123,6 +123,7 @@ const MyOfferCard = (props) => {
                                 />
                             }
                             animation="fadeInRightBig"
+                            style={{ marginBottom: 60 }}
                             contentContainerStyle={{
                                 flexGrow: 1,
                                 justifyContent: "center",
