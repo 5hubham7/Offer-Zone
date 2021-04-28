@@ -381,6 +381,7 @@ const SaveOfferStackScreen = ({ navigation }) => (
                 textAlign: "center",
                 fontSize: 20,
             },
+
         }}
     >
         <SaveOffersStack.Screen
