@@ -44,7 +44,7 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (offer_id) => {
@@ -123,7 +123,7 @@ const MyOfferCard = (props) => {
                                 />
                             }
                             animation="fadeInRightBig"
-                            style={{ marginBottom: 60 }}
+                            style={{ marginBottom: 20 }}
                             contentContainerStyle={{
                                 flexGrow: 1,
                                 justifyContent: "center",
@@ -158,7 +158,7 @@ const MyOfferCard = (props) => {
                                     progressBackgroundColor={"#000"}
                                 />
                             }
-                            style={{ marginBottom: 60 }}
+                            style={{ marginBottom: 10 }}
                             animation="fadeInRightBig"
                         >
                             {props.offerData.map((element, index) => (

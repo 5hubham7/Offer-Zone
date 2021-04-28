@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     btnSaperator: {
         color: "#fff",
-        borderColor: "#585858",
+        borderColor: "#fff",
         borderRightWidth: 1,
     },
     buttons: {
