@@ -55,7 +55,7 @@ const MyShops = ({ navigation }) => {
 
     const addShop = () => {
         alert("Add Shop");
-        navigation.navigate("AddShop");
+        //navigation.navigate("AddShop");
     };
 
     useEffect(() => {
