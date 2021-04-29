@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
         elevation: 3
     },
     checkButton: {
-        borderColor: '#FF9200',
-        borderWidth: 1,
+        borderColor: '#FF0000',
+        borderWidth: 2,
         borderRadius: 10,
         marginTop: 5,
         backgroundColor: '#E6E6E6',

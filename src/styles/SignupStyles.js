@@ -5,7 +5,7 @@ const { width } = Dimensions.get("screen").width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#000",
+        backgroundColor: "#006064",
     },
     header: {
         flex: 1,
