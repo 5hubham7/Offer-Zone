@@ -15,37 +15,41 @@ const windowWidth = Dimensions.get("screen").width;
 const MyShops = ({ navigation }) => {
     const { colors } = useTheme();
 
-    const [shopData, setShopData] = React.useState([
-        {
-            shop_name: "[Shop Name]",
-            category: "[Category]",
-            shop_address: "[Address]",
-            offer: [],
-        },
-    ]);
+    const [shopData, setShopData] = React.useState(null);
 
     const getMyShops = (seller_id) => {
         var data = [];
         var options = [];
         // console.log(
-        //     `${axiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
+        //     `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
         // );
         axios
             .get(`${axiosURL}/seller/getMyShops/${seller_id}`)
+            // axios
+            //     .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
             .then((response) => {
+                // console.log(response.data.response);
                 if (response.data.status === 200) {
-                    // console.log(response.data.response);
-                    setShopData(response.data.response);
-                    response.data.response.map((element) => {
-                        data.push(element.offer_id);
-                        options.push(false);
-                    });
+                    if (response.data.response.length > 0) {
+                        setOfferData(response.data.response);
+                        response.data.response.map((element) => {
+                            data.push(element.offer_id);
+                            options.push(false);
+                        });
 
-                    options.reduce(function (result, field, index) {
-                        result[data[index]] = field;
-                        // console.log("shopData", shopData);
-                        return result;
-                    }, {});
+                        var result = options.reduce(function (
+                            result,
+                            field,
+                            index
+                        ) {
+                            result[data[index]] = field;
+                            return result;
+                        },
+                        {});
+                        setOfferLike({ ...result });
+                    } else {
+                        setShopData("No Shops");
+                    }
                 }
             })
             .catch((error) => {

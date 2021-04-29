@@ -71,9 +71,9 @@ const MyShopsCard = (props) => {
 
     return (
         <View style={styles.container}>
-            {props.offerData != null ? (
+            {props.shopData != null ? (
                 <View>
-                    {props.offerData === "No Offers" ? (
+                    {props.shopData === "No Shops" ? (
                         <ScrollView
                             showsVerticalScrollIndicator={false}
                             refreshControl={
@@ -100,8 +100,7 @@ const MyShopsCard = (props) => {
                                         { width: windowWidth * 0.9 },
                                     ]}
                                 >
-                                    Sorry, your current location don't have any
-                                    offers! Try with another location.
+                                    Sorry, you haven't added any shop!
                                 </Text>
                                 <Image
                                     source={require("../../assets/sad_folder.png")}

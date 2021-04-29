@@ -32,18 +32,17 @@ const MyOffers = ({ navigation }) => {
     const getMyOffers = (seller_id) => {
         var data = [];
         var options = [];
-        console.log(
-            `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
-        );
+        // console.log(
+        //     `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
+        // );
         axios
             .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
             // axios
             //     .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
             .then((response) => {
-                console.log(response.data.response);
+                // console.log(response.data.response);
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
-                        console.log(response.data.response);
                         setOfferData(response.data.response);
                         response.data.response.map((element) => {
                             data.push(element.offer_id);
@@ -59,7 +58,6 @@ const MyOffers = ({ navigation }) => {
                             return result;
                         },
                         {});
-                        //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
                         setOfferData("No Offers");

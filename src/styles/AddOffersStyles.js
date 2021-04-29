@@ -5,14 +5,12 @@ const { width } = Dimensions.get("screen").width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#000",
+        backgroundColor: "#006064",
     },
     header: {
         flex: 1,
         justifyContent: "flex-end",
         paddingHorizontal: 20,
-        paddingBottom: 20,
-        paddingTop: 0,
     },
     footer: {
         flex: 4,
@@ -25,7 +23,7 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
         color: "#fff",
         fontWeight: "bold",
-        fontSize: 30,
+        fontSize: 25,
         textAlign: "center",
         marginBottom: 40,
     },
@@ -90,6 +88,21 @@ const styles = StyleSheet.create({
         paddingLeft: 40,
         color: "#05375a",
         fontSize: 18,
+    },
+    imagePickerBox: {
+        marginTop: 5,
+        borderWidth: 1,
+        borderColor: "#c9c9c9",
+        borderTopLeftRadius: 20,
+        marginBottom: 10,
+    },
+    picker: {
+        marginTop: 5,
+        borderWidth: 1,
+        borderColor: "#c9c9c9",
+        borderTopLeftRadius: 20,
+        marginBottom: 10,
+        paddingLeft: 30,
     },
     errorMessage: {
         color: "#FF0000",

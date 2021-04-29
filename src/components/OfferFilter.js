@@ -11,7 +11,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from "react-native-modal";
-import styles from "../styles/OfferFilterStyle";
+import styles, { pickerSelectStyles } from "../styles/OfferFilterStyle";
 import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
@@ -201,27 +201,3 @@ const offerFilter = (props) => {
 };
 
 export default offerFilter;
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: "gray",
-        borderRadius: 4,
-        color: "black",
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: "#929292",
-        borderRadius: 8,
-        color: "black",
-        paddingRight: 30, // to ensure the text is never behind the icon
-        marginTop: 10,
-    },
-});

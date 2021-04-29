@@ -1,15 +1,3 @@
 start emulator:
 
     emulator -avd Pixel_3a_API_30_x86
-
-shop_name
-category
-shop_address
-country
-state
-city
-street address
-latitude auto
-longitude auto
-offer empty array auto
-
