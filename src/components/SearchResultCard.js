@@ -11,61 +11,114 @@ import {
     ToastAndroid,
     Image,
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Animatable from "react-native-animatable";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-
 import styles from "../styles/SearchResultCardStyle";
-import axiosURL from "../helper/AxiosURL";
-import { AuthContext } from "../components/context/Store";
+const windowWidth = Dimensions.get("screen").width;
+const windowHeight = Dimensions.get("screen").height;
 
 const SearchResultCard = (props) => {
 
+
+    useEffect(() => {
+        console.log(props)
+    }, [])
+
+    const dateFormatter = (postdate) => {
+        const today = new Date();
+        const endDate = new Date(postdate);
+        const days = parseInt((today - endDate) / (1000 * 60 * 60 * 24));
+        const hours = parseInt(
+            (Math.abs(today - endDate) / (1000 * 60 * 60)) % 24
+        );
+        const minutes = parseInt(
+            (Math.abs(endDate.getTime() - today.getTime()) / (1000 * 60)) % 60
+        );
+        const seconds = parseInt(
+            (Math.abs(endDate.getTime() - today.getTime()) / 1000) % 60
+        );
+        if (hours === 0 && days <= 0) return `${minutes} min ${seconds} sec`;
+        else if (hours >= 1 && days <= 0) return `${hours} hrs ${minutes} min`;
+        else if (hours >= 0 && days >= 1) return `${days} days ${hours} hrs`;
+        else return `${seconds} sec`;
+    };
+
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     return (
         <View style={styles.container}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={{ marginBottom: 60 }}
-                animation="fadeInRightBig"
-            >
-                <View style={[styles.cardView, { flexDirection: 'row' }]}>
-                    <View>
-                        <ImageBackground
-                            source={{
-                                uri:
-                                    "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
-                            }}
-                            style={styles.cardImage}
-                        >
-                            <LinearGradient
-                                locations={[0, 0]}
-                                colors={[
-                                    "rgba(0,0,0,0.00)",
-                                    "rgba(0,0,0,0.30)",
+            {props.SearchQueryData != null ? (
+                <View>
+                    {props.SearchQueryData === "No data" ? (
+                        <View style={{ alignItems: "center" }}>
+                            <Text
+                                style={[
+                                    styles.errorMessageText,
+                                    { width: windowWidth * 0.9 },
                                 ]}
-                                style={
-                                    styles.linearGradient
-                                }
                             >
+                                Sorry, your search query don't have any results ! Try with another query.
+                            </Text>
+                            <Image
+                                source={require("../../assets/sad_folder.png")}
+                                style={{ width: 200, height: 200 }}
+                                resizeMode="stretch"
+                            />
+                        </View>
+                    ) : (
 
-                            </LinearGradient>
-                        </ImageBackground>
-                    </View>
-                    <View >
-                        <Text style={styles.cardTitle}>Summer Sale Flat 40 % Off</Text>
-                        <Text style={styles.cardSubtitle}>Bhambare Cloth Store</Text>
-                        <Text style={styles.cardSubtitle2}>10 days 2 hr ago . 1000 Likes </Text>
-                    </View>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            style={{ marginBottom: 60 }}
+                            animation="fadeInRightBig"
+                        >
+                            {props.SearchQueryData.map((element, index) => (
+
+                                <View style={[styles.cardView, { flexDirection: 'row' }]} key={index}>
+                                    <View>
+                                        <ImageBackground
+                                            source={{
+                                                uri:
+                                                    "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                            }}
+                                            style={styles.cardImage}
+                                        >
+                                            <LinearGradient
+                                                locations={[0, 0]}
+                                                colors={[
+                                                    "rgba(0,0,0,0.00)",
+                                                    "rgba(0,0,0,0.30)",
+                                                ]}
+                                                style={
+                                                    styles.linearGradient
+                                                }
+                                            >
+
+                                            </LinearGradient>
+                                        </ImageBackground>
+                                    </View>
+                                    <View >
+                                        <Text style={styles.cardTitle}>{element.offer_title}</Text>
+                                        <Text style={styles.cardSubtitle}>{element.shop_name} </Text>
+                                        <Text style={styles.cardSubtitle2}>{dateFormatter(element.post_time)} . {numberWithCommas(element.likes.length)} Likes </Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    )}
                 </View>
-            </ScrollView>
-
+            ) : (
+                <View>
+                    <Image
+                        source={require("../../assets/tenor.gif")}
+                        style={{ width: 200, height: 200 }}
+                        resizeMode="stretch"
+                    />
+                </View>
+            )}
         </View>
     )
-
 }
 
 export default SearchResultCard

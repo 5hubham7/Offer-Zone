@@ -7,6 +7,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    errorMessageText: {
+        fontSize: 22,
+        marginBottom: 20,
+        fontWeight: "bold",
+        color: "red",
+        textAlign: "center",
+    },
     cardView: {
         backgroundColor: "#DADADA",
         borderRadius: 20,

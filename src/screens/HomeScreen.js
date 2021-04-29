@@ -10,9 +10,8 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Entypo from "react-native-vector-icons/Entypo"
+import AntDesign from "react-native-vector-icons/AntDesign"
 import { LinearGradient } from "expo-linear-gradient";
-import * as Animatable from "react-native-animatable";
 import Modal from "react-native-modal";
 import axios from "axios";
 import Constants from "expo-constants";
@@ -30,6 +29,7 @@ const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
 const HomeScreen = ({ navigation }) => {
+
     const { colors } = useTheme();
 
     const [User, setUser] = React.useState(null);
@@ -37,10 +37,14 @@ const HomeScreen = ({ navigation }) => {
         latitude: "",
         longitude: "",
     });
+
+    const [SearchQuery, setSearchQuery] = React.useState(null)
+    const [SearchQueryData, setSearchQueryData] = React.useState(null)
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
     const [emailVerified, setEmailVerified] = React.useState(true);
+    const [ToggelSearchAndOffers, setToggelSearchAndOffers] = React.useState(false)
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
@@ -123,10 +127,10 @@ const HomeScreen = ({ navigation }) => {
                         setCurrentOffers("No Offers");
                     }
                 }
-            });
+            }).catch((err) => {
+                alert("Network Error ! Please restart application.")
+            })
     };
-
-    const theme = useTheme();
 
     useEffect(() => {
         (async () => {
@@ -152,6 +156,23 @@ const HomeScreen = ({ navigation }) => {
         emailVerification();
     }, []);
 
+    const onSearchClick = () => {
+        setToggelSearchAndOffers(true)
+        axios.get(`${axiosURL}/customer/getSearchData/${SearchQuery}`)
+            .then((response) => {
+                //console.log(response.data)
+                if (response.data.status === 200) {
+                    if (response.data.response.length > 0)
+                        setSearchQueryData(response.data.response)
+                    else
+                        setSearchQueryData("No data")
+                }
+
+            }).catch((err) => {
+                alert("Network Error ! Please restart application.")
+            });
+
+    }
     return (
         <View style={styles.container}>
             <View
@@ -170,18 +191,30 @@ const HomeScreen = ({ navigation }) => {
                         marginRight: "auto",
                         borderRadius: 10,
                     }}
-                    onSubmitEditing={() => { alert("hello") }}
+                    value={SearchQuery}
+                    onChangeText={(text) => {
+                        setSearchQuery(text)
+                    }}
+                    onSubmitEditing={() => {
+                        onSearchClick()
+                    }}
+                    onIconPress={() => { console.log("ico press") }}
                     clearButtonMode="while-editing"
                     clearIcon={() => {
                         return (
-                            <Entypo
-                                name="cross"
-                                size={24}
-                                color="#000"
+                            <AntDesign
+                                name="close"
+                                size={25}
+                                color={colors.text}
+                                onPress={() => {
+                                    //console.log("clr press")
+                                    setSearchQuery(null)
+                                    setToggelSearchAndOffers(false)
+                                    setSearchQueryData(null)
+                                }}
                             />
-                        );
+                        )
                     }}
-
                 />
             </View>
             <View style={styles.footerNav}>
@@ -212,15 +245,17 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* <OfferCard
-                offerData={currentOffers}
-                getOffers={getOffers}
-                navigation={navigation}
-                location={location}
-                User={User}
-            /> */}
-
-            <SearchResultCard />
+            {ToggelSearchAndOffers ?
+                <SearchResultCard SearchQueryData={SearchQueryData} />
+                :
+                <OfferCard
+                    offerData={currentOffers}
+                    getOffers={getOffers}
+                    navigation={navigation}
+                    location={location}
+                    User={User}
+                />
+            }
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />

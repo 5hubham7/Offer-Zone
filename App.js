@@ -70,7 +70,7 @@ const App = () => {
         colors: {
             ...NavigationDefaultTheme.colors,
             ...PaperDefaultTheme.colors,
-            background: "#E9E9E9",
+            background: "#fff",
             text: "#333333",
             link: "#1B01A9",
         },
