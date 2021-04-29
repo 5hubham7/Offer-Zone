@@ -5,7 +5,6 @@ import {
     Dimensions,
     TouchableOpacity,
     StyleSheet,
-    Pic,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -16,11 +15,14 @@ import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
+import { useTheme } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
 const offerFilter = (props) => {
+    const { colors } = useTheme();
+
     const [allCategories, setAllCategories] = React.useState([
         { label: "All", value: "All" },
     ]);
@@ -68,7 +70,7 @@ const offerFilter = (props) => {
             deviceWidth={windowWidth}
             deviceHeight={windowHeight}
             //onBackdropPress={() => { props.toggleModal() }}
-            style={{ backgroundColor: "#fff" }}
+            style={{ backgroundColor: colors.background }}
             animationIn="slideInUp"
             animationOut="slideOutRight"
         >
@@ -93,7 +95,7 @@ const offerFilter = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <Text style={styles.subTitle}>Category</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>Category</Text>
                     <View style={{ width: "90%", marginLeft: 20 }}>
                         <RNPickerSelect
                             placeholder={placeholder}
@@ -121,7 +123,7 @@ const offerFilter = (props) => {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.subTitle}>City</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>City</Text>
                     <View style={{ width: "90%", marginLeft: 20 }}>
                         <RNPickerSelect
                             placeholder={placeholder}
@@ -154,7 +156,7 @@ const offerFilter = (props) => {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.subTitle}>Distance</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>Distance</Text>
                     <Slider
                         value={value.distance}
                         onValueChange={(value) => {
@@ -223,5 +225,6 @@ const pickerSelectStyles = StyleSheet.create({
         color: "black",
         paddingRight: 30, // to ensure the text is never behind the icon
         marginTop: 10,
+        backgroundColor: '#cccc'
     },
 });

@@ -8,11 +8,14 @@ import styles from '../styles/OfferSortStyle'
 import axios from 'axios'
 import axiosURL from "../helper/AxiosURL";
 import SortToggleButton from '../components/sortToggleButton'
+import { useTheme } from "@react-navigation/native";
+
 
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
 
 const offerSort = (props) => {
+    const { colors } = useTheme();
     const [state, setstate] = React.useState({
         selected: 0,
     })
@@ -35,7 +38,7 @@ const offerSort = (props) => {
             deviceWidth={windowWidth}
             deviceHeight={windowHeight}
             //onBackdropPress={() => { props.toggleModal() }}
-            style={{ backgroundColor: '#fff' }}
+            style={{ backgroundColor: colors.background }}
             animationIn="slideInUp"
             animationOut="slideOutRight"
         >
@@ -62,7 +65,7 @@ const offerSort = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <Text style={styles.subTitle}>Offers</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>Offers</Text>
                     <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                         <SortToggleButton
                             value="On Going"
@@ -91,7 +94,7 @@ const offerSort = (props) => {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.subTitle}>Dates</Text>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>Dates</Text>
                     <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                         <SortToggleButton
                             value="Today"
@@ -132,7 +135,7 @@ const offerSort = (props) => {
 
                     </View>
                     <View>
-                        <Text style={styles.subTitle}>distance</Text>
+                        <Text style={[styles.subTitle, { color: colors.text }]}>distance</Text>
                         <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                             <SortToggleButton
                                 value="Min to Max"

@@ -13,10 +13,11 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         margin: 10,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 5, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 2,
-        elevation: 2,
+        elevation: 3,
+        width: windowWidth * 0.95
     },
     cardImageView: {
         height: windowHeight * 0.17,
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     },
     cardImage: {
         height: windowHeight * 0.2,
-        width: windowWidth * 0.3,
+        width: windowWidth * 0.28,
     },
     cardImageTitle: {
         color: "#fff",
@@ -43,19 +44,28 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         width: windowWidth * 0.6,
-        textAlign: 'center',
-        marginRight: 10,
+        textAlign: 'left',
         marginLeft: 10,
         marginTop: 10
     },
     cardSubtitle: {
         color: "#000",
         marginTop: 5,
+        marginLeft: 10,
+        fontWeight: 'bold'
     },
     cardSubtitle2: {
         fontSize: 14,
         marginTop: 5,
         color: "#595959",
+        marginLeft: 10
+
+    },
+    linearGradient: {
+        flex: 1,
+        width: "100%",
+        borderRadius: 5,
+        marginTop: -1,
     },
     cardFooter: {
         fontSize: 14,

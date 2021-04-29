@@ -10,6 +10,7 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Entypo from "react-native-vector-icons/Entypo"
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import Modal from "react-native-modal";
@@ -115,7 +116,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
@@ -161,7 +162,7 @@ const HomeScreen = ({ navigation }) => {
                 }}
             >
                 <Searchbar
-                    placeholder="Search Offers..."
+                    placeholder="Search Offers & Shop..."
                     style={{
                         width: windowWidth * 0.9,
                         height: 40,
@@ -169,8 +170,18 @@ const HomeScreen = ({ navigation }) => {
                         marginRight: "auto",
                         borderRadius: 10,
                     }}
-                    //onChangeText={(text) => (alert(text))}
+                    onSubmitEditing={() => { alert("hello") }}
                     clearButtonMode="while-editing"
+                    clearIcon={() => {
+                        return (
+                            <Entypo
+                                name="cross"
+                                size={24}
+                                color="#000"
+                            />
+                        );
+                    }}
+
                 />
             </View>
             <View style={styles.footerNav}>
@@ -201,15 +212,15 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            <OfferCard
+            {/* <OfferCard
                 offerData={currentOffers}
                 getOffers={getOffers}
                 navigation={navigation}
                 location={location}
                 User={User}
-            />
+            /> */}
 
-            {/* <SearchResultCard /> */}
+            <SearchResultCard />
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />

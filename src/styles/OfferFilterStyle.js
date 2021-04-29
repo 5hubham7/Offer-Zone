@@ -3,7 +3,7 @@ const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: "#5B5B5B",
+        backgroundColor: "#006064",
         height: "10%",
         flexDirection: "row",
     },
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         color: "#B20000",
     },
     applyButton: {
-        backgroundColor: "#5B5B5B",
+        backgroundColor: "#006064",
         height: "151%",
     },
     bottomView: {

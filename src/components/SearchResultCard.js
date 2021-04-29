@@ -34,20 +34,32 @@ const SearchResultCard = (props) => {
             >
                 <View style={[styles.cardView, { flexDirection: 'row' }]}>
                     <View>
-                        <Image
+                        <ImageBackground
                             source={{
                                 uri:
                                     "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
                             }}
                             style={styles.cardImage}
-                        />
+                        >
+                            <LinearGradient
+                                locations={[0, 0]}
+                                colors={[
+                                    "rgba(0,0,0,0.00)",
+                                    "rgba(0,0,0,0.30)",
+                                ]}
+                                style={
+                                    styles.linearGradient
+                                }
+                            >
+
+                            </LinearGradient>
+                        </ImageBackground>
                     </View>
-                    <View style={{ alignItems: 'center' }}>
+                    <View >
                         <Text style={styles.cardTitle}>Summer Sale Flat 40 % Off</Text>
                         <Text style={styles.cardSubtitle}>Bhambare Cloth Store</Text>
-                        <Text style={styles.cardSubtitle2}>10 days 2 hr ago       </Text>
+                        <Text style={styles.cardSubtitle2}>10 days 2 hr ago . 1000 Likes </Text>
                     </View>
-
                 </View>
             </ScrollView>
 

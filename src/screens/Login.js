@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar, ToastAndroid } from "react-native";
 import * as Animatable from "react-native-animatable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
@@ -69,7 +69,7 @@ const Login = ({ navigation, route }) => {
             for (var i = 0; i < providerData.length; i++) {
                 if (
                     providerData[i].providerId ===
-                        firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
                     providerData[i].uid === googleUser.user.id
                 ) {
                     return true;
@@ -136,6 +136,8 @@ const Login = ({ navigation, route }) => {
                         onSignIn(result);
                         return result.accessToken;
                     } else {
+                        stopLoading();
+                        ToastAndroid.show("Login with Google failed ! Please try again.", ToastAndroid.SHORT)
                         return { cancelled: true };
                     }
                 } catch (e) {
