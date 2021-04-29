@@ -14,3 +14,4 @@ web-build/
 node_modules
 node_modules
 server/config.json
+package-lock.json
