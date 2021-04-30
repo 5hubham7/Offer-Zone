@@ -43,7 +43,7 @@ const offerSort = (props) => {
             animationOut="slideOutRight"
         >
             <View style={{ flex: 1 }}>
-                <View style={styles.header}>
+                <View style={[styles.header, { backgroundColor: colors.headerColor }]}>
                     <AntDesign
                         name="closecircle"
                         color='#fff'

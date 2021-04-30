@@ -6,6 +6,10 @@ import styles from "../styles/HomeScreenStyles";
 import SavedOfferCard from "../components/SavedOfferCard";
 import axiosURL from "../helper/AxiosURL";
 import { useTheme } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Icon from "react-native-vector-icons/Ionicons";
+
+const SaveOffersStack = createStackNavigator();
 
 const SaveOffers = ({ navigation }) => {
     const [User, setUser] = React.useState(null);
@@ -20,7 +24,7 @@ const SaveOffers = ({ navigation }) => {
                 setUser(value);
                 getSaveOffers(value);
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const getSaveOffers = (user) => {
@@ -63,4 +67,42 @@ const SaveOffers = ({ navigation }) => {
     );
 };
 
-export default SaveOffers;
+
+const SaveOfferStackScreen = ({ navigation }) => {
+    const { colors } = useTheme();
+    return (
+        <SaveOffersStack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: colors.headerColor,
+                    elevation: 0,
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    fontWeight: "bold",
+                    marginRight: 50,
+                    textAlign: "center",
+                    fontSize: 20,
+                },
+            }}
+        >
+            <SaveOffersStack.Screen
+                name="SaveOffers"
+                component={SaveOffers}
+                options={{
+                    title: "WISHLIST",
+                    headerLeft: () => (
+                        <Icon.Button
+                            name="ios-menu"
+                            size={30}
+                            backgroundColor={colors.headerColor}
+                            color="#fff"
+                            onPress={() => navigation.openDrawer()}
+                        ></Icon.Button>
+                    ),
+                }}
+            />
+        </SaveOffersStack.Navigator>
+    )
+};
+export default SaveOfferStackScreen;

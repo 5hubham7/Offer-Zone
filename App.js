@@ -42,10 +42,6 @@ LogBox.ignoreLogs([
 ]);
 
 const Drawer = createDrawerNavigator();
-const HomeStack = createStackNavigator();
-const MyOffersStack = createStackNavigator();
-const MyShopsStack = createStackNavigator();
-const SaveOffersStack = createStackNavigator();
 
 const App = () => {
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
@@ -73,6 +69,12 @@ const App = () => {
             background: "#fff",
             text: "#333333",
             link: "#1B01A9",
+            headerColor: "#006064",
+            offerCard: "#fff",
+            subtext: "#595959",
+            icon: "#000",
+            shareIcon: "#0277BD",
+
         },
     };
 
@@ -82,9 +84,14 @@ const App = () => {
         colors: {
             ...NavigationDarkTheme.colors,
             ...PaperDarkTheme.colors,
-            background: "#212121",
+            background: "#333333",
             text: "#ffffff",
             link: "yellow",
+            headerColor: "#1B1B1B",
+            offerCard: "#4C4C4C",
+            subtext: "#B4B4B4",
+            icon: "#fff",
+            shareIcon: "#35B3FF"
         },
     };
 
@@ -216,7 +223,7 @@ const App = () => {
                         >
                             <Drawer.Screen
                                 name="HomeDrawer"
-                                component={HomeStackScreen}
+                                component={HomeScreen}
                             />
                             <Drawer.Screen
                                 name="OfferDetails"
@@ -224,7 +231,7 @@ const App = () => {
                             />
                             <Drawer.Screen
                                 name="MyOffers"
-                                component={MyOffersStackScreen}
+                                component={MyOffers}
                             />
                             <Drawer.Screen
                                 name="AddOffers"
@@ -232,11 +239,11 @@ const App = () => {
                             />
                             <Drawer.Screen
                                 name="MyShops"
-                                component={MyShopsStackScreen}
+                                component={MyShops}
                             />
                             <Drawer.Screen
                                 name="SaveOffers"
-                                component={SaveOfferStackScreen}
+                                component={SaveOffers}
                             />
                         </Drawer.Navigator>
                     ) : (
@@ -267,144 +274,3 @@ const App = () => {
 };
 
 export default App;
-
-const HomeStackScreen = ({ navigation }) => (
-    <HomeStack.Navigator
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: "#006064",
-                elevation: 0,
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-                fontWeight: "bold",
-                marginRight: 50,
-                textAlign: "center",
-                fontSize: 22,
-            },
-        }}
-    >
-        <HomeStack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-                title: "OFFER ZONE",
-
-                headerLeft: () => (
-                    <Icon.Button
-                        name="ios-menu"
-                        size={30}
-                        backgroundColor="#006064"
-                        color="#fff"
-                        onPress={() => navigation.openDrawer()}
-                    ></Icon.Button>
-                ),
-            }}
-        />
-    </HomeStack.Navigator>
-);
-
-const MyOffersStackScreen = ({ navigation }) => (
-    <MyOffersStack.Navigator
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: "#006064",
-                elevation: 0,
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-                fontWeight: "bold",
-                marginRight: 50,
-                textAlign: "center",
-                fontSize: 20,
-            },
-        }}
-    >
-        <MyOffersStack.Screen
-            name="MyOffers"
-            component={MyOffers}
-            options={{
-                title: "MY OFFERS",
-                headerLeft: () => (
-                    <Icon.Button
-                        name="ios-menu"
-                        size={30}
-                        backgroundColor="#006064"
-                        color="#fff"
-                        onPress={() => navigation.openDrawer()}
-                    ></Icon.Button>
-                ),
-            }}
-        />
-    </MyOffersStack.Navigator>
-);
-
-const MyShopsStackScreen = ({ navigation }) => (
-    <MyShopsStack.Navigator
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: "#006064",
-                elevation: 0,
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-                fontWeight: "bold",
-                marginRight: 50,
-                textAlign: "center",
-                fontSize: 20,
-            },
-        }}
-    >
-        <MyShopsStack.Screen
-            name="MyShops"
-            component={MyShops}
-            options={{
-                title: "MY SHOPS",
-                headerLeft: () => (
-                    <Icon.Button
-                        name="ios-menu"
-                        size={30}
-                        backgroundColor="#006064"
-                        color="#fff"
-                        onPress={() => navigation.openDrawer()}
-                    ></Icon.Button>
-                ),
-            }}
-        />
-    </MyShopsStack.Navigator>
-);
-
-const SaveOfferStackScreen = ({ navigation }) => (
-    <SaveOffersStack.Navigator
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: "#006064",
-                elevation: 0,
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-                fontWeight: "bold",
-                marginRight: 50,
-                textAlign: "center",
-                fontSize: 20,
-            },
-        }}
-    >
-        <SaveOffersStack.Screen
-            name="SaveOffers"
-            component={SaveOffers}
-            options={{
-                title: "WISHLIST",
-                headerLeft: () => (
-                    <Icon.Button
-                        name="ios-menu"
-                        size={30}
-                        backgroundColor="#006064"
-                        color="#fff"
-                        onPress={() => navigation.openDrawer()}
-                    ></Icon.Button>
-                ),
-            }}
-        />
-    </SaveOffersStack.Navigator>
-);

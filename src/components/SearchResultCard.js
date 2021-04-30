@@ -13,11 +13,13 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/SearchResultCardStyle";
+import { useTheme } from "@react-navigation/native";
+
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
 const SearchResultCard = (props) => {
-
+    const { colors } = useTheme();
 
     useEffect(() => {
         console.log(props)
@@ -75,7 +77,7 @@ const SearchResultCard = (props) => {
                         >
                             {props.SearchQueryData.map((element, index) => (
 
-                                <View style={[styles.cardView, { flexDirection: 'row' }]} key={index}>
+                                <View style={[styles.cardView, { flexDirection: 'row', backgroundColor: colors.offerCard }]} key={index}>
                                     <View>
                                         <ImageBackground
                                             source={{
@@ -99,9 +101,9 @@ const SearchResultCard = (props) => {
                                         </ImageBackground>
                                     </View>
                                     <View >
-                                        <Text style={styles.cardTitle}>{element.offer_title}</Text>
-                                        <Text style={styles.cardSubtitle}>{element.shop_name} </Text>
-                                        <Text style={styles.cardSubtitle2}>{dateFormatter(element.post_time)} . {numberWithCommas(element.likes.length)} Likes </Text>
+                                        <Text style={[styles.cardTitle, { color: colors.text }]}>{element.offer_title}</Text>
+                                        <Text style={[styles.cardSubtitle, { color: colors.text }]}>{element.shop_name} </Text>
+                                        <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>{dateFormatter(element.post_time)} . {numberWithCommas(element.likes.length)} Likes </Text>
                                     </View>
                                 </View>
                             ))}

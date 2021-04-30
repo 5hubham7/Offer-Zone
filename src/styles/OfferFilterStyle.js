@@ -77,6 +77,7 @@ export const pickerSelectStyles = StyleSheet.create({
         borderColor: "gray",
         borderRadius: 4,
         color: "black",
+        backgroundColor: "#B2B2B2",
         paddingRight: 30, // to ensure the text is never behind the icon
     },
     inputAndroid: {
@@ -87,6 +88,7 @@ export const pickerSelectStyles = StyleSheet.create({
         borderColor: "#929292",
         borderRadius: 8,
         color: "black",
+        backgroundColor: "#B2B2B2",
         paddingRight: 30, // to ensure the text is never behind the icon
         marginTop: 10,
     },
