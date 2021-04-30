@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
                 if (user.emailVerified === false) {
                     user.sendEmailVerification()
                         .then(function (res) {
-                            console.log(res);
+                            // console.log(res);
                         })
                         .catch(function (error) {
                             alert(error);

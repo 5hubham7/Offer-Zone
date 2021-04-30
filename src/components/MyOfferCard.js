@@ -45,28 +45,28 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const onSingleTap = (offer_id) => {
         //console.log(offer_id)
-        startLoading();
-        axios
-            .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
-            .then((response) => {
-                if (response.data.status === 200) {
-                    //setOfferDetails(response.data.response)
-                    stopLoading();
-                    props.navigation.navigate("OfferDetails", {
-                        offerData: response.data.response,
-                        location: props.location,
-                    });
-                }
-            })
-            .catch((error) => {
-                stopLoading();
-                alert(error);
-            });
+        // startLoading();
+        // axios
+        //     .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
+        //     .then((response) => {
+        //         if (response.data.status === 200) {
+        //             //setOfferDetails(response.data.response)
+        //             stopLoading();
+        //             props.navigation.navigate("OfferDetails", {
+        //                 offerData: response.data.response,
+        //                 location: props.location,
+        //             });
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         stopLoading();
+        //         alert(error);
+        //     });
     };
 
     useEffect(() => {
@@ -74,8 +74,6 @@ const MyOfferCard = (props) => {
             setUserID(response);
         });
     }, []);
-
-    console.log(props.offerData);
 
     const dateFormatter = (postdate) => {
         const today = new Date();
@@ -164,7 +162,10 @@ const MyOfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
+                                    style={[
+                                        styles.cardView,
+                                        { backgroundColor: colors.offerCard },
+                                    ]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -236,26 +237,42 @@ const MyOfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={[styles.cardTitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardTitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={[styles.cardSubtitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardSubtitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardSubtitle2,
+                                                    { color: colors.subtext },
+                                                ]}
+                                            >
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardFooter,
+                                                    { color: colors.text },
+                                                ]}
+                                            >
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -323,7 +340,9 @@ const MyOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color={colors.shareIcon}
+                                                            color={
+                                                                colors.shareIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>

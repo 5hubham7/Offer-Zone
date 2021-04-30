@@ -8,6 +8,7 @@ import {
     ScrollView,
     Platform,
     Image,
+    ToastAndroid,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -16,15 +17,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
+import { useTheme } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import ImageResizer from "react-native-image-resizer";
+import * as ImageManipulator from "expo-image-manipulator";
+
 import { AuthContext } from "../components/context/Store";
 import styles, { pickerSelectStyles } from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
-import { useTheme } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 
 try {
     firebase.initializeApp({
@@ -37,13 +41,13 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) { }
+} catch (err) {}
 
 const AddOffers = ({ navigation, route }) => {
     const { colors } = useTheme();
     const [offerDetails, setOfferDetails] = useState({
         shop_name: shopName,
-        offer_title: "",
+        offer_title: image,
         details: "",
         image_url: image,
         post_time: "",
@@ -60,6 +64,7 @@ const AddOffers = ({ navigation, route }) => {
     const [shopName, setShopName] = useState(null);
     const [shops, setShops] = useState([]);
     const [image, setImage] = useState(null);
+    const [imageUri, setImageUri] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [showStartDate, setShowStartDate] = useState(false);
@@ -106,7 +111,6 @@ const AddOffers = ({ navigation, route }) => {
 
     const handelDetailsChange = (val) => {
         setOfferDetails({ ...offerDetails, details: val });
-        console.log(offerDetails);
     };
 
     // image handlers:
@@ -121,7 +125,29 @@ const AddOffers = ({ navigation, route }) => {
 
         if (!result.cancelled) {
             setImage(result.uri);
+            offerDetails.image_url = image;
+            // image resize:
+            try {
+                const resizedImage = await ImageManipulator.manipulateAsync(
+                    result.uri,
+                    [{ resize: { height: 750, width: 1000 } }],
+                    { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+                );
+                setImage(resizedImage.uri);
+                offerDetails.image_url = image;
+            } catch (error) {
+                console.log(error);
+            }
         }
+    };
+
+    const uploadImage = async (image, imageName) => {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const ref = firebase.storage().ref().child(imageName);
+        const snapshot = await ref.put(blob);
+        console.log("DONE: ", snapshot.downloadURL);
+        return snapshot.downloadURL;
     };
 
     // getting shops:
@@ -131,8 +157,8 @@ const AddOffers = ({ navigation, route }) => {
         var options = [];
 
         axios
-            // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
-            .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
+            .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
+            // .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
@@ -142,10 +168,11 @@ const AddOffers = ({ navigation, route }) => {
                         });
                     } else {
                         setShops(["No Shops"]);
-                        alert(
-                            "Sorry, you don't have any shop to add an offer! Please add shop first."
+                        ToastAndroid.show(
+                            "Sorry, you don't have any shop to add an offer! Please add shop first.",
+                            ToastAndroid.LONG
                         );
-                        // navigation.navigate("MyShops");
+                        navigation.navigate("MyShops");
                     }
                 }
                 setShops(data);
@@ -154,7 +181,6 @@ const AddOffers = ({ navigation, route }) => {
                 console.log(error);
             });
     };
-
     // adding offer:
 
     const onAddOfferPress = async () => {
@@ -169,9 +195,14 @@ const AddOffers = ({ navigation, route }) => {
 
         let shop_name = shopName;
         let offer_title = offerDetails.offer_title;
-        let image_url = offerDetails.image_url;
+        // let image_url = image;
+        let image_url = "../images/offer.jpg";
         let details = offerDetails.details;
+        let offer_id = sellerID + "_" + generateOfferID(10);
 
+        // uploadImage(image_url, offer_id);
+
+        stopLoading();
         if (shop_name && offer_title && details) {
             let addOfferDetails = {
                 offer_title: offer_title,
@@ -182,7 +213,7 @@ const AddOffers = ({ navigation, route }) => {
                 end_date: getDateInFormat(endDate),
                 status: "Active",
                 likes: [],
-                offer_id: sellerID + "_" + generateOfferID(10),
+                offer_id: offer_id,
                 uid: sellerID,
             };
 
@@ -195,20 +226,30 @@ const AddOffers = ({ navigation, route }) => {
                 )
                 .then((response) => {
                     if (response.data.status === 200) {
-                        if (response.data.response.length > 0) {
-                            stopLoading();
-                            alert("Offer added successfully!");
-                            navigation.navigate("MyOffers");
-                        }
+                        console.log(response.data);
+                        stopLoading();
+                        ToastAndroid.show(
+                            "Offer added successfully!",
+                            ToastAndroid.LONG
+                        );
+                        navigation.navigate("MyOffers");
                     } else {
-                        alert("Something went wrong!");
+                        ToastAndroid.show(
+                            "Something went wrong!",
+                            ToastAndroid.LONG
+                        );
                     }
                 })
                 .catch((error) => {
+                    stopLoading();
                     console.log(error);
                 });
         } else {
-            alert("Please fill out all the necessary fields!");
+            stopLoading();
+            ToastAndroid.show(
+                "Please fill out all the necessary fields!",
+                ToastAndroid.LONG
+            );
         }
     };
 
@@ -240,6 +281,12 @@ const AddOffers = ({ navigation, route }) => {
         }
 
         return result;
+    };
+
+    const addDays = (date, days) => {
+        var newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + days);
+        return newDate;
     };
 
     // getting media access permission and getting shops of current user
@@ -294,13 +341,16 @@ const AddOffers = ({ navigation, route }) => {
     }, [navigation]);
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.headerColor }]}>
-            <StatusBar backgroundColor={colors.headerColor} barStyle="light-content" />
+        <View
+            style={[styles.container, { backgroundColor: colors.headerColor }]}
+        >
+            <StatusBar
+                backgroundColor={colors.headerColor}
+                barStyle="light-content"
+            />
 
             <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                >
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Animatable.View animation="fadeIn">
                         <FontAwesome
                             name="arrow-circle-left"
@@ -335,18 +385,13 @@ const AddOffers = ({ navigation, route }) => {
                                 setShopName(itemValue)
                             }
                         >
-                            <Picker.Item
-                                label="hello"
-                                value="hello"
-                                key="1"
-                            />
-                            {/* {shops.map((shop, index) => (
+                            {shops.map((shop, index) => (
                                 <Picker.Item
                                     label={shop}
                                     value={shop}
                                     key={index}
                                 />
-                            ))} */}
+                            ))}
                         </Picker>
                     </View>
 
@@ -400,8 +445,19 @@ const AddOffers = ({ navigation, route }) => {
                                 ]}
                                 onPress={pickImage}
                             >
-                                Select Image
+                                {image ? "Reselect" : "Select"} Image
                             </Text>
+                            {image && (
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{
+                                        width: 30,
+                                        height: 27,
+                                        marginRight: 10,
+                                    }}
+                                />
+                            )}
+
                             <MaterialCommunityIcons
                                 name="image"
                                 size={25}
@@ -411,12 +467,14 @@ const AddOffers = ({ navigation, route }) => {
                         </View>
                     </View>
 
-                    {image && (
-                        <Image
-                            source={{ uri: image }}
-                            style={{ width: 50, height: 50 }}
-                        />
-                    )}
+                    {/* {image && (
+                            <View style={{ alignItems: "center" }}>
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{ width: 40, height: 30 }}
+                                />
+                            </View>
+                    )} */}
 
                     <View style={styles.imagePickerBox}>
                         <View style={styles.action}>
@@ -453,6 +511,8 @@ const AddOffers = ({ navigation, route }) => {
                             mode="date"
                             is24Hour={false}
                             display="default"
+                            minimumDate={new Date()}
+                            maximumDate={addDays(startDate, 60)}
                             onChange={onStartDateSelect}
                         />
                     )}
@@ -493,6 +553,8 @@ const AddOffers = ({ navigation, route }) => {
                             mode="date"
                             is24Hour={false}
                             display="default"
+                            minimumDate={new Date()}
+                            maximumDate={addDays(startDate, 7)}
                             onChange={onEndDateSelect}
                         />
                     )}

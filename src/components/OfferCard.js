@@ -41,7 +41,7 @@ const OfferCard = (props) => {
     const [User, setUser] = React.useState(null);
 
     const setData = () => {
-        console.log("hello");
+        // console.log("hello");
     };
 
     const _retrieveData = async () => {
@@ -269,7 +269,10 @@ const OfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
+                                    style={[
+                                        styles.cardView,
+                                        { backgroundColor: colors.offerCard },
+                                    ]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -349,26 +352,42 @@ const OfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={[styles.cardTitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardTitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={[styles.cardSubtitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardSubtitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardSubtitle2,
+                                                    { color: colors.subtext },
+                                                ]}
+                                            >
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardFooter,
+                                                    { color: colors.text },
+                                                ]}
+                                            >
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -388,21 +407,21 @@ const OfferCard = (props) => {
                                                             User
                                                         )
                                                             ? disLike(
-                                                                element.offer_id,
-                                                                User,
-                                                                props.location
-                                                                    .latitude,
-                                                                props.location
-                                                                    .longitude
-                                                            )
+                                                                  element.offer_id,
+                                                                  User,
+                                                                  props.location
+                                                                      .latitude,
+                                                                  props.location
+                                                                      .longitude
+                                                              )
                                                             : like(
-                                                                element.offer_id,
-                                                                User,
-                                                                props.location
-                                                                    .latitude,
-                                                                props.location
-                                                                    .longitude
-                                                            );
+                                                                  element.offer_id,
+                                                                  User,
+                                                                  props.location
+                                                                      .latitude,
+                                                                  props.location
+                                                                      .longitude
+                                                              );
                                                     }}
                                                     style={{
                                                         marginLeft:
@@ -433,7 +452,9 @@ const OfferCard = (props) => {
                                                         >
                                                             <FontAwesome
                                                                 name="heart-o"
-                                                                color={colors.icon}
+                                                                color={
+                                                                    colors.icon
+                                                                }
                                                                 size={25}
                                                             />
                                                         </View>
@@ -446,13 +467,13 @@ const OfferCard = (props) => {
                                                             element.offer_id
                                                         )
                                                             ? removeOffer(
-                                                                element.offer_id,
-                                                                props.User
-                                                            )
+                                                                  element.offer_id,
+                                                                  props.User
+                                                              )
                                                             : saveOffer(
-                                                                element.offer_id,
-                                                                props.User
-                                                            );
+                                                                  element.offer_id,
+                                                                  props.User
+                                                              );
                                                     }}
                                                     style={{
                                                         marginLeft:
@@ -483,7 +504,9 @@ const OfferCard = (props) => {
                                                         >
                                                             <MaterialCommunityIcons
                                                                 name="plus-box-multiple"
-                                                                color={colors.icon}
+                                                                color={
+                                                                    colors.icon
+                                                                }
                                                                 size={25}
                                                             />
                                                         </View>
@@ -507,7 +530,9 @@ const OfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color={colors.shareIcon}
+                                                            color={
+                                                                colors.shareIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>

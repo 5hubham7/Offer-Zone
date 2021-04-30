@@ -75,7 +75,12 @@ const offerFilter = (props) => {
             animationOut="slideOutRight"
         >
             <View style={{ flex: 1 }}>
-                <View style={[styles.header, { backgroundColor: colors.headerColor }]}>
+                <View
+                    style={[
+                        styles.header,
+                        { backgroundColor: colors.headerColor },
+                    ]}
+                >
                     <AntDesign
                         name="closecircle"
                         color="#fff"
@@ -197,7 +202,10 @@ const offerFilter = (props) => {
 
                 <View style={styles.bottomView}>
                     <TouchableOpacity
-                        style={[styles.applyButton, { backgroundColor: colors.headerColor }]}
+                        style={[
+                            styles.applyButton,
+                            { backgroundColor: colors.headerColor },
+                        ]}
                         activeOpacity={0.7}
                     >
                         <Text style={styles.buttonText}>Apply Filter</Text>
