@@ -75,7 +75,7 @@ const offerFilter = (props) => {
             animationOut="slideOutRight"
         >
             <View style={{ flex: 1 }}>
-                <View style={styles.header}>
+                <View style={[styles.header, { backgroundColor: colors.headerColor }]}>
                     <AntDesign
                         name="closecircle"
                         color="#fff"
@@ -113,7 +113,7 @@ const offerFilter = (props) => {
                                     <FontAwesome
                                         name="angle-down"
                                         size={24}
-                                        color="gray"
+                                        color="#404040"
                                         style={{
                                             marginTop: 20,
                                             marginRight: 20,
@@ -148,7 +148,7 @@ const offerFilter = (props) => {
                                     <FontAwesome
                                         name="angle-down"
                                         size={24}
-                                        color="gray"
+                                        color="#404040"
                                         style={{
                                             marginTop: 20,
                                             marginRight: 20,
@@ -197,7 +197,7 @@ const offerFilter = (props) => {
 
                 <View style={styles.bottomView}>
                     <TouchableOpacity
-                        style={styles.applyButton}
+                        style={[styles.applyButton, { backgroundColor: colors.headerColor }]}
                         activeOpacity={0.7}
                     >
                         <Text style={styles.buttonText}>Apply Filter</Text>

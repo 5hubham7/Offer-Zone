@@ -18,7 +18,7 @@ import DoubleClick from "react-native-double-tap";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-
+import { useTheme } from "@react-navigation/native";
 import styles from "../styles/CardStyles";
 import axiosURL from "../helper/AxiosURL";
 import { AuthContext } from "../components/context/Store";
@@ -31,6 +31,7 @@ const wait = (timeout) => {
 };
 
 const SavedOfferCard = (props) => {
+    const { colors } = useTheme();
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
     const [location, setlocation] = React.useState({
@@ -177,22 +178,42 @@ const SavedOfferCard = (props) => {
             {props.offerData != null ? (
                 <View>
                     {props.offerData === "No Offers" ? (
-                        <View style={{ alignItems: "center" }}>
-                            <Text
-                                style={[
-                                    styles.errorMessageText,
-                                    { width: windowWidth * 0.9 },
-                                ]}
-                            >
-                                Sorry, you don't have any offers in your
-                                Wishlist!
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={() => {
+                                        onRefresh(props.User);
+                                    }}
+                                    colors={["#fff", "red", "yellow"]}
+                                    progressBackgroundColor={"#000"}
+                                />
+                            }
+                            style={{ marginBottom: 10 }}
+                            animation="fadeInRightBig"
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                justifyContent: "center",
+                            }}
+                        >
+                            <View style={{ alignItems: "center" }}>
+                                <Text
+                                    style={[
+                                        styles.errorMessageText,
+                                        { width: windowWidth * 0.9 },
+                                    ]}
+                                >
+                                    Sorry, you don't have any offers in your
+                                    Wishlist!
                             </Text>
-                            <Image
-                                source={require("../../assets/sad_folder.png")}
-                                style={{ width: 200, height: 200 }}
-                                resizeMode="stretch"
-                            />
-                        </View>
+                                <Image
+                                    source={require("../../assets/sad_folder.png")}
+                                    style={{ width: 200, height: 200 }}
+                                    resizeMode="stretch"
+                                />
+                            </View>
+                        </ScrollView>
                     ) : (
                         <ScrollView
                             showsVerticalScrollIndicator={false}
@@ -211,7 +232,7 @@ const SavedOfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={styles.cardView}
+                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -289,26 +310,26 @@ const SavedOfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={styles.cardTitle}
+                                                style={[styles.cardTitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={styles.cardSubtitle}
+                                                style={[styles.cardSubtitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={styles.cardSubtitle2}>
+                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={styles.cardFooter}>
+                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -328,13 +349,13 @@ const SavedOfferCard = (props) => {
                                                             User
                                                         )
                                                             ? disLike(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              )
+                                                                element.offer_id,
+                                                                props.User
+                                                            )
                                                             : like(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              );
+                                                                element.offer_id,
+                                                                props.User
+                                                            );
                                                     }}
                                                     style={{
                                                         marginLeft:
@@ -365,7 +386,7 @@ const SavedOfferCard = (props) => {
                                                         >
                                                             <FontAwesome
                                                                 name="heart-o"
-                                                                color="#000"
+                                                                color={colors.icon}
                                                                 size={25}
                                                             />
                                                         </View>
@@ -388,7 +409,7 @@ const SavedOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color="#0277BD"
+                                                            color={colors.shareIcon}
                                                             size={25}
                                                         />
                                                     </View>

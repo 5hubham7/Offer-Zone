@@ -19,10 +19,12 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
-
 import { AuthContext } from "../components/context/Store";
-import styles from "../styles/AddOffersStyles";
+import styles, { pickerSelectStyles } from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
+import { useTheme } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 
 try {
     firebase.initializeApp({
@@ -35,9 +37,10 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) {}
+} catch (err) { }
 
 const AddOffers = ({ navigation, route }) => {
+    const { colors } = useTheme();
     const [offerDetails, setOfferDetails] = useState({
         shop_name: shopName,
         offer_title: "",
@@ -128,7 +131,7 @@ const AddOffers = ({ navigation, route }) => {
 
         axios
             // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
-            .get(`${AxiosURL}/seller/getMyOffers/${seller_id}`)
+            .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
@@ -241,7 +244,7 @@ const AddOffers = ({ navigation, route }) => {
 
     useEffect(() => {
         (async () => {
-            if (Platform.OS !== "web") {
+            if (Platform.OS !== "android") {
                 const {
                     status,
                 } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -288,10 +291,25 @@ const AddOffers = ({ navigation, route }) => {
     }, [navigation]);
 
     return (
-        <View style={styles.container}>
-            <StatusBar backgroundColor="#006064" barStyle="light-content" />
+        <View style={[styles.container, { backgroundColor: colors.headerColor }]}>
+            <StatusBar backgroundColor={colors.headerColor} barStyle="light-content" />
 
             <View style={styles.header}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                >
+                    <Animatable.View animation="fadeIn">
+                        <FontAwesome
+                            name="arrow-circle-left"
+                            color="#fff"
+                            size={30}
+                            style={{
+                                marginLeft: 20,
+                                marginTop: 20,
+                            }}
+                        />
+                    </Animatable.View>
+                </TouchableOpacity>
                 <Animatable.View animation="fadeInLeftBig" duration={1500}>
                     <Text style={styles.headerText}>Add Offer</Text>
                 </Animatable.View>
@@ -302,7 +320,7 @@ const AddOffers = ({ navigation, route }) => {
                 style={[
                     styles.footer,
                     {
-                        backgroundColor: "#fff",
+                        backgroundColor: colors.background,
                     },
                 ]}
             >
@@ -314,13 +332,18 @@ const AddOffers = ({ navigation, route }) => {
                                 setShopName(itemValue)
                             }
                         >
-                            {shops.map((shop, index) => (
+                            <Picker.Item
+                                label="hello"
+                                value="hello"
+                                key="1"
+                            />
+                            {/* {shops.map((shop, index) => (
                                 <Picker.Item
                                     label={shop}
                                     value={shop}
                                     key={index}
                                 />
-                            ))}
+                            ))} */}
                         </Picker>
                     </View>
 
@@ -332,7 +355,7 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: "#000",
+                                        color: colors.text,
                                     },
                                 ]}
                                 autoCapitalize="none"
@@ -353,7 +376,7 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: "#000",
+                                        color: colors.text,
                                     },
                                 ]}
                                 autoCapitalize="none"

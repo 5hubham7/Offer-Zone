@@ -6,15 +6,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import axios from "axios";
 import Constants from "expo-constants";
+import Icon from "react-native-vector-icons/Ionicons";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Entypo from "react-native-vector-icons/Entypo";
-
+import { createStackNavigator } from "@react-navigation/stack";
 import styles from "../styles/HomeScreenStyles";
 import MyOfferCard from "../components/MyOfferCard";
 import axiosURL from "../helper/AxiosURL";
 
 const windowWidth = Dimensions.get("screen").width;
+const MyOffersStack = createStackNavigator();
 
 const MyOffers = ({ navigation }) => {
     const { colors } = useTheme();
@@ -57,7 +59,7 @@ const MyOffers = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         setOfferLike({ ...result });
                     } else {
                         setOfferData("No Offers");
@@ -99,7 +101,7 @@ const MyOffers = ({ navigation }) => {
             <View
                 style={{
                     width: "100%",
-                    backgroundColor: "#006064",
+                    backgroundColor: colors.headerColor,
                     height: 50,
                 }}
                 animation="fadeInRight"
@@ -125,7 +127,7 @@ const MyOffers = ({ navigation }) => {
                 location={location}
             />
             <FAB
-                style={styles.fab}
+                style={[styles.fab, { backgroundColor: colors.headerColor }]}
                 icon={({ color, size }) => (
                     <Entypo name="add-to-list" color={color} size={size} />
                 )}
@@ -137,4 +139,42 @@ const MyOffers = ({ navigation }) => {
     );
 };
 
-export default MyOffers;
+const MyOffersStackScreen = ({ navigation }) => {
+    const { colors } = useTheme();
+    return (
+        <MyOffersStack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: colors.headerColor,
+                    elevation: 0,
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    fontWeight: "bold",
+                    marginRight: 50,
+                    textAlign: "center",
+                    fontSize: 20,
+                },
+            }}
+        >
+            <MyOffersStack.Screen
+                name="MyOffers"
+                component={MyOffers}
+                options={{
+                    title: "MY OFFERS",
+                    headerLeft: () => (
+                        <Icon.Button
+                            name="ios-menu"
+                            size={30}
+                            backgroundColor={colors.headerColor}
+                            color="#fff"
+                            onPress={() => navigation.openDrawer()}
+                        ></Icon.Button>
+                    ),
+                }}
+            />
+        </MyOffersStack.Navigator>
+    )
+};
+
+export default MyOffersStackScreen;

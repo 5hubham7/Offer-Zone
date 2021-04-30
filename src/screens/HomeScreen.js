@@ -10,6 +10,7 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign"
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from "react-native-modal";
@@ -24,6 +25,10 @@ import OfferFilter from "../components/OfferFilter";
 import OfferSort from "../components/OfferSort";
 import axiosURL from "../helper/AxiosURL";
 import SearchResultCard from "../components/SearchResultCard";
+import { createStackNavigator } from "@react-navigation/stack";
+
+const HomeStack = createStackNavigator();
+
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -175,10 +180,11 @@ const HomeScreen = ({ navigation }) => {
     }
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor={colors.headerColor} barStyle="light-content" />
             <View
                 style={{
                     width: "100%",
-                    backgroundColor: "#006064",
+                    backgroundColor: colors.headerColor,
                     height: 50,
                 }}
             >
@@ -217,7 +223,7 @@ const HomeScreen = ({ navigation }) => {
                     }}
                 />
             </View>
-            <View style={styles.footerNav}>
+            <View style={[styles.footerNav, { backgroundColor: colors.headerColor }]}>
                 <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity
                         onPress={toggleModal}
@@ -331,4 +337,43 @@ const HomeScreen = ({ navigation }) => {
     );
 };
 
-export default HomeScreen;
+const HomeStackScreen = ({ navigation }) => {
+    const { colors } = useTheme();
+    return (
+        <HomeStack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: colors.headerColor,
+                    elevation: 0,
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    fontWeight: "bold",
+                    marginRight: 50,
+                    textAlign: "center",
+                    fontSize: 22,
+                },
+            }}
+        >
+            <HomeStack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                    title: "OFFER ZONE",
+
+                    headerLeft: () => (
+                        <Icon.Button
+                            name="ios-menu"
+                            size={30}
+                            backgroundColor={colors.headerColor}
+                            color="#fff"
+                            onPress={() => navigation.openDrawer()}
+                        ></Icon.Button>
+                    ),
+                }}
+            />
+        </HomeStack.Navigator>
+    )
+};
+
+export default HomeStackScreen;

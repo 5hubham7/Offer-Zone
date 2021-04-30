@@ -19,7 +19,7 @@ import DoubleClick from "react-native-double-tap";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-
+import { useTheme } from "@react-navigation/native";
 import styles from "../styles/CardStyles";
 import axiosURL from "../helper/AxiosURL";
 import { AuthContext } from "../components/context/Store";
@@ -32,6 +32,7 @@ const wait = (timeout) => {
 };
 
 const OfferCard = (props) => {
+    const { colors } = useTheme();
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
     const [saveList, setSaveList] = React.useState([]);
@@ -268,7 +269,7 @@ const OfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={styles.cardView}
+                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -348,26 +349,26 @@ const OfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={styles.cardTitle}
+                                                style={[styles.cardTitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={styles.cardSubtitle}
+                                                style={[styles.cardSubtitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={styles.cardSubtitle2}>
+                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={styles.cardFooter}>
+                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -432,7 +433,7 @@ const OfferCard = (props) => {
                                                         >
                                                             <FontAwesome
                                                                 name="heart-o"
-                                                                color="#000"
+                                                                color={colors.icon}
                                                                 size={25}
                                                             />
                                                         </View>
@@ -482,7 +483,7 @@ const OfferCard = (props) => {
                                                         >
                                                             <MaterialCommunityIcons
                                                                 name="plus-box-multiple"
-                                                                color="#000"
+                                                                color={colors.icon}
                                                                 size={25}
                                                             />
                                                         </View>
@@ -506,7 +507,7 @@ const OfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color="#0277BD"
+                                                            color={colors.shareIcon}
                                                             size={25}
                                                         />
                                                     </View>

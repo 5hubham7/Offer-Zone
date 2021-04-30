@@ -11,7 +11,7 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DoubleClick from "react-native-double-tap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useTheme } from "@react-navigation/native";
 import styles from "../styles/CardStyles";
 import { AuthContext } from "../components/context/Store";
 
@@ -22,6 +22,7 @@ const wait = (timeout) => {
 };
 
 const MyShopsCard = (props) => {
+    const { colors } = useTheme();
     const [refreshing, setRefreshing] = React.useState(false);
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [userID, setUserID] = React.useState(false);
@@ -32,7 +33,7 @@ const MyShopsCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (offer_id) => {
@@ -127,7 +128,7 @@ const MyShopsCard = (props) => {
                         >
                             {props.shopData.map((element, index) => (
                                 <View
-                                    style={styles.cardView}
+                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -139,27 +140,27 @@ const MyShopsCard = (props) => {
                                     >
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={styles.cardTitle}
+                                                style={[styles.cardTitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.shop_name}
                                             </Text>
                                             <Text
-                                                style={styles.cardSubtitle}
+                                                style={[styles.cardSubtitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.category}
                                             </Text>
                                             <Text
-                                                style={styles.cardSubtitle2}
+                                                style={[styles.cardSubtitle2, { color: colors.subtext }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.shop_address}
                                             </Text>
-                                            <Text style={styles.offerLikeCount}>
+                                            <Text style={[styles.offerLikeCount, { color: colors.text }]}>
                                                 {element.offer.length}
                                                 {"  "}
                                                 Offers

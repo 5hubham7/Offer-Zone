@@ -12,7 +12,7 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-
+import { useTheme } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import DoubleClick from "react-native-double-tap";
 import * as Animatable from "react-native-animatable";
@@ -31,6 +31,7 @@ const wait = (timeout) => {
 };
 
 const MyOfferCard = (props) => {
+    const { colors } = useTheme();
     const [refreshing, setRefreshing] = React.useState(false);
     const [likeDoubleTap, setLikeDobleTap] = React.useState(null);
     const [saveList, setSaveList] = React.useState([]);
@@ -163,7 +164,7 @@ const MyOfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={styles.cardView}
+                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -235,26 +236,26 @@ const MyOfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={styles.cardTitle}
+                                                style={[styles.cardTitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={styles.cardSubtitle}
+                                                style={[styles.cardSubtitle, { color: colors.text }]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={styles.cardSubtitle2}>
+                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={styles.cardFooter}>
+                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -322,7 +323,7 @@ const MyOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color="#0277BD"
+                                                            color={colors.shareIcon}
                                                             size={25}
                                                         />
                                                     </View>
