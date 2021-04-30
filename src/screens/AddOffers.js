@@ -49,6 +49,7 @@ const AddOffers = ({ navigation, route }) => {
         status: "",
         likes: [],
         offer_id: "",
+        uid: "",
     });
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
@@ -128,7 +129,7 @@ const AddOffers = ({ navigation, route }) => {
 
         axios
             // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
-            .get(`${AxiosURL}/seller/getMyOffers/${seller_id}`)
+            .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
@@ -141,7 +142,7 @@ const AddOffers = ({ navigation, route }) => {
                         alert(
                             "Sorry, you don't have any shop to add an offer! Please add shop first."
                         );
-                        navigation.navigate("MyShops");
+                        // navigation.navigate("MyShops");
                     }
                 }
                 setShops(data);
@@ -154,6 +155,7 @@ const AddOffers = ({ navigation, route }) => {
     // adding offer:
 
     const onAddOfferPress = async () => {
+        startLoading();
         let sellerID;
 
         try {
@@ -172,17 +174,17 @@ const AddOffers = ({ navigation, route }) => {
                 offer_title: offer_title,
                 details: details,
                 image_url: image_url,
-                post_time: getDateInFormat(new Date()),
+                post_time: new Date(),
                 start_date: getDateInFormat(startDate),
                 end_date: getDateInFormat(endDate),
                 status: "Active",
                 likes: [],
                 offer_id: sellerID + "_" + generateOfferID(10),
+                uid: sellerID,
             };
 
-            alert(JSON.stringify(addOfferDetails));
+            // alert(JSON.stringify(addOfferDetails));
 
-            /*
             axios
                 .post(
                     `${AxiosURL}/seller/addOffer/${sellerID}/${shop_name}`,
@@ -191,6 +193,7 @@ const AddOffers = ({ navigation, route }) => {
                 .then((response) => {
                     if (response.data.status === 200) {
                         if (response.data.response.length > 0) {
+                            stopLoading();
                             alert("Offer added successfully!");
                             navigation.navigate("MyOffers");
                         }
@@ -201,7 +204,6 @@ const AddOffers = ({ navigation, route }) => {
                 .catch((error) => {
                     console.log(error);
                 });
-            */
         } else {
             alert("Please fill out all the necessary fields!");
         }
@@ -275,6 +277,7 @@ const AddOffers = ({ navigation, route }) => {
                 status: "",
                 likes: [],
                 offer_id: "",
+                uid: "",
             });
             setImage(null);
             try {

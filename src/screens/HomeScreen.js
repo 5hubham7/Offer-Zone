@@ -10,7 +10,7 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import AntDesign from "react-native-vector-icons/AntDesign"
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from "react-native-modal";
 import axios from "axios";
@@ -29,7 +29,6 @@ const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
 const HomeScreen = ({ navigation }) => {
-
     const { colors } = useTheme();
 
     const [User, setUser] = React.useState(null);
@@ -38,13 +37,15 @@ const HomeScreen = ({ navigation }) => {
         longitude: "",
     });
 
-    const [SearchQuery, setSearchQuery] = React.useState(null)
-    const [SearchQueryData, setSearchQueryData] = React.useState(null)
+    const [SearchQuery, setSearchQuery] = React.useState(null);
+    const [SearchQueryData, setSearchQueryData] = React.useState(null);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
     const [emailVerified, setEmailVerified] = React.useState(true);
-    const [ToggelSearchAndOffers, setToggelSearchAndOffers] = React.useState(false)
+    const [ToggelSearchAndOffers, setToggelSearchAndOffers] = React.useState(
+        false
+    );
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
     });
@@ -97,10 +98,10 @@ const HomeScreen = ({ navigation }) => {
         var data = [];
         var options = [];
         axios
-            .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
-            // .get(
-            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
-            // )
+            // .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
+            .get(
+                `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
+            )
             .then((response) => {
                 //console.log(response.data.response);
                 if (response.data.status === 200) {
@@ -120,16 +121,17 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                         //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
                         setCurrentOffers("No Offers");
                     }
                 }
-            }).catch((err) => {
-                alert("Network Error ! Please restart application.")
             })
+            .catch((err) => {
+                alert("Network Error ! Please restart application.");
+            });
     };
 
     useEffect(() => {
@@ -157,22 +159,21 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const onSearchClick = () => {
-        setToggelSearchAndOffers(true)
-        axios.get(`${axiosURL}/customer/getSearchData/${SearchQuery}`)
+        setToggelSearchAndOffers(true);
+        axios
+            .get(`${axiosURL}/customer/getSearchData/${SearchQuery}`)
             .then((response) => {
                 //console.log(response.data)
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0)
-                        setSearchQueryData(response.data.response)
-                    else
-                        setSearchQueryData("No data")
+                        setSearchQueryData(response.data.response);
+                    else setSearchQueryData("No data");
                 }
-
-            }).catch((err) => {
-                alert("Network Error ! Please restart application.")
+            })
+            .catch((err) => {
+                alert("Network Error ! Please restart application.");
             });
-
-    }
+    };
     return (
         <View style={styles.container}>
             <View
@@ -193,12 +194,14 @@ const HomeScreen = ({ navigation }) => {
                     }}
                     value={SearchQuery}
                     onChangeText={(text) => {
-                        setSearchQuery(text)
+                        setSearchQuery(text);
                     }}
                     onSubmitEditing={() => {
-                        onSearchClick()
+                        onSearchClick();
                     }}
-                    onIconPress={() => { console.log("ico press") }}
+                    onIconPress={() => {
+                        console.log("ico press");
+                    }}
                     clearButtonMode="while-editing"
                     clearIcon={() => {
                         return (
@@ -208,12 +211,12 @@ const HomeScreen = ({ navigation }) => {
                                 color={colors.text}
                                 onPress={() => {
                                     //console.log("clr press")
-                                    setSearchQuery(null)
-                                    setToggelSearchAndOffers(false)
-                                    setSearchQueryData(null)
+                                    setSearchQuery(null);
+                                    setToggelSearchAndOffers(false);
+                                    setSearchQueryData(null);
                                 }}
                             />
-                        )
+                        );
                     }}
                 />
             </View>
@@ -245,9 +248,9 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {ToggelSearchAndOffers ?
+            {ToggelSearchAndOffers ? (
                 <SearchResultCard SearchQueryData={SearchQueryData} />
-                :
+            ) : (
                 <OfferCard
                     offerData={currentOffers}
                     getOffers={getOffers}
@@ -255,7 +258,7 @@ const HomeScreen = ({ navigation }) => {
                     location={location}
                     User={User}
                 />
-            }
+            )}
 
             <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
             <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />

@@ -69,9 +69,10 @@ const MyShopsCard = (props) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
+    console.log(props.shopData);
     return (
         <View style={styles.container}>
-            {props.shopData != null ? (
+            {props.shopData !== null ? (
                 <View>
                     {props.shopData === "No Shops" ? (
                         <ScrollView

@@ -24,14 +24,13 @@ const MyShops = ({ navigation }) => {
         //     `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
         // );
         axios
+            // .get(`${axiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
             .get(`${axiosURL}/seller/getMyShops/${seller_id}`)
-            // axios
-            //     .get(`${axiosURL}/seller/getMyOffers/${seller_id}`)
             .then((response) => {
                 // console.log(response.data.response);
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
-                        setOfferData(response.data.response);
+                        setShopData(response.data.response);
                         response.data.response.map((element) => {
                             data.push(element.offer_id);
                             options.push(false);
@@ -46,7 +45,6 @@ const MyShops = ({ navigation }) => {
                             return result;
                         },
                         {});
-                        setOfferLike({ ...result });
                     } else {
                         setShopData("No Shops");
                     }
