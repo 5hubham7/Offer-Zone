@@ -45,7 +45,7 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (offer_id) => {
@@ -179,7 +179,7 @@ const MyOfferCard = (props) => {
                                             <ImageBackground
                                                 source={{
                                                     uri:
-                                                        "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                                        element.image_url
                                                 }}
                                                 style={styles.cardImage}
                                             >
