@@ -41,7 +41,7 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) {}
+} catch (err) { }
 
 const AddOffers = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -70,6 +70,7 @@ const AddOffers = ({ navigation, route }) => {
     const [showStartDate, setShowStartDate] = useState(false);
     const [showEndDate, setShowEndDate] = useState(false);
     const [mode, setMode] = useState("date");
+    const [PosterData, setPosterData] = useState(null)
 
     // date handlers:
 
@@ -124,7 +125,7 @@ const AddOffers = ({ navigation, route }) => {
         });
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImageUri(result.uri);
             offerDetails.image_url = image;
             // image resize:
             try {
@@ -133,7 +134,8 @@ const AddOffers = ({ navigation, route }) => {
                     [{ resize: { height: 750, width: 1000 } }],
                     { compress: 1, format: ImageManipulator.SaveFormat.PNG }
                 );
-                setImage(resizedImage.uri);
+
+                setImage({ uri: resizedImage.uri, height: resizedImage.height, width: resizedImage.width });
                 offerDetails.image_url = image;
             } catch (error) {
                 console.log(error);
@@ -141,14 +143,30 @@ const AddOffers = ({ navigation, route }) => {
         }
     };
 
-    const uploadImage = async (image, imageName) => {
-        const response = await fetch(image);
-        const blob = await response.blob();
-        const ref = firebase.storage().ref().child(imageName);
-        const snapshot = await ref.put(blob);
-        console.log("DONE: ", snapshot.downloadURL);
-        return snapshot.downloadURL;
-    };
+    // image upload function 
+    const upload = async (uri, imagename) => {
+        try {
+            //   getting image uri
+            const response = await fetch(uri);
+            //   convert it to blob
+            const blob = await response.blob();
+            //   upload to firebase storage
+            var ref = firebase.storage().ref().child("Offer_Poster/" + imagename);
+            return ref.put(blob);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const download = async (imagecode, sellerID) => {
+        console.log("call")
+        firebase.storage().ref().child(`Offer_Poster/${imagecode}`).getDownloadURL().then((url) => {
+            console.log(url)
+            addOfferApiCall(url, sellerID)
+        })
+
+    }
 
     // getting shops:
 
@@ -179,7 +197,6 @@ const AddOffers = ({ navigation, route }) => {
                         navigation.navigate("MyShops");
                     }
                 }
-                console.log(data);
                 setShops(data);
             })
             .catch((error) => {
@@ -191,23 +208,27 @@ const AddOffers = ({ navigation, route }) => {
     const onAddOfferPress = async () => {
         startLoading();
         let sellerID;
-
         try {
             sellerID = await AsyncStorage.getItem("userToken");
         } catch (error) {
             console.log(error);
         }
+        const imagename = sellerID + "_" + generateOfferID(10)
+        upload(image.uri, imagename).then(() => {
+            // get uploaded image firebase link
+            download(imagename, sellerID)
+        })
+    };
 
+    const addOfferApiCall = async (imageUrl, sellerID) => {
         let shop_name = shopName;
         let offer_title = offerDetails.offer_title;
-        // let image_url = image;
-        let image_url = "../images/offer.jpg";
+        let image_url = imageUrl;
+        //let image_url = "../images/offer.jpg";
         let details = offerDetails.details;
         let offer_id = sellerID + "_" + generateOfferID(10);
 
         // uploadImage(image_url, offer_id);
-
-        stopLoading();
         if (shop_name && offer_title && details) {
             let addOfferDetails = {
                 offer_title: offer_title,
@@ -222,7 +243,7 @@ const AddOffers = ({ navigation, route }) => {
                 uid: sellerID,
             };
 
-            // alert(JSON.stringify(addOfferDetails));
+            //alert(JSON.stringify(addOfferDetails));
 
             axios
                 .post(
@@ -231,7 +252,6 @@ const AddOffers = ({ navigation, route }) => {
                 )
                 .then((response) => {
                     if (response.data.status === 200) {
-                        console.log(response.data);
                         stopLoading();
                         ToastAndroid.show(
                             "Offer added successfully!",
@@ -256,7 +276,7 @@ const AddOffers = ({ navigation, route }) => {
                 ToastAndroid.LONG
             );
         }
-    };
+    }
 
     // helper functions:
 
@@ -366,8 +386,8 @@ const AddOffers = ({ navigation, route }) => {
                             color="#fff"
                             size={30}
                             style={{
-                                marginLeft: 20,
-                                marginTop: 20,
+                                marginLeft: 0,
+                                marginTop: 30,
                             }}
                         />
                     </Animatable.View>
@@ -487,7 +507,7 @@ const AddOffers = ({ navigation, route }) => {
                             </Text>
                             {image && (
                                 <Image
-                                    source={{ uri: image }}
+                                    source={{ uri: imageUri }}
                                     style={{
                                         width: 30,
                                         height: 27,
