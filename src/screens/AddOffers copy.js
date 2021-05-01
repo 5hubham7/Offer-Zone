@@ -44,24 +44,12 @@ try {
 } catch (err) {}
 
 const AddOffers = ({ navigation, route }) => {
-    const defaultImage =
-        "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg";
-
     const { colors } = useTheme();
-    const { startLoading, stopLoading } = React.useContext(AuthContext);
-
-    const [shops, setShops] = useState([]);
-    const [image, setImage] = useState(null);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    const [showStartDate, setShowStartDate] = useState(false);
-    const [showEndDate, setShowEndDate] = useState(false);
-    const [mode, setMode] = useState("date");
     const [offerDetails, setOfferDetails] = useState({
-        shop_name: "",
-        offer_title: "",
+        shop_name: shopName,
+        offer_title: image,
         details: "",
-        image_url: defaultImage,
+        image_url: image,
         post_time: "",
         start_date: "",
         end_date: "",
@@ -70,6 +58,19 @@ const AddOffers = ({ navigation, route }) => {
         offer_id: "",
         uid: "",
     });
+
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
+
+    const [shopName, setShopName] = useState(null);
+    const [shops, setShops] = useState([]);
+    const [image, setImage] = useState(null);
+    const [imageUri, setImageUri] = useState("../demo.jpg");
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [showStartDate, setShowStartDate] = useState(false);
+    const [showEndDate, setShowEndDate] = useState(false);
+    const [mode, setMode] = useState("date");
+    const [PosterData, setPosterData] = useState(null);
 
     // date handlers:
 
@@ -103,7 +104,7 @@ const AddOffers = ({ navigation, route }) => {
         showEndDateMode("date");
     };
 
-    // input handlers:
+    // text input handlers:
 
     const handelOfferTitleChange = (val) => {
         setOfferDetails({ ...offerDetails, offer_title: val });
@@ -111,10 +112,6 @@ const AddOffers = ({ navigation, route }) => {
 
     const handelDetailsChange = (val) => {
         setOfferDetails({ ...offerDetails, details: val });
-    };
-
-    const handelShopNameChange = (val) => {
-        setOfferDetails({ ...offerDetails, shop_name: val });
     };
 
     // image handlers:
@@ -128,9 +125,8 @@ const AddOffers = ({ navigation, route }) => {
         });
 
         if (!result.cancelled) {
-            setImage(result.uri);
-            // offerDetails.image_url = image;
-            setOfferDetails({ ...offerDetails, image_url: result.uri });
+            setImageUri(result.uri);
+            offerDetails.image_url = image;
             // image resize:
             try {
                 const resizedImage = await ImageManipulator.manipulateAsync(
@@ -139,53 +135,47 @@ const AddOffers = ({ navigation, route }) => {
                     { compress: 1, format: ImageManipulator.SaveFormat.PNG }
                 );
 
-                // setImage({
-                //     uri: resizedImage.uri,
-                //     height: resizedImage.height,
-                //     width: resizedImage.width,
-                // });
-                // offerDetails.image_url = image;
-                setOfferDetails({
-                    ...offerDetails,
-                    image_url: resizedImage.uri,
+                setImage({
+                    uri: resizedImage.uri,
+                    height: resizedImage.height,
+                    width: resizedImage.width,
                 });
+                offerDetails.image_url = image;
             } catch (error) {
-                setOfferDetails({
-                    ...offerDetails,
-                    image_url: defaultImage,
-                });
                 console.log(error);
             }
         }
     };
 
     // image upload function
-
-    const uploadImage = async (imageURI, imageName) => {
+    const upload = async (uri, imagename) => {
         try {
-            const response = await fetch(imageURI);
+            //   getting image uri
+            const response = await fetch(uri);
+            //   convert it to blob
             const blob = await response.blob();
+            //   upload to firebase storage
             var ref = firebase
                 .storage()
                 .ref()
-                .child("Offer_Poster/" + imageName);
+                .child("Offer_Poster/" + imagename);
             return ref.put(blob);
         } catch (err) {
             console.log(err);
         }
     };
 
-    const download = async (imageName) => {
-        try {
-            return await firebase
-                .storage()
-                .ref()
-                .child(`Offer_Poster/${imageName}`)
-                .getDownloadURL();
-        } catch (error) {
-            console.log(error);
-            return defaultImage;
-        }
+    const download = async (imagecode, sellerID) => {
+        console.log("call");
+        firebase
+            .storage()
+            .ref()
+            .child(`Offer_Poster/${imagecode}`)
+            .getDownloadURL()
+            .then((url) => {
+                console.log(url);
+                addOfferApiCall(url, sellerID);
+            });
     };
 
     // getting shops:
@@ -195,8 +185,8 @@ const AddOffers = ({ navigation, route }) => {
         var options = [];
 
         axios
-            // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
-            .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
+            .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
+            // .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
@@ -223,40 +213,35 @@ const AddOffers = ({ navigation, route }) => {
                 console.log(error);
             });
     };
-
     // adding offer:
 
     const onAddOfferPress = async () => {
         startLoading();
-
         let sellerID;
         try {
             sellerID = await AsyncStorage.getItem("userToken");
         } catch (error) {
             console.log(error);
         }
+        const imagename = sellerID + "_" + generateOfferID(10);
+        upload(image.uri, imagename).then(() => {
+            // get uploaded image firebase link
+            download(imagename, sellerID);
+        });
+    };
 
-        let shop_name = offerDetails.shop_name;
+    const addOfferApiCall = async (imageUrl, sellerID) => {
+        let shop_name = shopName;
         let offer_title = offerDetails.offer_title;
-        let image_url = defaultImage; //default image if user don't upload image
+        let image_url = imageUrl;
+        //let image_url = "../images/offer.jpg";
         let details = offerDetails.details;
         let offer_id = sellerID + "_" + generateOfferID(10);
 
         // uploadImage(image_url, offer_id);
-
         if (shop_name && offer_title && details) {
-            if (image) {
-                try {
-                    await uploadImage(offerDetails.image_url, offer_id);
-                    image_url = await download(offer_id);
-                } catch (error) {
-                    image_url = defaultImage;
-                    console.log(error);
-                }
-            }
-
             let addOfferDetails = {
-                offer_title: offer_title.toUpperCase(),
+                offer_title: offer_title,
                 details: details,
                 image_url: image_url,
                 post_time: new Date(),
@@ -367,7 +352,7 @@ const AddOffers = ({ navigation, route }) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", async () => {
             setOfferDetails({
-                shop_name: "",
+                shop_name: shopName,
                 offer_title: "",
                 details: "",
                 image_url: "",
@@ -379,7 +364,7 @@ const AddOffers = ({ navigation, route }) => {
                 offer_id: "",
                 uid: "",
             });
-
+            setImage(null);
             try {
                 const userID = await AsyncStorage.getItem("userToken");
                 getMyShops(userID);
@@ -389,6 +374,10 @@ const AddOffers = ({ navigation, route }) => {
             return unsubscribe;
         });
     }, [navigation]);
+
+    const [allCategories, setAllCategories] = React.useState([
+        { label: "All", value: "All" },
+    ]);
 
     return (
         <View
@@ -428,6 +417,22 @@ const AddOffers = ({ navigation, route }) => {
                 ]}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
+                    {/* <View style={styles.picker}>
+                        <Picker
+                            selectedValue={shopName}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setShopName(itemValue)
+                            }
+                        >
+                            {shops.map((shop, index) => (
+                                <Picker.Item
+                                    label={shop}
+                                    value={shop}
+                                    key={index}
+                                />
+                            ))}
+                        </Picker>
+                    </View> */}
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
@@ -435,10 +440,10 @@ const AddOffers = ({ navigation, route }) => {
                                 value: null,
                                 color: "#404040",
                             }}
-                            value={offerDetails.shop_name}
+                            value={shopName}
                             items={shops}
                             onValueChange={(value) => {
-                                handelShopNameChange(value);
+                                setShopName(value);
                             }}
                             style={pickerSelectStyles}
                             useNativeAndroidPickerStyle={false}
@@ -508,12 +513,15 @@ const AddOffers = ({ navigation, route }) => {
                                 ]}
                                 onPress={pickImage}
                             >
-                                {image ? "Reselect" : "Select"}
-                                {" Image"}
+                                {imageUri ? "Reselect" : "Select"} Image
                             </Text>
-                            {image && (
+                            {imageUri && (
                                 <Image
-                                    source={{ uri: image }}
+                                    source={
+                                        imageUri
+                                            ? { uri: imageUri }
+                                            : { uri: "../demo.jpg" }
+                                    }
                                     style={{
                                         width: 30,
                                         height: 27,
@@ -530,6 +538,15 @@ const AddOffers = ({ navigation, route }) => {
                             />
                         </View>
                     </View>
+
+                    {/* {image && (
+                            <View style={{ alignItems: "center" }}>
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{ width: 40, height: 30 }}
+                                />
+                            </View>
+                    )} */}
 
                     <View style={styles.imagePickerBox}>
                         <View style={styles.action}>
