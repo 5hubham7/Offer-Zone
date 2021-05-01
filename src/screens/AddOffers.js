@@ -163,7 +163,11 @@ const AddOffers = ({ navigation, route }) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
                         response.data.response.map((element) => {
-                            data.push(element.shop_name);
+                            // data.push(element.shop_name);
+                            data.push({
+                                label: element.shop_name,
+                                value: element.shop_name,
+                            });
                             options.push(false);
                         });
                     } else {
@@ -175,6 +179,7 @@ const AddOffers = ({ navigation, route }) => {
                         navigation.navigate("MyShops");
                     }
                 }
+                console.log(data);
                 setShops(data);
             })
             .catch((error) => {
@@ -340,6 +345,10 @@ const AddOffers = ({ navigation, route }) => {
         });
     }, [navigation]);
 
+    const [allCategories, setAllCategories] = React.useState([
+        { label: "All", value: "All" },
+    ]);
+
     return (
         <View
             style={[styles.container, { backgroundColor: colors.headerColor }]}
@@ -378,7 +387,7 @@ const AddOffers = ({ navigation, route }) => {
                 ]}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.picker}>
+                    {/* <View style={styles.picker}>
                         <Picker
                             selectedValue={shopName}
                             onValueChange={(itemValue, itemIndex) =>
@@ -393,6 +402,35 @@ const AddOffers = ({ navigation, route }) => {
                                 />
                             ))}
                         </Picker>
+                    </View> */}
+                    <View style={styles.picker}>
+                        <RNPickerSelect
+                            placeholder={{
+                                label: "Select a Shop..",
+                                value: null,
+                                color: "#404040",
+                            }}
+                            value={shopName}
+                            items={shops}
+                            onValueChange={(value) => {
+                                setShopName(value);
+                            }}
+                            style={pickerSelectStyles}
+                            useNativeAndroidPickerStyle={false}
+                            Icon={() => {
+                                return (
+                                    <FontAwesome
+                                        name="angle-down"
+                                        size={24}
+                                        color="#404040"
+                                        style={{
+                                            marginTop: 10,
+                                            marginRight: 20,
+                                        }}
+                                    />
+                                );
+                            }}
+                        />
                     </View>
 
                     <View style={styles.inputBox}>
@@ -553,7 +591,7 @@ const AddOffers = ({ navigation, route }) => {
                             mode="date"
                             is24Hour={false}
                             display="default"
-                            minimumDate={new Date()}
+                            minimumDate={startDate}
                             maximumDate={addDays(startDate, 7)}
                             onChange={onEndDateSelect}
                         />

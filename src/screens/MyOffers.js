@@ -59,7 +59,7 @@ const MyOffers = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                         setOfferLike({ ...result });
                     } else {
                         setOfferData("No Offers");
@@ -95,6 +95,18 @@ const MyOffers = ({ navigation }) => {
             getMyOffers(userID);
         })();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", async () => {
+            try {
+                const userID = await AsyncStorage.getItem("userToken");
+                getMyOffers(userID);
+            } catch (error) {
+                console.log(error);
+            }
+            return unsubscribe;
+        });
+    }, [navigation]);
 
     return (
         <View style={styles.container}>
@@ -174,7 +186,7 @@ const MyOffersStackScreen = ({ navigation }) => {
                 }}
             />
         </MyOffersStack.Navigator>
-    )
+    );
 };
 
 export default MyOffersStackScreen;

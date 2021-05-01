@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     picker: {
-        marginTop: 5,
         borderWidth: 1,
         borderColor: "#c9c9c9",
         borderTopLeftRadius: 20,
@@ -118,7 +117,6 @@ export const pickerSelectStyles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 10,
         borderWidth: 1,
-        borderColor: "gray",
         borderRadius: 4,
         color: "black",
         paddingRight: 30, // to ensure the text is never behind the icon
@@ -127,12 +125,8 @@ export const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,
         paddingHorizontal: 10,
         paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: "#929292",
-        borderRadius: 8,
         color: "black",
         paddingRight: 30, // to ensure the text is never behind the icon
-        marginTop: 10,
     },
 });
 
