@@ -125,7 +125,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
@@ -161,6 +161,12 @@ const HomeScreen = ({ navigation }) => {
         })();
         emailVerification();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", async () => {
+            getOffers(location.latitude, location.longitude)
+        });
+    }, [navigation]);
 
     const onSearchClick = () => {
         setToggelSearchAndOffers(true);

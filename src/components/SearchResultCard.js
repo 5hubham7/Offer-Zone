@@ -82,7 +82,7 @@ const SearchResultCard = (props) => {
                                         <ImageBackground
                                             source={{
                                                 uri:
-                                                    "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                                    element.image_url
                                             }}
                                             style={styles.cardImage}
                                         >

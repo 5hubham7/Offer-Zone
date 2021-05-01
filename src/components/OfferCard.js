@@ -294,7 +294,7 @@ const OfferCard = (props) => {
                                             <ImageBackground
                                                 source={{
                                                     uri:
-                                                        "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                                        element.image_url
                                                 }}
                                                 style={styles.cardImage}
                                             >
@@ -407,21 +407,21 @@ const OfferCard = (props) => {
                                                             User
                                                         )
                                                             ? disLike(
-                                                                  element.offer_id,
-                                                                  User,
-                                                                  props.location
-                                                                      .latitude,
-                                                                  props.location
-                                                                      .longitude
-                                                              )
+                                                                element.offer_id,
+                                                                User,
+                                                                props.location
+                                                                    .latitude,
+                                                                props.location
+                                                                    .longitude
+                                                            )
                                                             : like(
-                                                                  element.offer_id,
-                                                                  User,
-                                                                  props.location
-                                                                      .latitude,
-                                                                  props.location
-                                                                      .longitude
-                                                              );
+                                                                element.offer_id,
+                                                                User,
+                                                                props.location
+                                                                    .latitude,
+                                                                props.location
+                                                                    .longitude
+                                                            );
                                                     }}
                                                     style={{
                                                         marginLeft:
@@ -467,13 +467,13 @@ const OfferCard = (props) => {
                                                             element.offer_id
                                                         )
                                                             ? removeOffer(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              )
+                                                                element.offer_id,
+                                                                props.User
+                                                            )
                                                             : saveOffer(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              );
+                                                                element.offer_id,
+                                                                props.User
+                                                            );
                                                     }}
                                                     style={{
                                                         marginLeft:

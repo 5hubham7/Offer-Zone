@@ -47,7 +47,7 @@ const MyShops = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                     } else {
                         setShopData("No Shops");
                     }
@@ -70,6 +70,16 @@ const MyShops = ({ navigation }) => {
             getMyShops(userID);
         })();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", async () => {
+            (async () => {
+                const userID = await AsyncStorage.getItem("userToken");
+                // console.log("userID", userID);
+                getMyShops(userID);
+            })();
+        });
+    }, [navigation]);
 
     return (
         <View style={styles.container}>

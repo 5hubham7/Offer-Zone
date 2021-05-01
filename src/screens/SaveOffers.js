@@ -55,6 +55,12 @@ const SaveOffers = ({ navigation }) => {
         _retrieveData();
     }, []);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", async () => {
+            _retrieveData()
+        });
+    }, [navigation]);
+
     return (
         <View style={styles.container}>
             <SavedOfferCard
