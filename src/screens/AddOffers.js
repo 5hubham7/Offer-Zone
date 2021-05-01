@@ -16,7 +16,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -47,7 +46,7 @@ const AddOffers = ({ navigation, route }) => {
     const { colors } = useTheme();
     const [offerDetails, setOfferDetails] = useState({
         shop_name: shopName,
-        offer_title: image,
+        offer_title: "",
         details: "",
         image_url: image,
         post_time: "",
@@ -141,14 +140,7 @@ const AddOffers = ({ navigation, route }) => {
         }
     };
 
-    const uploadImage = async (image, imageName) => {
-        const response = await fetch(image);
-        const blob = await response.blob();
-        const ref = firebase.storage().ref().child(imageName);
-        const snapshot = await ref.put(blob);
-        console.log("DONE: ", snapshot.downloadURL);
-        return snapshot.downloadURL;
-    };
+    const uploadImage = async (image, imageName) => {};
 
     // getting shops:
 
@@ -345,10 +337,6 @@ const AddOffers = ({ navigation, route }) => {
         });
     }, [navigation]);
 
-    const [allCategories, setAllCategories] = React.useState([
-        { label: "All", value: "All" },
-    ]);
-
     return (
         <View
             style={[styles.container, { backgroundColor: colors.headerColor }]}
@@ -387,22 +375,6 @@ const AddOffers = ({ navigation, route }) => {
                 ]}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    {/* <View style={styles.picker}>
-                        <Picker
-                            selectedValue={shopName}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setShopName(itemValue)
-                            }
-                        >
-                            {shops.map((shop, index) => (
-                                <Picker.Item
-                                    label={shop}
-                                    value={shop}
-                                    key={index}
-                                />
-                            ))}
-                        </Picker>
-                    </View> */}
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{

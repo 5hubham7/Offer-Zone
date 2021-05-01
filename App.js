@@ -14,7 +14,6 @@ import {
 } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Icon from "react-native-vector-icons/Ionicons";
 import NetInfo from "@react-native-community/netinfo";
 import {
     Provider as PaperProvider,
@@ -26,8 +25,6 @@ import { DrawerContent } from "./src/components/DrawerContent";
 import NoInternetError from "./src/components/NoInternetError";
 import RootStackScreen from "./src/navigation/StackNavigation";
 import { AuthContext } from "./src/components/context/Store";
-import { createStackNavigator } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
 import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
@@ -36,6 +33,7 @@ import MyOffers from "./src/screens/MyOffers";
 import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
 import AddOffers from "./src/screens/AddOffers";
+import AddShops from "./src/screens/AddShops";
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -74,7 +72,6 @@ const App = () => {
             subtext: "#595959",
             icon: "#000",
             shareIcon: "#0277BD",
-
         },
     };
 
@@ -91,7 +88,7 @@ const App = () => {
             offerCard: "#4C4C4C",
             subtext: "#B4B4B4",
             icon: "#fff",
-            shareIcon: "#35B3FF"
+            shareIcon: "#35B3FF",
         },
     };
 
@@ -237,9 +234,10 @@ const App = () => {
                                 name="AddOffers"
                                 component={AddOffers}
                             />
+                            <Drawer.Screen name="MyShops" component={MyShops} />
                             <Drawer.Screen
-                                name="MyShops"
-                                component={MyShops}
+                                name="AddShops"
+                                component={AddShops}
                             />
                             <Drawer.Screen
                                 name="SaveOffers"

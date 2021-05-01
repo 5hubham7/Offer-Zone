@@ -59,8 +59,8 @@ const MyShops = ({ navigation }) => {
     };
 
     const addShop = () => {
-        alert("Add Shop");
-        //navigation.navigate("AddShop");
+        // alert("Add Shop");
+        navigation.navigate("AddShops");
     };
 
     useEffect(() => {
