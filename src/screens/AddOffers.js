@@ -22,7 +22,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 import { useTheme } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import ImageResizer from "react-native-image-resizer";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import { AuthContext } from "../components/context/Store";
@@ -178,6 +177,7 @@ const AddOffers = ({ navigation, route }) => {
                 console.log(error);
             });
     };
+
     // adding offer:
 
     const onAddOfferPress = async () => {
@@ -476,15 +476,6 @@ const AddOffers = ({ navigation, route }) => {
                             />
                         </View>
                     </View>
-
-                    {/* {image && (
-                            <View style={{ alignItems: "center" }}>
-                                <Image
-                                    source={{ uri: image }}
-                                    style={{ width: 40, height: 30 }}
-                                />
-                            </View>
-                    )} */}
 
                     <View style={styles.imagePickerBox}>
                         <View style={styles.action}>
