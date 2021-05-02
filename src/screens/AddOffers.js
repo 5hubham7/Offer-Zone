@@ -39,7 +39,7 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) {}
+} catch (err) { }
 
 const AddOffers = ({ navigation, route }) => {
     const defaultImage =
@@ -421,8 +421,9 @@ const AddOffers = ({ navigation, route }) => {
                             placeholder={{
                                 label: "Select a Shop..",
                                 value: null,
-                                color: colors.text,
+                                color: "#666666",
                             }}
+
                             value={offerDetails.shop_name}
                             items={shops}
                             onValueChange={(value) => {

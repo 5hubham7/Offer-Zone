@@ -303,8 +303,22 @@ const HomeScreen = ({ navigation }) => {
                 />
             )}
 
-            <OfferFilter state={isModalVisible} toggleModal={toggleModal} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
-            <OfferSort state={isModalVisible1} toggleModal={toggleModal1} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
+            <OfferFilter
+                state={isModalVisible}
+                toggleModal={toggleModal}
+                currentOffers={currentOffers}
+                setCurrentOffers={setCurrentOffers}
+                location={location}
+                getOffers={getOffers}
+            />
+            <OfferSort
+                state={isModalVisible1}
+                toggleModal={toggleModal1}
+                currentOffers={currentOffers}
+                setCurrentOffers={setCurrentOffers}
+                location={location}
+                getOffers={getOffers}
+            />
 
             <Modal
                 isVisible={!emailVerified}

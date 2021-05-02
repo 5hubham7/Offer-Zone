@@ -7,7 +7,7 @@ const windowHeight = Dimensions.get('screen').height;
 
 const SortToggleButton = (props) => {
     const [state, setstate] = useState({
-        status: "unchecked"
+        status: props.status
     })
 
 
@@ -17,7 +17,7 @@ const SortToggleButton = (props) => {
     }
     return (
         <View style={{ marginRight: 10 }}>
-            {state.status === "unchecked" ?
+            {props.status === "unchecked" ?
                 <TouchableOpacity
                     style={styles.uncheckButton}
                     onPress={() => { onPress() }}

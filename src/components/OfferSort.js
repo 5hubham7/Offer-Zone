@@ -19,6 +19,9 @@ const offerSort = (props) => {
     const [state, setstate] = React.useState({
         selected: 0,
     })
+
+    const [activeButton, setActiveButton] = React.useState(null)
+    const [offers, setOffers] = React.useState(null)
     var today = new Date();
     var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     var last = lastDay.getDate()
@@ -113,7 +116,7 @@ const offerSort = (props) => {
             if (end_date <= lastWeekDay)
                 exporingSoonOffers.push(element)
         })
-        props.setCurrentOffers(exporingSoon)
+        props.setCurrentOffers(exporingSoonOffers)
         props.toggleModal()
     }
 
@@ -130,6 +133,12 @@ const offerSort = (props) => {
                 todaysOffers.push(element)
         })
         props.setCurrentOffers(todaysOffers)
+        props.toggleModal()
+    }
+
+    const onResetPress = (latitude, longitude) => {
+        setActiveButton(null)
+        props.getOffers(latitude, longitude);
         props.toggleModal()
     }
 
@@ -155,7 +164,10 @@ const offerSort = (props) => {
                     <Text style={styles.title}>Sort</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            resetFilters()
+                            onResetPress(
+                                props.location.latitude,
+                                props.location.longitude,
+                            )
                         }}
                     >
                         <Text
@@ -170,25 +182,33 @@ const offerSort = (props) => {
                     <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                         <SortToggleButton
                             value="On Going"
+                            status={activeButton === "On Going" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("On Going")
                                 onGoingSort()
                             }}
                         />
                         <SortToggleButton
                             value="Title : A to Z"
+                            status={activeButton === "Title : A to Z" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("Title : A to Z")
                                 offerTitleSort()
                             }}
                         />
                         <SortToggleButton
                             value="Title : Z to A"
+                            status={activeButton === "Title : Z to A" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("Title : Z to A")
                                 offerTitleSortReverse()
                             }}
                         />
                         <SortToggleButton
                             value="Expiring Soon"
+                            status={activeButton === "Expiring Soon" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("Expiring Soon")
                                 exporingSoonSort()
                             }}
                         />
@@ -199,37 +219,49 @@ const offerSort = (props) => {
                     <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                         <SortToggleButton
                             value="Today"
+                            status={activeButton === "Today" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("Today")
                                 todaySort()
                             }}
                         />
                         <SortToggleButton
                             value={ButtonNames.start_date_asc}
+                            status={activeButton === ButtonNames.start_date_asc ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton(ButtonNames.start_date_asc)
                                 startDateSort()
                             }}
                         />
                         <SortToggleButton
                             value={ButtonNames.start_date_desc}
+                            status={activeButton === ButtonNames.start_date_desc ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton(ButtonNames.start_date_desc)
                                 startDateSortReverse()
                             }}
                         />
                         <SortToggleButton
                             value={ButtonNames.end_date_asc}
+                            status={activeButton === ButtonNames.end_date_asc ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton(ButtonNames.end_date_asc)
                                 endDateSort()
                             }}
                         />
                         <SortToggleButton
                             value={ButtonNames.end_date_desc}
+                            status={activeButton === ButtonNames.end_date_desc ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton(ButtonNames.end_date_desc)
                                 endDateSortReverse()
                             }}
                         />
                         <SortToggleButton
                             value="Post Date"
+                            status={activeButton === "Post Date" ? "checked" : "unchecked"}
                             onPress={(value) => {
+                                setActiveButton("Post Date")
                                 postDateSort()
                             }}
                         />
@@ -240,12 +272,20 @@ const offerSort = (props) => {
                         <View style={{ width: "90%", marginLeft: 20, flexWrap: 'wrap', flexDirection: 'row' }}>
                             <SortToggleButton
                                 value="Min to Max"
-                                onPress={(value) => { distanceSort() }}
+                                status={activeButton === "Min to Max" ? "checked" : "unchecked"}
+                                onPress={(value) => {
+                                    setActiveButton("Min to Max")
+                                    distanceSort()
+                                }}
 
                             />
                             <SortToggleButton
                                 value="Max to Min"
-                                onPress={(value) => { distanceSortReverse() }}
+                                status={activeButton === "Max to Min" ? "checked" : "unchecked"}
+                                onPress={(value) => {
+                                    setActiveButton("Max to Min")
+                                    distanceSortReverse()
+                                }}
                             />
 
                         </View>
