@@ -102,10 +102,10 @@ const HomeScreen = ({ navigation }) => {
         var data = [];
         var options = [];
         axios
-            // .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
-            .get(
-                `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
-            )
+            .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
+            // .get(
+            //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
+            // )
             .then((response) => {
                 //console.log(response.data.response);
                 if (response.data.status === 200) {
@@ -164,14 +164,38 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", async () => {
-            getOffers(location.latitude, location.longitude)
+            _retrieveData();
+            if (Platform.OS === "android" && !Constants.isDevice) {
+                setErrorMessage(
+                    "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
+                );
+                return;
+            }
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+                alert("Permission to access location was denied!");
+                return;
+            }
+
+            await Location.getCurrentPositionAsync({}).then((data) => {
+                //console.log(data)
+                setLocation(data.coords);
+                getOffers(data.coords.latitude, data.coords.longitude);
+            });
         });
     }, [navigation]);
+
+
+
+    String.prototype.toProperCase = function () {
+        return this.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+    };
+
 
     const onSearchClick = () => {
         setToggelSearchAndOffers(true);
         axios
-            .get(`${axiosURL}/customer/getSearchData/${SearchQuery}`)
+            .get(`${axiosURL}/customer/getSearchData/${SearchQuery.toProperCase()}`)
             .then((response) => {
                 //console.log(response.data)
                 if (response.data.status === 200) {
@@ -279,8 +303,8 @@ const HomeScreen = ({ navigation }) => {
                 />
             )}
 
-            <OfferFilter state={isModalVisible} toggleModal={toggleModal} />
-            <OfferSort state={isModalVisible1} toggleModal={toggleModal1} />
+            <OfferFilter state={isModalVisible} toggleModal={toggleModal} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
+            <OfferSort state={isModalVisible1} toggleModal={toggleModal1} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
 
             <Modal
                 isVisible={!emailVerified}

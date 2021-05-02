@@ -68,7 +68,7 @@ const App = () => {
             text: "#333333",
             link: "#1B01A9",
             headerColor: "#006064",
-            offerCard: "#fff",
+            offerCard: "#D6D6D6",
             subtext: "#595959",
             icon: "#000",
             shareIcon: "#0277BD",

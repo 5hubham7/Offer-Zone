@@ -40,9 +40,26 @@ const OfferCard = (props) => {
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [User, setUser] = React.useState(null);
 
-    const setData = () => {
-        // console.log("hello");
-    };
+    const numberTest = (n) => {
+        var result = (n - Math.floor(n)) !== 0;
+
+        if (result)
+            return 'decimal number';
+        else
+            return 'whole number';
+    }
+
+    const showDistance = (distance) => {
+        let str = numberTest(distance)
+        if (str === 'decimal number') {
+            var text = distance.toFixed(3).toString();
+            var parts = text.split('.');
+            return parts[1] + " Meter"
+        }
+        else if (str === 'whole number') {
+            return distance + " Km"
+        }
+    }
 
     const _retrieveData = async () => {
         try {
@@ -392,7 +409,9 @@ const OfferCard = (props) => {
                                                     element.likes.length
                                                 )}
                                                 {"  "}
-                                                Likes
+                                                Likes  •  {
+                                                    showDistance(element.distance)
+                                                }
                                             </Text>
                                             <View style={styles.line} />
                                             <View
