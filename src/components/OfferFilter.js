@@ -64,6 +64,27 @@ const offerFilter = (props) => {
         getAllCatogories();
     }, []);
 
+    const onApplayPress = () => {
+        filterParameter = {
+            catogory: selectCatogory,
+            city: selectCity,
+            distance: value.distance,
+            latitude: props.location.latitude,
+            longitude: props.location.longitude,
+        }
+        axios.post(`${axiosURL}/customer/getFilterOffers`, filterParameter).then((response) => {
+            if (response.data.status == 200) {
+                if (response.data.response.length > 0) {
+                    props.setCurrentOffers(response.data.response)
+                    props.toggleModal();
+                }
+                else {
+                    props.setCurrentOffers("No Offers");
+                    props.toggleModal();
+                }
+            }
+        })
+    }
     return (
         <Modal
             isVisible={!props.state}
@@ -81,23 +102,30 @@ const offerFilter = (props) => {
                         { backgroundColor: colors.headerColor },
                     ]}
                 >
-                    <AntDesign
-                        name="closecircle"
-                        color="#fff"
-                        size={25}
-                        style={styles.closeIcon}
-                        onPress={() => {
-                            props.toggleModal();
-                        }}
-                    />
-                    <Text style={styles.title}>Filters</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            resetFilters();
-                        }}
-                    >
-                        <Text style={styles.resetButton}>Reset</Text>
-                    </TouchableOpacity>
+                    <View>
+                        <AntDesign
+                            name="closecircle"
+                            color="#fff"
+                            size={28}
+                            style={styles.closeIcon}
+                            onPress={() => {
+                                props.toggleModal();
+                            }}
+                        />
+                    </View>
+                    <View style={{ marginLeft: windowWidth * 0.20, marginRight: windowWidth * 0.20 }}>
+                        <Text style={styles.title}>FILTER</Text>
+                    </View>
+                    <View style={{ marginLeft: -30 }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                resetFilters();
+                            }}
+                            style={styles.resetButton}
+                        >
+                            <Text style={styles.resetButton}>Reset</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View>
                     <Text style={[styles.subTitle, { color: colors.text }]}>
@@ -207,6 +235,7 @@ const offerFilter = (props) => {
                             { backgroundColor: colors.headerColor },
                         ]}
                         activeOpacity={0.7}
+                        onPress={() => { onApplayPress() }}
                     >
                         <Text style={styles.buttonText}>Apply Filter</Text>
                     </TouchableOpacity>

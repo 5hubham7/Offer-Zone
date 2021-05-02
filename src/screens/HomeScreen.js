@@ -152,8 +152,7 @@ const HomeScreen = ({ navigation }) => {
                 alert("Permission to access location was denied!");
                 return;
             }
-
-            await Location.getCurrentPositionAsync({}).then((data) => {
+            await Location.getCurrentPositionAsync({ enableHighAccuracy: true }).then((data) => {
                 //console.log(data)
                 setLocation(data.coords);
                 getOffers(data.coords.latitude, data.coords.longitude);
@@ -303,8 +302,22 @@ const HomeScreen = ({ navigation }) => {
                 />
             )}
 
-            <OfferFilter state={isModalVisible} toggleModal={toggleModal} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
-            <OfferSort state={isModalVisible1} toggleModal={toggleModal1} currentOffers={currentOffers} setCurrentOffers={setCurrentOffers} />
+            <OfferFilter
+                state={isModalVisible}
+                toggleModal={toggleModal}
+                currentOffers={currentOffers}
+                setCurrentOffers={setCurrentOffers}
+                location={location}
+                getOffers={getOffers}
+            />
+            <OfferSort
+                state={isModalVisible1}
+                toggleModal={toggleModal1}
+                currentOffers={currentOffers}
+                setCurrentOffers={setCurrentOffers}
+                location={location}
+                getOffers={getOffers}
+            />
 
             <Modal
                 isVisible={!emailVerified}

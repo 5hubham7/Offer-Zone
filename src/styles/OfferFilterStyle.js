@@ -5,19 +5,19 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: "#006064",
         height: "10%",
-        flexDirection: "row",
+        flexDirection: 'row'
     },
     closeIcon: {
-        marginLeft: 20,
         marginTop: "auto",
         marginBottom: "auto",
+        marginLeft: 20,
     },
     title: {
         color: "#fff",
         fontSize: 25,
-        fontWeight: "bold",
         width: 100,
-        marginLeft: 20,
+        fontWeight: "bold",
+        textAlign: 'center',
         marginTop: "auto",
         marginBottom: "auto",
     },
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontSize: 20,
         fontWeight: "600",
-        width: 140,
         textAlign: "right",
         marginTop: "auto",
         marginBottom: "auto",
