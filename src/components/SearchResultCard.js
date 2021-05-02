@@ -22,8 +22,8 @@ const SearchResultCard = (props) => {
     const { colors } = useTheme();
 
     useEffect(() => {
-        console.log(props)
-    }, [])
+        // console.log(props)
+    }, []);
 
     const dateFormatter = (postdate) => {
         const today = new Date();
@@ -60,7 +60,8 @@ const SearchResultCard = (props) => {
                                     { width: windowWidth * 0.9 },
                                 ]}
                             >
-                                Sorry, your search query don't have any results ! Try with another query.
+                                Sorry, your search query don't have any results
+                                ! Try with another query.
                             </Text>
                             <Image
                                 source={require("../../assets/sad_folder.png")}
@@ -69,20 +70,26 @@ const SearchResultCard = (props) => {
                             />
                         </View>
                     ) : (
-
                         <ScrollView
                             showsVerticalScrollIndicator={false}
                             style={{ marginBottom: 60 }}
                             animation="fadeInRightBig"
                         >
                             {props.SearchQueryData.map((element, index) => (
-
-                                <View style={[styles.cardView, { flexDirection: 'row', backgroundColor: colors.offerCard }]} key={index}>
+                                <View
+                                    style={[
+                                        styles.cardView,
+                                        {
+                                            flexDirection: "row",
+                                            backgroundColor: colors.offerCard,
+                                        },
+                                    ]}
+                                    key={index}
+                                >
                                     <View>
                                         <ImageBackground
                                             source={{
-                                                uri:
-                                                    element.image_url
+                                                uri: element.image_url,
                                             }}
                                             style={styles.cardImage}
                                         >
@@ -92,18 +99,39 @@ const SearchResultCard = (props) => {
                                                     "rgba(0,0,0,0.00)",
                                                     "rgba(0,0,0,0.30)",
                                                 ]}
-                                                style={
-                                                    styles.linearGradient
-                                                }
-                                            >
-
-                                            </LinearGradient>
+                                                style={styles.linearGradient}
+                                            ></LinearGradient>
                                         </ImageBackground>
                                     </View>
-                                    <View >
-                                        <Text style={[styles.cardTitle, { color: colors.text }]}>{element.offer_title}</Text>
-                                        <Text style={[styles.cardSubtitle, { color: colors.text }]}>{element.shop_name} </Text>
-                                        <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>{dateFormatter(element.post_time)}  •  {numberWithCommas(element.likes.length)} Likes </Text>
+                                    <View>
+                                        <Text
+                                            style={[
+                                                styles.cardTitle,
+                                                { color: colors.text },
+                                            ]}
+                                        >
+                                            {element.offer_title}
+                                        </Text>
+                                        <Text
+                                            style={[
+                                                styles.cardSubtitle,
+                                                { color: colors.text },
+                                            ]}
+                                        >
+                                            {element.shop_name}{" "}
+                                        </Text>
+                                        <Text
+                                            style={[
+                                                styles.cardSubtitle2,
+                                                { color: colors.subtext },
+                                            ]}
+                                        >
+                                            {dateFormatter(element.post_time)} •{" "}
+                                            {numberWithCommas(
+                                                element.likes.length
+                                            )}{" "}
+                                            Likes{" "}
+                                        </Text>
                                     </View>
                                 </View>
                             ))}
@@ -120,7 +148,7 @@ const SearchResultCard = (props) => {
                 </View>
             )}
         </View>
-    )
-}
+    );
+};
 
-export default SearchResultCard
+export default SearchResultCard;

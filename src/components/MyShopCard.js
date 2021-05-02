@@ -33,7 +33,7 @@ const MyShopsCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const onSingleTap = (offer_id) => {
@@ -70,7 +70,6 @@ const MyShopsCard = (props) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    console.log(props.shopData);
     return (
         <View style={styles.container}>
             {props.shopData !== null ? (
@@ -129,7 +128,10 @@ const MyShopsCard = (props) => {
                         >
                             {props.shopData.map((element, index) => (
                                 <View
-                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
+                                    style={[
+                                        styles.cardView,
+                                        { backgroundColor: colors.offerCard },
+                                    ]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -141,27 +143,41 @@ const MyShopsCard = (props) => {
                                     >
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={[styles.cardTitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardTitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.shop_name}
                                             </Text>
                                             <Text
-                                                style={[styles.cardSubtitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardSubtitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.category}
                                             </Text>
                                             <Text
-                                                style={[styles.cardSubtitle2, { color: colors.subtext }]}
+                                                style={[
+                                                    styles.cardSubtitle2,
+                                                    { color: colors.subtext },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.shop_address}
                                             </Text>
-                                            <Text style={[styles.offerLikeCount, { color: colors.text }]}>
+                                            <Text
+                                                style={[
+                                                    styles.offerLikeCount,
+                                                    { color: colors.text },
+                                                ]}
+                                            >
                                                 {element.offer.length}
                                                 {"  "}
                                                 Offers

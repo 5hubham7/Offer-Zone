@@ -11,7 +11,6 @@ import {
     ToastAndroid,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,13 +18,14 @@ import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTheme } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import Entypo from "react-native-vector-icons/Entypo";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as firebase from "firebase";
 import axios from "axios";
 
 import { AuthContext } from "../components/context/Store";
-import styles, { pickerSelectStyles } from "../styles/AddOffersStyles";
+import styles from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
 
 try {
@@ -46,8 +46,25 @@ const AddOffers = ({ navigation, route }) => {
         "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg";
 
     const { colors } = useTheme();
-    const { startLoading, stopLoading } = React.useContext(AuthContext);
+    const pickerSelectStyles = {
+        inputIOS: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: colors.text,
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        inputAndroid: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: colors.text,
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        placeholder: { color: "#666666", fontSize: 18 },
+    };
 
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [shops, setShops] = useState([]);
     const [image, setImage] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
@@ -165,7 +182,7 @@ const AddOffers = ({ navigation, route }) => {
         }
     };
 
-    const download = async (imageName) => {
+    const downloadImage = async (imageName) => {
         try {
             return await firebase
                 .storage()
@@ -182,7 +199,6 @@ const AddOffers = ({ navigation, route }) => {
 
     const getMyShops = (seller_id) => {
         var data = [];
-        var options = [];
 
         axios
             // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
@@ -196,7 +212,6 @@ const AddOffers = ({ navigation, route }) => {
                                 label: element.shop_name,
                                 value: element.shop_name,
                             });
-                            options.push(false);
                         });
                     } else {
                         setShops(["No Shops"]);
@@ -236,7 +251,7 @@ const AddOffers = ({ navigation, route }) => {
             if (image) {
                 try {
                     await uploadImage(offerDetails.image_url, offer_id);
-                    image_url = await download(offer_id);
+                    image_url = await downloadImage(offer_id);
                 } catch (error) {
                     image_url = defaultImage;
                     console.log(error);
@@ -389,7 +404,7 @@ const AddOffers = ({ navigation, route }) => {
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Animatable.View animation="fadeIn">
-                        <FontAwesome
+                        <FontAwesome5
                             name="arrow-circle-left"
                             color={"#fff"}
                             size={30}
@@ -419,41 +434,29 @@ const AddOffers = ({ navigation, route }) => {
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
-                                label: "Select a Shop..",
+                                label: "Select the Shop..",
                                 value: null,
-                                color: colors.text,
                             }}
                             value={offerDetails.shop_name}
                             items={shops}
                             onValueChange={(value) => {
                                 handelShopNameChange(value);
                             }}
-                            style={{
-                                inputIOS: {
-                                    fontSize: 16,
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 8,
-                                    color: colors.text,
-                                    paddingRight: 30, // to ensure the text is never behind the icon
-                                },
-                                inputAndroid: {
-                                    fontSize: 16,
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 8,
-                                    color: colors.text,
-                                    paddingRight: 30, // to ensure the text is never behind the icon
-                                },
-                            }}
+                            style={pickerSelectStyles}
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
-                                    <FontAwesome
-                                        name="angle-down"
+                                    <FontAwesome5
+                                        name="chevron-down"
                                         size={24}
-                                        color="#666666"
+                                        color={
+                                            offerDetails.shop_name
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 15,
+                                            marginRight: 10,
                                         }}
                                     />
                                 );
@@ -464,7 +467,7 @@ const AddOffers = ({ navigation, route }) => {
                     <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
-                                placeholder="Offer Title"
+                                placeholder="Enter the Offer Title..."
                                 placeholderTextColor="#666666"
                                 style={[
                                     styles.textInput,
@@ -481,7 +484,11 @@ const AddOffers = ({ navigation, route }) => {
                             <MaterialCommunityIcons
                                 name="format-title"
                                 size={25}
-                                color="#666666"
+                                color={
+                                    offerDetails.offer_title
+                                        ? colors.formIcon
+                                        : "#666666"
+                                }
                                 style={{ marginRight: 10 }}
                             />
                         </View>
@@ -491,7 +498,7 @@ const AddOffers = ({ navigation, route }) => {
                         <View style={styles.action}>
                             <TextInput
                                 multiline={true}
-                                placeholder="Details"
+                                placeholder="Enter the Offer Details..."
                                 placeholderTextColor="#666666"
                                 style={[
                                     styles.textInput,
@@ -503,10 +510,14 @@ const AddOffers = ({ navigation, route }) => {
                                 value={offerDetails.details}
                                 onChangeText={(val) => handelDetailsChange(val)}
                             />
-                            <MaterialCommunityIcons
-                                name="format-list-bulleted"
+                            <Entypo
+                                name="text"
                                 size={25}
-                                color="#666666"
+                                color={
+                                    offerDetails.details
+                                        ? colors.formIcon
+                                        : "#666666"
+                                }
                                 style={{ marginRight: 10 }}
                             />
                         </View>
@@ -517,14 +528,17 @@ const AddOffers = ({ navigation, route }) => {
                             <Text
                                 style={[
                                     styles.textInput,
-                                    {
-                                        color: "#1976D2",
-                                    },
+                                    image
+                                        ? {
+                                              color: colors.text,
+                                          }
+                                        : {
+                                              color: "#666666",
+                                          },
                                 ]}
                                 onPress={pickImage}
                             >
-                                {image ? "Reselect" : "Select"}
-                                {" Image"}
+                                {image ? "Reselect Image" : "Select Image"}
                             </Text>
                             {image && (
                                 <Image
@@ -540,7 +554,7 @@ const AddOffers = ({ navigation, route }) => {
                             <MaterialCommunityIcons
                                 name="image"
                                 size={25}
-                                color="#666666"
+                                color={image ? colors.formIcon : "#666666"}
                                 style={{ marginRight: 10 }}
                             />
                         </View>
@@ -552,7 +566,7 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: "#1976D2",
+                                        color: colors.text,
                                     },
                                 ]}
                                 onPress={showStartDatepicker}
@@ -567,7 +581,7 @@ const AddOffers = ({ navigation, route }) => {
                             <MaterialCommunityIcons
                                 name="calendar"
                                 size={25}
-                                color="#666666"
+                                color={startDate ? colors.formIcon : "#666666"}
                                 style={{ marginRight: 10 }}
                             />
                         </View>
@@ -593,7 +607,7 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: "#1976D2",
+                                        color: colors.text,
                                     },
                                 ]}
                                 onPress={showEndDatepicker}
@@ -609,7 +623,7 @@ const AddOffers = ({ navigation, route }) => {
                             <MaterialCommunityIcons
                                 name="calendar"
                                 size={25}
-                                color="#666666"
+                                color={endDate ? colors.formIcon : "#666666"}
                                 style={{ marginRight: 10 }}
                             />
                         </View>

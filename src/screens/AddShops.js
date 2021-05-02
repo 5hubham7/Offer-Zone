@@ -7,7 +7,6 @@ import {
     TextInput,
     ScrollView,
     Platform,
-    Image,
     ToastAndroid,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
@@ -17,16 +16,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from "react-native-picker-select";
-import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
+import * as Location from "expo-location";
 import { useTheme } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import ImageResizer from "react-native-image-resizer";
-import * as ImageManipulator from "expo-image-manipulator";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import { AuthContext } from "../components/context/Store";
-import styles, { pickerSelectStyles } from "../styles/AddOffersStyles";
+import styles from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
 
 try {
@@ -44,12 +40,37 @@ try {
 
 const AddShops = ({ navigation, route }) => {
     const { colors } = useTheme();
+    const pickerSelectStyles = {
+        inputIOS: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: colors.text,
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        inputAndroid: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: colors.text,
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        placeholder: { color: "#666666", fontSize: 18 },
+    };
+
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
+    const [shops, setShops] = useState([]);
+    // const [token, setToken] = useState(null);
+    // const token = "";
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
     const [shopDetails, setShopDetails] = useState({
         shop_name: "",
-        category: [],
-        country: [],
-        state: [],
-        city: [],
+        category: "",
+        country: "",
+        state: "",
+        city: "",
         address: "",
         latitude: "",
         longitude: "",
@@ -58,56 +79,49 @@ const AddShops = ({ navigation, route }) => {
     });
 
     const categories = [
-        "All",
-        "Automotive",
-        "Baby & Toddler",
-        "Clothing & Shoes",
-        "Computers",
-        "Electronics",
-        "Entertainment & Arts",
-        "Food & Gifts",
-        "Health & Beauty",
-        "Home & Garden",
-        "Office & Professional Services",
-        "Personal & Home Services",
-        "Restaurants & Dining",
-        "Software",
-        "Sports & Outdoors",
-        "Travel",
-        "Other",
+        { label: "Automotive", value: "Automotive" },
+        { label: "Baby & Toddler", value: "Baby & Toddler" },
+        { label: "Clothing & Shoes", value: "Clothing & Shoes" },
+        { label: "Computers", value: "Computers" },
+        { label: "Electronics", value: "Electronics" },
+        { label: "Entertainment & Arts", value: "Entertainment & Arts" },
+        { label: "Food & Gifts", value: "Food & Gifts" },
+        { label: "Health & Beauty", value: "Health & Beauty" },
+        { label: "Home & Garden", value: "Home & Garden" },
+        {
+            label: "Office & Professional Services",
+            value: "Office & Professional Services",
+        },
+        {
+            label: "Personal & Home Services",
+            value: "Personal & Home Services",
+        },
+        { label: "Restaurants & Dining", value: "Restaurants & Dining" },
+        { label: "Software", value: "Software" },
+        { label: "Sports & Outdoors", value: "Sports & Outdoors" },
+        { label: "Travel", value: "Travel" },
+        { label: "Other", value: "Other" },
     ];
-
-    const { startLoading, stopLoading } = React.useContext(AuthContext);
-    const { shops, setShops } = React.useContext(AuthContext);
-    // const [selectedCategory, setSelectedCategory] = useState(null);
-    const [countries, setCountries] = useState([]);
-    const [states, setStates] = useState([]);
-    const [cities, setCities] = useState([]);
-    // const [selectedCountry, setSelectedCountry] = useState(null);
-    // const [selectedState, setSelectedState] = useState(null);
-    // const [selectedCity, setSelectedCity] = useState(null);
 
     const handelShopNameChange = (val) => {
         setShopDetails({ ...shopDetails, shop_name: val });
     };
 
     const handelCategoryChange = (val) => {
-        // setSelectedCategory(val);
         setShopDetails({ ...shopDetails, category: val });
     };
 
     const handelCountryChange = (val) => {
-        // setSelectedCountry(val);
         setShopDetails({ ...shopDetails, country: val });
+        getStates(val);
     };
 
     const handelStateChange = (val) => {
-        // setSelectedState(val);
         setShopDetails({ ...shopDetails, state: val });
+        getCities(val);
     };
 
     const handelCityChange = (val) => {
-        // setSelectedCity(val);
         setShopDetails({ ...shopDetails, city: val });
     };
 
@@ -115,14 +129,164 @@ const AddShops = ({ navigation, route }) => {
         setShopDetails({ ...shopDetails, address: val });
     };
 
+    // const token =
+    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiI1aHViaGFtNy51bm9mZmljaWFsQGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IjhRWkFZZlVFSEpkTDY1NEJfdDJtVEVCdHU4UjJYenNabXZHSms1REktbG11WGRyUWphTUZUNUpQaTdTT1dvV20waTQifSwiZXhwIjoxNjIwMDY1MTQ5fQ.nrWkVsiGJlkGTLeibbj6NBOXcq1TqTwPh7VV-px5ykA";
+
+    const getToken = async () => {
+        const config = {
+            headers: {
+                Accept: "application/json",
+                "api-token":
+                    "8QZAYfUEHJdL654B_t2mTEBtu8R2XzsZmvGJk5DI-lmuXdrQjaMFT5JPi7SOWoWm0i4",
+                "user-email": "5hubham7.unofficial@gmail.com",
+            },
+        };
+
+        let response = await axios.get(
+            "https://www.universal-tutorial.com/api/getaccesstoken",
+            config
+        );
+        if (response.status == 200) {
+            return response.data.auth_token.toString();
+        }
+
+        // axios
+        //     .get(
+        //         "https://www.universal-tutorial.com/api/getaccesstoken",
+        //         config
+        //     )
+        //     .then((response) => {
+        //         if (response.status == 200) {
+        //             console.log(response.data.auth_token);
+        //             // setToken(response.data.auth_token);
+        //             token = response.data.auth_token;
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+    };
+
+    const getCountries = async () => {
+        let config = {
+            headers: {
+                Authorization: "Bearer " + (await getToken()),
+            },
+        };
+        let countryData = [];
+
+        axios
+            .get("https://www.universal-tutorial.com/api/countries/", config)
+            .then((response) => {
+                if (response.status == 200) {
+                    if (response.data.length > 0) {
+                        response.data.map((element) => {
+                            countryData.push({
+                                label: element.country_name,
+                                value: element.country_name,
+                            });
+                        });
+                    } else {
+                        setCountries([
+                            {
+                                label: "No Countries",
+                                value: "No Countries",
+                            },
+                        ]);
+                    }
+                }
+                setCountries(countryData);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const getStates = async (countryName) => {
+        let config = {
+            headers: {
+                Authorization: "Bearer " + (await getToken()),
+            },
+        };
+        let stateData = [];
+
+        axios
+            .get(
+                "https://www.universal-tutorial.com/api/states/" + countryName,
+                config
+            )
+            .then((response) => {
+                if (response.status == 200) {
+                    if (response.data.length > 0) {
+                        response.data.map((element) => {
+                            stateData.push({
+                                label: element.state_name,
+                                value: element.state_name,
+                            });
+                        });
+                    } else {
+                        setStates([
+                            {
+                                label: "No States",
+                                value: "No States",
+                            },
+                        ]);
+                    }
+                }
+                setStates(stateData);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const getCities = async (stateName) => {
+        let config = {
+            headers: {
+                Authorization: "Bearer " + (await getToken()),
+            },
+        };
+        let cityData = [];
+
+        axios
+            .get(
+                "https://www.universal-tutorial.com/api/cities/" + stateName,
+                config
+            )
+            .then((response) => {
+                if (response.status == 200) {
+                    if (response.data.length > 0) {
+                        response.data.map((element) => {
+                            cityData.push({
+                                label: element.city_name,
+                                value: element.city_name,
+                            });
+                        });
+                    } else {
+                        setCities([
+                            {
+                                label: "No Cities",
+                                value: "No Cities",
+                            },
+                        ]);
+                    }
+                }
+                setCities(cityData);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     // getting shops:
 
-    const getMyShops = (seller_id) => {
+    const getMyShops = async (seller_id) => {
+        await getCountries();
         var data = [];
 
         axios
-            .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
-            // .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
+            // .get(`${AxiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
+            .get(`${AxiosURL}/seller/getMyShops/${seller_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
@@ -231,16 +395,21 @@ const AddShops = ({ navigation, route }) => {
             if (Platform.OS !== "android") {
                 const {
                     status,
-                } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                } = await Location.requestForegroundPermissionsAsync();
                 if (status !== "granted") {
-                    alert(
-                        "Sorry, we need camera roll permissions to make this work!"
-                    );
+                    alert("Permission to access location was denied!");
+                    navigation.goBack();
+                }
+
+                status = await Location.getCurrentPositionAsync({});
+                if (status !== "granted") {
+                    alert("Permission to access location was denied!");
+                    navigation.goBack();
                 }
             }
             try {
                 const userID = await AsyncStorage.getItem("userToken");
-                getMyShops(userID);
+                await getMyShops(userID);
             } catch (error) {
                 console.log(error);
             }
@@ -253,10 +422,10 @@ const AddShops = ({ navigation, route }) => {
         const unsubscribe = navigation.addListener("focus", async () => {
             setShopDetails({
                 shop_name: "",
-                category: [],
-                country: [],
-                state: [],
-                city: [],
+                category: "",
+                country: "",
+                state: "",
+                city: "",
                 address: "",
                 latitude: "",
                 longitude: "",
@@ -265,7 +434,7 @@ const AddShops = ({ navigation, route }) => {
             });
             try {
                 const userID = await AsyncStorage.getItem("userToken");
-                getMyShops(userID);
+                await getMyShops(userID);
             } catch (error) {
                 console.log(error);
             }
@@ -285,7 +454,7 @@ const AddShops = ({ navigation, route }) => {
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Animatable.View animation="fadeIn">
-                        <FontAwesome
+                        <FontAwesome5
                             name="arrow-circle-left"
                             color="#fff"
                             size={30}
@@ -297,7 +466,7 @@ const AddShops = ({ navigation, route }) => {
                     </Animatable.View>
                 </TouchableOpacity>
                 <Animatable.View animation="fadeInLeftBig" duration={1500}>
-                    <Text style={styles.headerText}>Add Offer</Text>
+                    <Text style={styles.headerText}>Add Shop</Text>
                 </Animatable.View>
             </View>
             <Animatable.View
@@ -314,7 +483,7 @@ const AddShops = ({ navigation, route }) => {
                     <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
-                                placeholder="Shop Name"
+                                placeholder="Enter the Shop Name..."
                                 placeholderTextColor="#666666"
                                 style={[
                                     styles.textInput,
@@ -328,15 +497,24 @@ const AddShops = ({ navigation, route }) => {
                                     handelShopNameChange(val)
                                 }
                             />
+                            <Entypo
+                                name="shop"
+                                size={25}
+                                color={
+                                    shopDetails.shop_name
+                                        ? colors.formIcon
+                                        : "#666666"
+                                }
+                                style={{ marginRight: 10 }}
+                            />
                         </View>
                     </View>
 
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
-                                label: "Category",
+                                label: "Select a Category...",
                                 value: null,
-                                color: "#404040",
                             }}
                             value={shopDetails.category}
                             items={categories}
@@ -347,13 +525,17 @@ const AddShops = ({ navigation, route }) => {
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
-                                    <FontAwesome
-                                        name="angle-down"
-                                        size={24}
-                                        color="#404040"
+                                    <FontAwesome5
+                                        name="chevron-down"
+                                        size={25}
+                                        color={
+                                            shopDetails.category
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 20,
+                                            marginRight: 10,
                                         }}
                                     />
                                 );
@@ -364,9 +546,8 @@ const AddShops = ({ navigation, route }) => {
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
-                                label: "Country",
+                                label: "Select the Country...",
                                 value: null,
-                                color: "#404040",
                             }}
                             value={shopDetails.country}
                             items={countries}
@@ -377,13 +558,17 @@ const AddShops = ({ navigation, route }) => {
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
-                                    <FontAwesome
-                                        name="angle-down"
-                                        size={24}
-                                        color="#404040"
+                                    <FontAwesome5
+                                        name="chevron-down"
+                                        size={25}
+                                        color={
+                                            shopDetails.country
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 20,
+                                            marginRight: 10,
                                         }}
                                     />
                                 );
@@ -394,9 +579,8 @@ const AddShops = ({ navigation, route }) => {
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
-                                label: "State",
+                                label: "Select the state...",
                                 value: null,
-                                color: "#404040",
                             }}
                             value={shopDetails.state}
                             items={states}
@@ -407,13 +591,17 @@ const AddShops = ({ navigation, route }) => {
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
-                                    <FontAwesome
-                                        name="angle-down"
-                                        size={24}
-                                        color="#404040"
+                                    <FontAwesome5
+                                        name="chevron-down"
+                                        size={25}
+                                        color={
+                                            shopDetails.state
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 20,
+                                            marginRight: 10,
                                         }}
                                     />
                                 );
@@ -424,9 +612,8 @@ const AddShops = ({ navigation, route }) => {
                     <View style={styles.picker}>
                         <RNPickerSelect
                             placeholder={{
-                                label: "City",
+                                label: "Select the City...",
                                 value: null,
-                                color: "#404040",
                             }}
                             value={shopDetails.city}
                             items={cities}
@@ -437,13 +624,17 @@ const AddShops = ({ navigation, route }) => {
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
-                                    <FontAwesome
-                                        name="angle-down"
-                                        size={24}
-                                        color="#404040"
+                                    <FontAwesome5
+                                        name="chevron-down"
+                                        size={25}
+                                        color={
+                                            shopDetails.city
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 20,
+                                            marginRight: 10,
                                         }}
                                     />
                                 );
@@ -454,7 +645,7 @@ const AddShops = ({ navigation, route }) => {
                     <View style={styles.inputBox}>
                         <View style={styles.action}>
                             <TextInput
-                                placeholder="Address"
+                                placeholder="Enter the Shop Address..."
                                 placeholderTextColor="#666666"
                                 style={[
                                     styles.textInput,
@@ -466,6 +657,16 @@ const AddShops = ({ navigation, route }) => {
                                 value={shopDetails.address}
                                 onChangeText={(val) => handelAddressChange(val)}
                             />
+                            <Entypo
+                                name="address"
+                                size={25}
+                                color={
+                                    shopDetails.address
+                                        ? colors.formIcon
+                                        : "#666666"
+                                }
+                                style={{ marginRight: 10 }}
+                            />
                         </View>
                     </View>
 
@@ -473,21 +674,16 @@ const AddShops = ({ navigation, route }) => {
                         onPress={() => {
                             onAddShopPress();
                         }}
+                        style={[
+                            styles.addOfferButtonBG,
+                            { backgroundColor: colors.headerColor },
+                        ]}
                     >
-                        <LinearGradient
-                            colors={["#009688", "#00796B", "#004D40"]}
-                            style={[styles.addOfferButtonBG]}
-                        >
-                            <Text style={styles.addOfferButtonText}>
-                                <Entypo
-                                    name="add-to-list"
-                                    color="#fff"
-                                    size={25}
-                                />
-                                {"  "}
-                                Add Shop
-                            </Text>
-                        </LinearGradient>
+                        <Text style={styles.addOfferButtonText}>
+                            <Entypo name="add-to-list" color="#fff" size={25} />
+                            {"  "}
+                            Add Shop
+                        </Text>
                     </TouchableOpacity>
                 </ScrollView>
             </Animatable.View>

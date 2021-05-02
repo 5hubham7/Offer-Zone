@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === "ios" ? 0 : 0,
         marginBottom: -8,
         paddingLeft: 40,
-
         fontSize: 18,
     },
     imagePickerBox: {

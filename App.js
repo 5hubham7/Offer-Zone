@@ -72,6 +72,7 @@ const App = () => {
             subtext: "#595959",
             icon: "#000",
             shareIcon: "#0277BD",
+            formIcon: "#006064",
         },
     };
 
@@ -89,6 +90,7 @@ const App = () => {
             subtext: "#B4B4B4",
             icon: "#fff",
             shareIcon: "#35B3FF",
+            formIcon: "#fff",
         },
     };
 
