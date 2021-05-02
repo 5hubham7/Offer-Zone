@@ -307,6 +307,7 @@ const AddShops = ({ navigation, route }) => {
     // adding offer:
 
     const onAddShopPress = async () => {
+        alert("TODO");
         /*
         startLoading();
         let sellerID;
