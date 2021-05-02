@@ -154,28 +154,33 @@ const offerSort = (props) => {
         >
             <View style={{ flex: 1 }}>
                 <View style={[styles.header, { backgroundColor: colors.headerColor }]}>
-                    <AntDesign
-                        name="closecircle"
-                        color='#fff'
-                        size={25}
-                        style={styles.closeIcon}
-                        onPress={() => { props.toggleModal() }}
-                    />
-                    <Text style={styles.title}>Sort</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            onResetPress(
-                                props.location.latitude,
-                                props.location.longitude,
-                            )
-                        }}
-                    >
-                        <Text
+                    <View>
+                        <AntDesign
+                            name="closecircle"
+                            color="#fff"
+                            size={28}
+                            style={styles.closeIcon}
+                            onPress={() => {
+                                props.toggleModal();
+                            }}
+                        />
+                    </View>
+                    <View style={{ marginLeft: windowWidth * 0.20, marginRight: windowWidth * 0.20 }}>
+                        <Text style={styles.title}>SORT</Text>
+                    </View>
+                    <View style={{ marginLeft: -30 }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                onResetPress(
+                                    props.location.latitude,
+                                    props.location.longitude,
+                                )
+                            }}
                             style={styles.resetButton}
                         >
-                            Reset
-                        </Text>
-                    </TouchableOpacity>
+                            <Text style={styles.resetButton}>Reset</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View>
                     <Text style={[styles.subTitle, { color: colors.text }]}>Offers</Text>

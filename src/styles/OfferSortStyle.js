@@ -15,20 +15,19 @@ const styles = StyleSheet.create({
     title: {
         color: "#fff",
         fontSize: 25,
-        fontWeight: 'bold',
         width: 100,
-        marginLeft: 20,
+        fontWeight: "bold",
+        textAlign: 'center',
         marginTop: "auto",
-        marginBottom: 'auto'
+        marginBottom: "auto",
     },
     resetButton: {
         color: "#fff",
         fontSize: 20,
-        fontWeight: '600',
-        width: 140,
+        fontWeight: "600",
         textAlign: "right",
         marginTop: "auto",
-        marginBottom: 'auto'
+        marginBottom: "auto",
     },
     subTitle: {
         fontSize: 20,

@@ -152,8 +152,7 @@ const HomeScreen = ({ navigation }) => {
                 alert("Permission to access location was denied!");
                 return;
             }
-
-            await Location.getCurrentPositionAsync({}).then((data) => {
+            await Location.getCurrentPositionAsync({ enableHighAccuracy: true }).then((data) => {
                 //console.log(data)
                 setLocation(data.coords);
                 getOffers(data.coords.latitude, data.coords.longitude);
