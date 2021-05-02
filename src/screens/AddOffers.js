@@ -14,17 +14,15 @@ import * as Animatable from "react-native-animatable";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
-import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import axios from "axios";
 import { useTheme } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import ImageResizer from "react-native-image-resizer";
 import * as ImageManipulator from "expo-image-manipulator";
+import * as firebase from "firebase";
+import axios from "axios";
 
 import { AuthContext } from "../components/context/Store";
 import styles, { pickerSelectStyles } from "../styles/AddOffersStyles";
@@ -129,9 +127,7 @@ const AddOffers = ({ navigation, route }) => {
 
         if (!result.cancelled) {
             setImage(result.uri);
-            // offerDetails.image_url = image;
             setOfferDetails({ ...offerDetails, image_url: result.uri });
-            // image resize:
             try {
                 const resizedImage = await ImageManipulator.manipulateAsync(
                     result.uri,
@@ -139,12 +135,6 @@ const AddOffers = ({ navigation, route }) => {
                     { compress: 1, format: ImageManipulator.SaveFormat.PNG }
                 );
 
-                // setImage({
-                //     uri: resizedImage.uri,
-                //     height: resizedImage.height,
-                //     width: resizedImage.width,
-                // });
-                // offerDetails.image_url = image;
                 setOfferDetails({
                     ...offerDetails,
                     image_url: resizedImage.uri,
@@ -242,8 +232,6 @@ const AddOffers = ({ navigation, route }) => {
         let details = offerDetails.details;
         let offer_id = sellerID + "_" + generateOfferID(10);
 
-        // uploadImage(image_url, offer_id);
-
         if (shop_name && offer_title && details) {
             if (image) {
                 try {
@@ -267,8 +255,6 @@ const AddOffers = ({ navigation, route }) => {
                 offer_id: offer_id,
                 uid: sellerID,
             };
-
-            //alert(JSON.stringify(addOfferDetails));
 
             axios
                 .post(
@@ -379,6 +365,7 @@ const AddOffers = ({ navigation, route }) => {
                 offer_id: "",
                 uid: "",
             });
+            setImage(null);
 
             try {
                 const userID = await AsyncStorage.getItem("userToken");
@@ -404,10 +391,11 @@ const AddOffers = ({ navigation, route }) => {
                     <Animatable.View animation="fadeIn">
                         <FontAwesome
                             name="arrow-circle-left"
-                            color="#fff"
+                            color={"#fff"}
                             size={30}
                             style={{
                                 marginLeft: 0,
+                                marginTop: 30,
                                 marginTop: 30,
                             }}
                         />
@@ -433,24 +421,39 @@ const AddOffers = ({ navigation, route }) => {
                             placeholder={{
                                 label: "Select a Shop..",
                                 value: null,
-                                color: "#404040",
+                                color: colors.text,
                             }}
                             value={offerDetails.shop_name}
                             items={shops}
                             onValueChange={(value) => {
                                 handelShopNameChange(value);
                             }}
-                            style={pickerSelectStyles}
+                            style={{
+                                inputIOS: {
+                                    fontSize: 16,
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 8,
+                                    color: colors.text,
+                                    paddingRight: 30, // to ensure the text is never behind the icon
+                                },
+                                inputAndroid: {
+                                    fontSize: 16,
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 8,
+                                    color: colors.text,
+                                    paddingRight: 30, // to ensure the text is never behind the icon
+                                },
+                            }}
                             useNativeAndroidPickerStyle={false}
                             Icon={() => {
                                 return (
                                     <FontAwesome
                                         name="angle-down"
                                         size={24}
-                                        color="#404040"
+                                        color="#666666"
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 20,
+                                            marginRight: 15,
                                         }}
                                     />
                                 );
@@ -475,6 +478,12 @@ const AddOffers = ({ navigation, route }) => {
                                     handelOfferTitleChange(val)
                                 }
                             />
+                            <MaterialCommunityIcons
+                                name="format-title"
+                                size={25}
+                                color="#666666"
+                                style={{ marginRight: 10 }}
+                            />
                         </View>
                     </View>
 
@@ -493,6 +502,12 @@ const AddOffers = ({ navigation, route }) => {
                                 autoCapitalize="none"
                                 value={offerDetails.details}
                                 onChangeText={(val) => handelDetailsChange(val)}
+                            />
+                            <MaterialCommunityIcons
+                                name="format-list-bulleted"
+                                size={25}
+                                color="#666666"
+                                style={{ marginRight: 10 }}
                             />
                         </View>
                     </View>
@@ -618,21 +633,16 @@ const AddOffers = ({ navigation, route }) => {
                         onPress={() => {
                             onAddOfferPress();
                         }}
+                        style={[
+                            styles.addOfferButtonBG,
+                            { backgroundColor: colors.headerColor },
+                        ]}
                     >
-                        <LinearGradient
-                            colors={["#009688", "#00796B", "#004D40"]}
-                            style={[styles.addOfferButtonBG]}
-                        >
-                            <Text style={styles.addOfferButtonText}>
-                                <Entypo
-                                    name="add-to-list"
-                                    color="#fff"
-                                    size={25}
-                                />
-                                {"  "}
-                                Add Offer
-                            </Text>
-                        </LinearGradient>
+                        <Text style={styles.addOfferButtonText}>
+                            <Entypo name="add-to-list" color="#fff" size={25} />
+                            {"  "}
+                            Add Offer
+                        </Text>
                     </TouchableOpacity>
                 </ScrollView>
             </Animatable.View>

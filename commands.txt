@@ -19,3 +19,8 @@ changes in node_modules
     Look for the variable MAX_TIMER_DURATION_MS
 
     Change its value to 10000 * 1000
+
+
+
+
+TODO: remove map from offer details

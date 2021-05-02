@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-
-const { width } = Dimensions.get("screen").width;
+import { color } from "react-native-reanimated";
 
 const styles = StyleSheet.create({
     container: {
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderTopLeftRadius: 20,
-        backgroundColor: "#000",
+
         marginTop: 10,
     },
     addOfferButtonText: {
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     inputBox: {
         marginTop: 5,
         borderWidth: 1,
-        borderColor: "#c9c9c9",
+        borderColor: "#9E9E9E",
         paddingBottom: 5,
         borderTopLeftRadius: 20,
         marginBottom: 10,
@@ -86,19 +85,19 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === "ios" ? 0 : 0,
         marginBottom: -8,
         paddingLeft: 40,
-        color: "#05375a",
+
         fontSize: 18,
     },
     imagePickerBox: {
         marginTop: 5,
         borderWidth: 1,
-        borderColor: "#c9c9c9",
+        borderColor: "#9E9E9E",
         borderTopLeftRadius: 20,
         marginBottom: 10,
     },
     picker: {
         borderWidth: 1,
-        borderColor: "#c9c9c9",
+        borderColor: "#9E9E9E",
         borderTopLeftRadius: 20,
         marginBottom: 10,
         paddingLeft: 30,
