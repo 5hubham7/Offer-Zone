@@ -103,7 +103,7 @@ const SearchResultCard = (props) => {
                                     <View >
                                         <Text style={[styles.cardTitle, { color: colors.text }]}>{element.offer_title}</Text>
                                         <Text style={[styles.cardSubtitle, { color: colors.text }]}>{element.shop_name} </Text>
-                                        <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>{dateFormatter(element.post_time)} . {numberWithCommas(element.likes.length)} Likes </Text>
+                                        <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>{dateFormatter(element.post_time)}  •  {numberWithCommas(element.likes.length)} Likes </Text>
                                     </View>
                                 </View>
                             ))}

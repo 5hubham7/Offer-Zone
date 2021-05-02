@@ -409,7 +409,7 @@ const OfferCard = (props) => {
                                                     element.likes.length
                                                 )}
                                                 {"  "}
-                                                Likes . {
+                                                Likes  •  {
                                                     showDistance(element.distance)
                                                 }
                                             </Text>
