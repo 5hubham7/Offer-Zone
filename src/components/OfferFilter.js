@@ -26,6 +26,9 @@ const offerFilter = (props) => {
     const [allCategories, setAllCategories] = React.useState([
         { label: "All", value: "All" },
     ]);
+    const [allCities, setAllCities] = React.useState([
+        { label: "Current", value: "Current" },
+    ]);
     const [value, setValue] = React.useState({
         distance: 5,
         minDistance: 1,
@@ -54,7 +57,19 @@ const offerFilter = (props) => {
         axios.get(`${axiosURL}/customer/getAllCatogories`).then((response) => {
             if (response.data.status == 200) {
                 response.data.response.map((element) => {
-                    allCategories.push({ label: element, value: element });
+                    if (!allCategories.includes({ label: element, value: element }))
+                        allCategories.push({ label: element, value: element });
+                });
+            }
+        });
+    };
+
+    const getAllCaities = () => {
+        axios.get(`${axiosURL}/customer/getAllCities`).then((response) => {
+            if (response.data.status == 200) {
+                response.data.response.map((element) => {
+                    if (!allCities.includes({ label: element, value: element }))
+                        allCities.push({ label: element, value: element });
                 });
             }
         });
@@ -62,6 +77,7 @@ const offerFilter = (props) => {
 
     useEffect(() => {
         getAllCatogories();
+        getAllCaities();
     }, []);
 
     const onApplayPress = () => {
@@ -170,12 +186,7 @@ const offerFilter = (props) => {
                         <RNPickerSelect
                             placeholder={placeholder}
                             value={selectCity}
-                            items={[
-                                { label: "Current", value: "Current" },
-                                { label: "Pune", value: "Pune" },
-                                { label: "Mumbai", value: "Mumbai" },
-                                { label: "Nashik", value: "Nashik" },
-                            ]}
+                            items={allCities}
                             onValueChange={(value) => {
                                 setSelectCity(value);
                             }}

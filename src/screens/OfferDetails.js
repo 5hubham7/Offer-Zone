@@ -5,6 +5,7 @@ import {
     ScrollView,
     TouchableOpacity,
     ImageBackground,
+    StatusBar
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -292,7 +293,7 @@ const OfferDetails = ({ navigation, route }) => {
                                         ]}
                                         lineBreakMode="tail"
                                     >
-                                        {route.params.offerData.shop_address}
+                                        {route.params.offerData.shop_address} , {route.params.offerData.city} , {route.params.offerData.state} , {route.params.offerData.country}
                                     </Text>
                                 </Text>
                             </View>
