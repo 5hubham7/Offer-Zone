@@ -128,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
                         },
                         {});
                         //console.log("final result", result)
-                        setScrollLoder(false)
+                        setScrollLoder(false);
                         setOfferLike({ ...result });
                     } else {
                         setCurrentOffers("No Offers");

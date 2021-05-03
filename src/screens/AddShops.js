@@ -12,7 +12,6 @@ import {
 import * as Animatable from "react-native-animatable";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from "react-native-picker-select";
@@ -36,7 +35,7 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) { }
+} catch (err) {}
 
 const AddShops = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -506,7 +505,7 @@ const AddShops = ({ navigation, route }) => {
                             Icon={() => {
                                 return (
                                     <FontAwesome5
-                                        name="chevron-down"
+                                        name="angle-down"
                                         size={25}
                                         color={
                                             shopDetails.category
@@ -515,7 +514,7 @@ const AddShops = ({ navigation, route }) => {
                                         }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 10,
+                                            marginRight: 15,
                                         }}
                                     />
                                 );
@@ -539,7 +538,7 @@ const AddShops = ({ navigation, route }) => {
                             Icon={() => {
                                 return (
                                     <FontAwesome5
-                                        name="chevron-down"
+                                        name="angle-down"
                                         size={25}
                                         color={
                                             shopDetails.country
@@ -548,7 +547,7 @@ const AddShops = ({ navigation, route }) => {
                                         }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 10,
+                                            marginRight: 15,
                                         }}
                                     />
                                 );
@@ -572,7 +571,7 @@ const AddShops = ({ navigation, route }) => {
                             Icon={() => {
                                 return (
                                     <FontAwesome5
-                                        name="chevron-down"
+                                        name="angle-down"
                                         size={25}
                                         color={
                                             shopDetails.state
@@ -581,7 +580,7 @@ const AddShops = ({ navigation, route }) => {
                                         }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 10,
+                                            marginRight: 15,
                                         }}
                                     />
                                 );
@@ -605,7 +604,7 @@ const AddShops = ({ navigation, route }) => {
                             Icon={() => {
                                 return (
                                     <FontAwesome5
-                                        name="chevron-down"
+                                        name="angle-down"
                                         size={25}
                                         color={
                                             shopDetails.city
@@ -614,7 +613,7 @@ const AddShops = ({ navigation, route }) => {
                                         }
                                         style={{
                                             marginTop: 10,
-                                            marginRight: 10,
+                                            marginRight: 15,
                                         }}
                                     />
                                 );

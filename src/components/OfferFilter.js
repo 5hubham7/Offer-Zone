@@ -71,20 +71,21 @@ const offerFilter = (props) => {
             distance: value.distance,
             latitude: props.location.latitude,
             longitude: props.location.longitude,
-        }
-        axios.post(`${axiosURL}/customer/getFilterOffers`, filterParameter).then((response) => {
-            if (response.data.status == 200) {
-                if (response.data.response.length > 0) {
-                    props.setCurrentOffers(response.data.response)
-                    props.toggleModal();
+        };
+        axios
+            .post(`${axiosURL}/customer/getFilterOffers`, filterParameter)
+            .then((response) => {
+                if (response.data.status == 200) {
+                    if (response.data.response.length > 0) {
+                        props.setCurrentOffers(response.data.response);
+                        props.toggleModal();
+                    } else {
+                        props.setCurrentOffers("No Offers");
+                        props.toggleModal();
+                    }
                 }
-                else {
-                    props.setCurrentOffers("No Offers");
-                    props.toggleModal();
-                }
-            }
-        })
-    }
+            });
+    };
     return (
         <Modal
             isVisible={!props.state}
@@ -99,32 +100,36 @@ const offerFilter = (props) => {
                 <View
                     style={[
                         styles.header,
-                        { backgroundColor: colors.headerColor },
+                        {
+                            backgroundColor: colors.headerColor,
+                            justifyContent: "space-between",
+                        },
                     ]}
                 >
                     <View>
                         <AntDesign
                             name="closecircle"
-                            color="#fff"
+                            color="#FFF"
                             size={28}
-                            style={styles.closeIcon}
+                            style={styles.closeButton}
                             onPress={() => {
                                 props.toggleModal();
                             }}
                         />
                     </View>
-                    <View style={{ marginLeft: windowWidth * 0.20, marginRight: windowWidth * 0.20 }}>
-                        <Text style={styles.title}>FILTER</Text>
+                    <View>
+                        <Text style={styles.title}>Filter</Text>
                     </View>
-                    <View style={{ marginLeft: -30 }}>
-                        <TouchableOpacity
+                    <View>
+                        <FontAwesome
+                            name="undo"
+                            color="#FFF"
+                            size={28}
+                            style={styles.resetButton}
                             onPress={() => {
                                 resetFilters();
                             }}
-                            style={styles.resetButton}
-                        >
-                            <Text style={styles.resetButton}>Reset</Text>
-                        </TouchableOpacity>
+                        />
                     </View>
                 </View>
                 <View>
@@ -235,7 +240,9 @@ const offerFilter = (props) => {
                             { backgroundColor: colors.headerColor },
                         ]}
                         activeOpacity={0.7}
-                        onPress={() => { onApplayPress() }}
+                        onPress={() => {
+                            onApplayPress();
+                        }}
                     >
                         <Text style={styles.buttonText}>Apply Filter</Text>
                     </TouchableOpacity>

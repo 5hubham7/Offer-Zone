@@ -5,9 +5,9 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: "#006064",
         height: "10%",
-        flexDirection: 'row'
+        flexDirection: "row",
     },
-    closeIcon: {
+    closeButton: {
         marginTop: "auto",
         marginBottom: "auto",
         marginLeft: 20,
@@ -17,17 +17,21 @@ const styles = StyleSheet.create({
         fontSize: 25,
         width: 100,
         fontWeight: "bold",
-        textAlign: 'center',
+        textAlign: "center",
         marginTop: "auto",
         marginBottom: "auto",
+        textTransform: "uppercase",
     },
     resetButton: {
-        color: "#fff",
-        fontSize: 20,
-        fontWeight: "600",
-        textAlign: "right",
         marginTop: "auto",
         marginBottom: "auto",
+        marginRight: 20,
+    },
+    resetButtonText: {
+        fontWeight: "600",
+        color: "#fff",
+        fontSize: 20,
+        marginRight: 20,
     },
     subTitle: {
         fontSize: 20,
@@ -64,6 +68,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginTop: "auto",
         marginBottom: "auto",
+        textTransform: "uppercase",
     },
 });
 
