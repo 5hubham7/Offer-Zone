@@ -36,7 +36,7 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) {}
+} catch (err) { }
 
 const AddShops = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -460,8 +460,8 @@ const AddShops = ({ navigation, route }) => {
                             color="#fff"
                             size={30}
                             style={{
-                                marginLeft: 20,
-                                marginTop: 20,
+                                marginLeft: 0,
+                                marginTop: 30,
                             }}
                         />
                     </Animatable.View>

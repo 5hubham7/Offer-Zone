@@ -47,6 +47,7 @@ const HomeScreen = ({ navigation }) => {
     const [isModalVisible, setModalVisible] = React.useState(true);
     const [isModalVisible1, setModalVisible1] = React.useState(true);
     const [emailVerified, setEmailVerified] = React.useState(true);
+    const [scrollLoder, setScrollLoder] = React.useState(false);
     const [ToggelSearchAndOffers, setToggelSearchAndOffers] = React.useState(
         false
     );
@@ -98,11 +99,11 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    const getOffers = (lat, long) => {
+    const getOffers = (lat, long, count) => {
         var data = [];
         var options = [];
         axios
-            .get(`${axiosURL}/customer/getOffers/${lat}/${long}`)
+            .get(`${axiosURL}/customer/getOffers/${lat}/${long}/${count}`)
             // .get(
             //     `${axiosURL}/customer/getOffers/20.042818069458008/74.48754119873047`
             // )
@@ -127,6 +128,7 @@ const HomeScreen = ({ navigation }) => {
                         },
                             {});
                         //console.log("final result", result)
+                        setScrollLoder(false)
                         setOfferLike({ ...result });
                     } else {
                         setCurrentOffers("No Offers");
@@ -155,34 +157,34 @@ const HomeScreen = ({ navigation }) => {
             await Location.getCurrentPositionAsync({ enableHighAccuracy: true }).then((data) => {
                 //console.log(data)
                 setLocation(data.coords);
-                getOffers(data.coords.latitude, data.coords.longitude);
+                getOffers(data.coords.latitude, data.coords.longitude, 2);
             });
         })();
         emailVerification();
     }, []);
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", async () => {
-            _retrieveData();
-            if (Platform.OS === "android" && !Constants.isDevice) {
-                setErrorMessage(
-                    "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
-                );
-                return;
-            }
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== "granted") {
-                alert("Permission to access location was denied!");
-                return;
-            }
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener("focus", async () => {
+    //         _retrieveData();
+    //         if (Platform.OS === "android" && !Constants.isDevice) {
+    //             setErrorMessage(
+    //                 "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
+    //             );
+    //             return;
+    //         }
+    //         let { status } = await Location.requestForegroundPermissionsAsync();
+    //         if (status !== "granted") {
+    //             alert("Permission to access location was denied!");
+    //             return;
+    //         }
 
-            await Location.getCurrentPositionAsync({}).then((data) => {
-                //console.log(data)
-                setLocation(data.coords);
-                getOffers(data.coords.latitude, data.coords.longitude);
-            });
-        });
-    }, [navigation]);
+    //         await Location.getCurrentPositionAsync({}).then((data) => {
+    //             //console.log(data)
+    //             setLocation(data.coords);
+    //             getOffers(data.coords.latitude, data.coords.longitude, 2);
+    //         });
+    //     });
+    // }, [navigation]);
 
 
 
@@ -299,6 +301,8 @@ const HomeScreen = ({ navigation }) => {
                     navigation={navigation}
                     location={location}
                     User={User}
+                    setScrollLoder={setScrollLoder}
+                    scrollLoder={scrollLoder}
                 />
             )}
 
@@ -399,6 +403,7 @@ const HomeStackScreen = ({ navigation }) => {
                     backgroundColor: colors.headerColor,
                     elevation: 0,
                 },
+                animationEnabled: false,
                 headerTintColor: "#fff",
                 headerTitleStyle: {
                     fontWeight: "bold",

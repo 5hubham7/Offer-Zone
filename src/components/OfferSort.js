@@ -34,6 +34,34 @@ const offerSort = (props) => {
 
     })
 
+    function getDateInFormat(d) {
+        var dt = new Date(d);
+        var dd = dt.getDate();
+        var mm = dt.getMonth() + 1;
+        var yyyy = dt.getFullYear();
+        if (dd < 10) {
+            dd = "0" + dd;
+        }
+        if (mm < 10) {
+            mm = "0" + mm;
+        }
+        return yyyy + "-" + mm + "-" + dd;
+    }
+
+    /* get date array between sdate and end date */
+
+    var getDateArray = function (start, end) {
+        var
+            arr = new Array(),
+            dt = new Date(start);
+
+        while (dt <= end) {
+            arr.push(getDateInFormat(new Date(dt)));
+            dt.setDate(dt.getDate() + 1);
+        }
+        return arr;
+    }
+
     const distanceSort = () => {
         var sortOffers = props.currentOffers.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
         props.setCurrentOffers(sortOffers)
@@ -91,48 +119,50 @@ const offerSort = (props) => {
     const onGoingSort = () => {
         var onGoingOffers = []
         var today = new Date();
-        var currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         props.currentOffers.forEach((element) => {
             var start_date = new Date(element.start_date);
-            var start_date = start_date.getFullYear() + '-' + (start_date.getMonth() + 1) + '-' + start_date.getDate()
             var end_date = new Date(element.end_date);
-            var end_date = end_date.getFullYear() + '-' + (end_date.getMonth() + 1) + '-' + end_date.getDate()
-            if (start_date == currentDate || end_date >= currentDate)
+            if (getDateArray(start_date, end_date).includes(getDateInFormat(today)))
                 onGoingOffers.push(element)
         })
-        props.setCurrentOffers(onGoingOffers)
+        if (onGoingOffers.length > 0)
+            props.setCurrentOffers(onGoingOffers)
+        else
+            props.setCurrentOffers("No Offers")
         props.toggleModal()
     }
 
     const exporingSoonSort = () => {
         var exporingSoonOffers = []
-        var newDay = new Date(today.getFullYear(), today.getMonth(), 8);
-        var lastWeekDay = newDay.getFullYear() + '-' + (newDay.getMonth() + 1) + '-' + newDay.getDate();
+        var curr = new Date()
+        var today = new Date();
+        var lastday = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+        let currentWeek = getDateArray(curr, lastday)
         props.currentOffers.forEach((element) => {
-            var start_date = new Date(element.start_date);
-            var start_date = start_date.getFullYear() + '-' + (start_date.getMonth() + 1) + '-' + start_date.getDate()
             var end_date = new Date(element.end_date);
-            var end_date = end_date.getFullYear() + '-' + (end_date.getMonth() + 1) + '-' + end_date.getDate()
-            if (end_date <= lastWeekDay)
+            if (currentWeek.includes(getDateInFormat(end_date)))
                 exporingSoonOffers.push(element)
         })
-        props.setCurrentOffers(exporingSoonOffers)
+        if (exporingSoonOffers.length > 0)
+            props.setCurrentOffers(exporingSoonOffers)
+        else
+            props.setCurrentOffers("No Offers")
         props.toggleModal()
     }
 
     const todaySort = () => {
         var todaysOffers = []
         var today = new Date();
-        var currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         props.currentOffers.forEach((element) => {
             var start_date = new Date(element.start_date);
-            var start_date = start_date.getFullYear() + '-' + (start_date.getMonth() + 1) + '-' + start_date.getDate()
             var end_date = new Date(element.end_date);
-            var end_date = end_date.getFullYear() + '-' + (end_date.getMonth() + 1) + '-' + end_date.getDate()
-            if (start_date == currentDate || end_date == currentDate)
+            if (getDateArray(start_date, end_date).includes(getDateInFormat(today)))
                 todaysOffers.push(element)
         })
-        props.setCurrentOffers(todaysOffers)
+        if (todaysOffers.length > 0)
+            props.setCurrentOffers(todaysOffers)
+        else
+            props.setCurrentOffers("No Offers")
         props.toggleModal()
     }
 
