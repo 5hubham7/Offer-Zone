@@ -72,6 +72,8 @@ const App = () => {
             subtext: "#595959",
             icon: "#000",
             shareIcon: "#0277BD",
+            deleteIcon: "#C62828",
+            editIcon: "#2E7D32",
             formIcon: "#006064",
         },
     };
@@ -89,7 +91,9 @@ const App = () => {
             offerCard: "#4C4C4C",
             subtext: "#B4B4B4",
             icon: "#fff",
-            shareIcon: "#35B3FF",
+            shareIcon: "#039BE5",
+            deleteIcon: "#E53935",
+            editIcon: "#43A047",
             formIcon: "#fff",
         },
     };

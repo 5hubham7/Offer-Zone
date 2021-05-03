@@ -60,8 +60,6 @@ const AddShops = ({ navigation, route }) => {
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [shops, setShops] = useState([]);
-    // const [token, setToken] = useState(null);
-    // const token = "";
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
@@ -129,9 +127,6 @@ const AddShops = ({ navigation, route }) => {
         setShopDetails({ ...shopDetails, address: val });
     };
 
-    // const token =
-    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiI1aHViaGFtNy51bm9mZmljaWFsQGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IjhRWkFZZlVFSEpkTDY1NEJfdDJtVEVCdHU4UjJYenNabXZHSms1REktbG11WGRyUWphTUZUNUpQaTdTT1dvV20waTQifSwiZXhwIjoxNjIwMDY1MTQ5fQ.nrWkVsiGJlkGTLeibbj6NBOXcq1TqTwPh7VV-px5ykA";
-
     const getToken = async () => {
         const config = {
             headers: {
@@ -149,22 +144,6 @@ const AddShops = ({ navigation, route }) => {
         if (response.status == 200) {
             return response.data.auth_token.toString();
         }
-
-        // axios
-        //     .get(
-        //         "https://www.universal-tutorial.com/api/getaccesstoken",
-        //         config
-        //     )
-        //     .then((response) => {
-        //         if (response.status == 200) {
-        //             console.log(response.data.auth_token);
-        //             // setToken(response.data.auth_token);
-        //             token = response.data.auth_token;
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
     };
 
     const getCountries = async () => {

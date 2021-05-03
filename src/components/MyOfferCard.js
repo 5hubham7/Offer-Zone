@@ -45,10 +45,11 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const onSingleTap = (offer_id) => {
+        alert("Offer clicked!");
         //console.log(offer_id)
         // startLoading();
         // axios
@@ -178,8 +179,7 @@ const MyOfferCard = (props) => {
                                         <View style={styles.cardImageView}>
                                             <ImageBackground
                                                 source={{
-                                                    uri:
-                                                        element.image_url
+                                                    uri: element.image_url,
                                                 }}
                                                 style={styles.cardImage}
                                             >
@@ -300,7 +300,9 @@ const MyOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="edit"
-                                                            color="#2E7D32"
+                                                            color={
+                                                                colors.editIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>
@@ -320,7 +322,9 @@ const MyOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="trash"
-                                                            color="#C62828"
+                                                            color={
+                                                                colors.deleteIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>
