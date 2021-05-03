@@ -10,8 +10,10 @@ import {
     ImageBackground,
     ToastAndroid,
     Image,
+    ActivityIndicator
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -23,7 +25,7 @@ import { useTheme } from "@react-navigation/native";
 import styles from "../styles/CardStyles";
 import axiosURL from "../helper/AxiosURL";
 import { AuthContext } from "../components/context/Store";
-
+import { FAB } from "react-native-paper";
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
@@ -39,7 +41,8 @@ const OfferCard = (props) => {
     const [offerDislike, setofferDislike] = React.useState(null);
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [User, setUser] = React.useState(null);
-
+    const [offerCount, setOfferCount] = React.useState(2);
+    const [upScroll, setUpScroll] = React.useState(false);
     const numberTest = (n) => {
         var result = (n - Math.floor(n)) !== 0;
 
@@ -117,7 +120,7 @@ const OfferCard = (props) => {
     const onRefresh = React.useCallback((latitude, longitude, user) => {
         setRefreshing(true);
         //console.log(latitude, longitude)
-        props.getOffers(latitude, longitude);
+        props.getOffers(latitude, longitude, 2);
         getUserData(user);
         wait(2000).then(() => setRefreshing(false));
     }, []);
@@ -219,6 +222,23 @@ const OfferCard = (props) => {
             });
     };
 
+    const scrollRef = React.useRef();
+
+    const onPressUpArrow = () => {
+        setUpScroll(false)
+        scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        });
+    }
+
+    const onDynamicScroll = (latitude, longitude, count) => {
+        //console.log(latitude, longitude, count) 
+        props.setScrollLoder(true)
+        setUpScroll(true)
+        props.getOffers(latitude, longitude, count);
+    }
+
     return (
         <View style={styles.container}>
             {props.offerData != null ? (
@@ -265,303 +285,336 @@ const OfferCard = (props) => {
                             </View>
                         </ScrollView>
                     ) : (
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={() => {
-                                        onRefresh(
-                                            props.location.latitude,
-                                            props.location.longitude,
-                                            props.User
-                                        );
-                                    }}
-                                    colors={["#fff", "red", "yellow"]}
-                                    progressBackgroundColor={"#000"}
-                                />
-                            }
-                            style={{ marginBottom: 60 }}
-                            animation="fadeInRightBig"
-                        >
-                            {props.offerData.map((element, index) => (
-                                <View
-                                    style={[
-                                        styles.cardView,
-                                        { backgroundColor: colors.offerCard },
-                                    ]}
-                                    elevation={3}
-                                    key={index}
-                                >
-                                    <DoubleClick
-                                        singleTap={() => {
-                                            onSingleTap(element.offer_id);
-                                        }}
-                                        doubleTap={() => {
-                                            onDoubleTap(
-                                                element.offer_id,
-                                                User,
+                        <View>
+                            <ScrollView
+                                showsVerticalScrollIndicator={false}
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={refreshing}
+                                        onRefresh={() => {
+                                            onRefresh(
                                                 props.location.latitude,
-                                                props.location.longitude
+                                                props.location.longitude,
+                                                props.User
                                             );
                                         }}
-                                        delay={500}
+
+                                        colors={["#fff", "red", "yellow"]}
+                                        progressBackgroundColor={"#000"}
+                                    />
+                                }
+                                ref={scrollRef}
+                                onMomentumScrollEnd={() => {
+                                    setOfferCount(offerCount + 2)
+                                    onDynamicScroll(
+                                        props.location.latitude,
+                                        props.location.longitude,
+                                        offerCount
+                                    )
+                                }}
+                                style={{ marginBottom: 60 }}
+                                animation="fadeInRightBig"
+                            >
+                                {props.offerData.map((element, index) => (
+                                    <View
+                                        style={[
+                                            styles.cardView,
+                                            { backgroundColor: colors.offerCard },
+                                        ]}
+                                        elevation={3}
+                                        key={index}
                                     >
-                                        <View style={styles.cardImageView}>
-                                            <ImageBackground
-                                                source={{
-                                                    uri:
-                                                        element.image_url
-                                                }}
-                                                style={styles.cardImage}
-                                            >
-                                                <LinearGradient
-                                                    locations={[0, 0]}
-                                                    colors={[
-                                                        "rgba(0,0,0,0.00)",
-                                                        "rgba(0,0,0,0.70)",
-                                                    ]}
-                                                    style={
-                                                        styles.linearGradient
-                                                    }
+                                        <DoubleClick
+                                            singleTap={() => {
+                                                onSingleTap(element.offer_id);
+                                            }}
+                                            doubleTap={() => {
+                                                onDoubleTap(
+                                                    element.offer_id,
+                                                    User,
+                                                    props.location.latitude,
+                                                    props.location.longitude
+                                                );
+                                            }}
+                                            delay={500}
+                                        >
+                                            <View style={styles.cardImageView}>
+                                                <ImageBackground
+                                                    source={{
+                                                        uri:
+                                                            element.image_url
+                                                    }}
+                                                    style={styles.cardImage}
                                                 >
-                                                    <Text
+                                                    <LinearGradient
+                                                        locations={[0, 0]}
+                                                        colors={[
+                                                            "rgba(0,0,0,0.00)",
+                                                            "rgba(0,0,0,0.70)",
+                                                        ]}
                                                         style={
-                                                            styles.cardImageTitle
+                                                            styles.linearGradient
                                                         }
                                                     >
-                                                        {element.offer_title}
-                                                    </Text>
-                                                </LinearGradient>
-                                            </ImageBackground>
-                                        </View>
-                                        {likeDoubleTap == element.offer_id ? (
-                                            <Animatable.View
-                                                animation="bounceIn"
-                                                style={{ alignItems: "center" }}
-                                            >
-                                                <FontAwesome
-                                                    name="heart"
-                                                    color="#FF0000"
-                                                    size={windowHeight * 0.1}
-                                                    style={{
-                                                        position: "absolute",
-                                                        marginTop: -30,
-                                                    }}
-                                                />
-                                            </Animatable.View>
-                                        ) : null}
-                                        {offerDislike == element.offer_id ? (
-                                            <Animatable.View
-                                                animation="bounceIn"
-                                                style={{ alignItems: "center" }}
-                                            >
-                                                <FontAwesome5
-                                                    name="heart-broken"
-                                                    color="#FF0000"
-                                                    size={windowHeight * 0.1}
-                                                    style={{
-                                                        position: "absolute",
-                                                        marginTop: -30,
-                                                    }}
-                                                />
-                                            </Animatable.View>
-                                        ) : null}
-                                        <View style={styles.cardData}>
-                                            <Text
-                                                style={[
-                                                    styles.cardTitle,
-                                                    { color: colors.text },
-                                                ]}
-                                                numberOfLines={1}
-                                                ellipsizeMode="tail"
-                                            >
-                                                {element.offer_title}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.cardSubtitle,
-                                                    { color: colors.text },
-                                                ]}
-                                                numberOfLines={1}
-                                                ellipsizeMode="tail"
-                                            >
-                                                {element.details}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.cardSubtitle2,
-                                                    { color: colors.subtext },
-                                                ]}
-                                            >
-                                                {dateFormatter(
-                                                    element.post_time
-                                                )}{" "}
+                                                        <Text
+                                                            style={
+                                                                styles.cardImageTitle
+                                                            }
+                                                        >
+                                                            {element.offer_title}
+                                                        </Text>
+                                                    </LinearGradient>
+                                                </ImageBackground>
+                                            </View>
+                                            {likeDoubleTap == element.offer_id ? (
+                                                <Animatable.View
+                                                    animation="bounceIn"
+                                                    style={{ alignItems: "center" }}
+                                                >
+                                                    <FontAwesome
+                                                        name="heart"
+                                                        color="#FF0000"
+                                                        size={windowHeight * 0.1}
+                                                        style={{
+                                                            position: "absolute",
+                                                            marginTop: -30,
+                                                        }}
+                                                    />
+                                                </Animatable.View>
+                                            ) : null}
+                                            {offerDislike == element.offer_id ? (
+                                                <Animatable.View
+                                                    animation="bounceIn"
+                                                    style={{ alignItems: "center" }}
+                                                >
+                                                    <FontAwesome5
+                                                        name="heart-broken"
+                                                        color="#FF0000"
+                                                        size={windowHeight * 0.1}
+                                                        style={{
+                                                            position: "absolute",
+                                                            marginTop: -30,
+                                                        }}
+                                                    />
+                                                </Animatable.View>
+                                            ) : null}
+                                            <View style={styles.cardData}>
+                                                <Text
+                                                    style={[
+                                                        styles.cardTitle,
+                                                        { color: colors.text },
+                                                    ]}
+                                                    numberOfLines={1}
+                                                    ellipsizeMode="tail"
+                                                >
+                                                    {element.offer_title}
+                                                </Text>
+                                                <Text
+                                                    style={[
+                                                        styles.cardSubtitle,
+                                                        { color: colors.text },
+                                                    ]}
+                                                    numberOfLines={1}
+                                                    ellipsizeMode="tail"
+                                                >
+                                                    {element.details}
+                                                </Text>
+                                                <Text
+                                                    style={[
+                                                        styles.cardSubtitle2,
+                                                        { color: colors.subtext },
+                                                    ]}
+                                                >
+                                                    {dateFormatter(
+                                                        element.post_time
+                                                    )}{" "}
                                                 ago
                                             </Text>
-                                            <Text
-                                                style={[
-                                                    styles.cardFooter,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {numberWithCommas(
-                                                    element.likes.length
-                                                )}
-                                                {"  "}
+                                                <Text
+                                                    style={[
+                                                        styles.cardFooter,
+                                                        { color: colors.text },
+                                                    ]}
+                                                >
+                                                    {numberWithCommas(
+                                                        element.likes.length
+                                                    )}
+                                                    {"  "}
                                                 Likes  •  {
-                                                    showDistance(element.distance)
-                                                }
-                                            </Text>
-                                            <View style={styles.line} />
-                                            <View
-                                                style={{
-                                                    flexDirection: "row",
-                                                    marginTop: 10,
-                                                }}
-                                            >
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        element.likes.includes(
-                                                            User
-                                                        )
-                                                            ? disLike(
-                                                                element.offer_id,
-                                                                User,
-                                                                props.location
-                                                                    .latitude,
-                                                                props.location
-                                                                    .longitude
+                                                        showDistance(element.distance)
+                                                    }
+                                                </Text>
+                                                <View style={styles.line} />
+                                                <View
+                                                    style={{
+                                                        flexDirection: "row",
+                                                        marginTop: 10,
+                                                    }}
+                                                >
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            element.likes.includes(
+                                                                User
                                                             )
-                                                            : like(
-                                                                element.offer_id,
-                                                                User,
-                                                                props.location
-                                                                    .latitude,
-                                                                props.location
-                                                                    .longitude
-                                                            );
-                                                    }}
-                                                    style={{
-                                                        marginLeft:
-                                                            windowWidth * 0.03,
-                                                    }}
-                                                >
-                                                    {element.likes.includes(
-                                                        User
-                                                    ) ? (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <FontAwesome
-                                                                name="heart"
-                                                                color="#F44336"
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    ) : (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <FontAwesome
-                                                                name="heart-o"
-                                                                color={
-                                                                    colors.icon
-                                                                }
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    )}
-                                                </TouchableOpacity>
-
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        saveList.includes(
-                                                            element.offer_id
-                                                        )
-                                                            ? removeOffer(
-                                                                element.offer_id,
-                                                                props.User
-                                                            )
-                                                            : saveOffer(
-                                                                element.offer_id,
-                                                                props.User
-                                                            );
-                                                    }}
-                                                    style={{
-                                                        marginLeft:
-                                                            windowWidth * 0.09,
-                                                    }}
-                                                >
-                                                    {saveList.includes(
-                                                        element.offer_id
-                                                    ) ? (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <MaterialCommunityIcons
-                                                                name="checkbox-multiple-marked"
-                                                                color="#2E7D32"
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    ) : (
-                                                        <View
-                                                            style={{
-                                                                flexDirection:
-                                                                    "row",
-                                                            }}
-                                                        >
-                                                            <MaterialCommunityIcons
-                                                                name="plus-box-multiple"
-                                                                color={
-                                                                    colors.icon
-                                                                }
-                                                                size={25}
-                                                            />
-                                                        </View>
-                                                    )}
-                                                </TouchableOpacity>
-
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        share("First");
-                                                    }}
-                                                    style={{
-                                                        marginLeft:
-                                                            windowWidth * 0.09,
-                                                    }}
-                                                >
-                                                    <View
+                                                                ? disLike(
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props.location
+                                                                        .latitude,
+                                                                    props.location
+                                                                        .longitude
+                                                                )
+                                                                : like(
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props.location
+                                                                        .latitude,
+                                                                    props.location
+                                                                        .longitude
+                                                                );
+                                                        }}
                                                         style={{
-                                                            flexDirection:
-                                                                "row",
+                                                            marginLeft:
+                                                                windowWidth * 0.03,
                                                         }}
                                                     >
-                                                        <FontAwesome5
-                                                            name="share-alt"
-                                                            color={
-                                                                colors.shareIcon
-                                                            }
-                                                            size={25}
-                                                        />
-                                                    </View>
-                                                </TouchableOpacity>
+                                                        {element.likes.includes(
+                                                            User
+                                                        ) ? (
+                                                            <View
+                                                                style={{
+                                                                    flexDirection:
+                                                                        "row",
+                                                                }}
+                                                            >
+                                                                <FontAwesome
+                                                                    name="heart"
+                                                                    color="#F44336"
+                                                                    size={25}
+                                                                />
+                                                            </View>
+                                                        ) : (
+                                                            <View
+                                                                style={{
+                                                                    flexDirection:
+                                                                        "row",
+                                                                }}
+                                                            >
+                                                                <FontAwesome
+                                                                    name="heart-o"
+                                                                    color={
+                                                                        colors.icon
+                                                                    }
+                                                                    size={25}
+                                                                />
+                                                            </View>
+                                                        )}
+                                                    </TouchableOpacity>
+
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            saveList.includes(
+                                                                element.offer_id
+                                                            )
+                                                                ? removeOffer(
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                )
+                                                                : saveOffer(
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                );
+                                                        }}
+                                                        style={{
+                                                            marginLeft:
+                                                                windowWidth * 0.09,
+                                                        }}
+                                                    >
+                                                        {saveList.includes(
+                                                            element.offer_id
+                                                        ) ? (
+                                                            <View
+                                                                style={{
+                                                                    flexDirection:
+                                                                        "row",
+                                                                }}
+                                                            >
+                                                                <MaterialCommunityIcons
+                                                                    name="checkbox-multiple-marked"
+                                                                    color="#2E7D32"
+                                                                    size={25}
+                                                                />
+                                                            </View>
+                                                        ) : (
+                                                            <View
+                                                                style={{
+                                                                    flexDirection:
+                                                                        "row",
+                                                                }}
+                                                            >
+                                                                <MaterialCommunityIcons
+                                                                    name="plus-box-multiple"
+                                                                    color={
+                                                                        colors.icon
+                                                                    }
+                                                                    size={25}
+                                                                />
+                                                            </View>
+                                                        )}
+                                                    </TouchableOpacity>
+
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            share("First");
+                                                        }}
+                                                        style={{
+                                                            marginLeft:
+                                                                windowWidth * 0.09,
+                                                        }}
+                                                    >
+                                                        <View
+                                                            style={{
+                                                                flexDirection:
+                                                                    "row",
+                                                            }}
+                                                        >
+                                                            <FontAwesome5
+                                                                name="share-alt"
+                                                                color={
+                                                                    colors.shareIcon
+                                                                }
+                                                                size={25}
+                                                            />
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                </View>
                                             </View>
+                                        </DoubleClick>
+                                    </View>
+                                ))}
+                                <View>
+                                    {props.scrollLoder ?
+                                        <View style={styles.scrollLodaer}>
+                                            <ActivityIndicator size="large" color="red" />
                                         </View>
-                                    </DoubleClick>
+                                        :
+                                        null
+                                    }
                                 </View>
-                            ))}
-                        </ScrollView>
+                            </ScrollView>
+
+                            {upScroll ?
+                                <FAB
+                                    style={[styles.upButtonStyle, { backgroundColor: colors.headerColor }]}
+                                    icon={({ color, size }) => (
+                                        <AntDesign name="caretup" color={color} size={size} />
+                                    )}
+                                    animated="true"
+                                    onPress={() => { onPressUpArrow() }}
+                                ></FAB>
+                                : null
+                            }
+                        </View>
                     )}
                 </View>
             ) : (
