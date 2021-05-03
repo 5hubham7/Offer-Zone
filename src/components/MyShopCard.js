@@ -203,7 +203,9 @@ const MyShopsCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="edit"
-                                                            color="#2E7D32"
+                                                            color={
+                                                                colors.editIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>
@@ -223,7 +225,9 @@ const MyShopsCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="trash"
-                                                            color="#C62828"
+                                                            color={
+                                                                colors.deleteIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>

@@ -125,7 +125,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                         //console.log("final result", result)
                         setOfferLike({ ...result });
                     } else {
@@ -152,7 +152,9 @@ const HomeScreen = ({ navigation }) => {
                 alert("Permission to access location was denied!");
                 return;
             }
-            await Location.getCurrentPositionAsync({ enableHighAccuracy: true }).then((data) => {
+            await Location.getCurrentPositionAsync({
+                enableHighAccuracy: true,
+            }).then((data) => {
                 //console.log(data)
                 setLocation(data.coords);
                 getOffers(data.coords.latitude, data.coords.longitude);
@@ -184,17 +186,18 @@ const HomeScreen = ({ navigation }) => {
         });
     }, [navigation]);
 
-
-
     String.prototype.toProperCase = function () {
-        return this.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+        return this.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     };
-
 
     const onSearchClick = () => {
         setToggelSearchAndOffers(true);
         axios
-            .get(`${axiosURL}/customer/getSearchData/${SearchQuery.toProperCase()}`)
+            .get(
+                `${axiosURL}/customer/getSearchData/${SearchQuery.toProperCase()}`
+            )
             .then((response) => {
                 //console.log(response.data)
                 if (response.data.status === 200) {
