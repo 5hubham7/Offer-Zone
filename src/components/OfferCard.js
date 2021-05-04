@@ -126,20 +126,20 @@ const OfferCard = (props) => {
     }, []);
 
     const onDoubleTap = React.useCallback(
-        (offer_id, User, latitude, longitude) => {
+        (offer_id, User, latitude, longitude, offerCount) => {
             setLikeDobleTap(offer_id);
-            like(offer_id, User, latitude, longitude);
+            like(offer_id, User, latitude, longitude, offerCount);
             wait(2000).then(() => setLikeDobleTap(null));
         },
         []
     );
 
-    const like = (offer_id, cust_id, latitude, longitude) => {
+    const like = (offer_id, cust_id, latitude, longitude, offerCount) => {
         axios
             .post(`${axiosURL}/customer/like/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
+                    props.getOffers(latitude, longitude, offerCount);
                 }
             });
     };
@@ -156,14 +156,14 @@ const OfferCard = (props) => {
             });
     };
 
-    const disLike = (offer_id, cust_id, latitude, longitude) => {
+    const disLike = (offer_id, cust_id, latitude, longitude, offerCount) => {
         setofferDislike(offer_id);
         wait(2000).then(() => setofferDislike(null));
         axios
             .post(`${axiosURL}/customer/disLike/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
+                    props.getOffers(latitude, longitude, offerCount);
                 }
             });
     };
@@ -341,7 +341,8 @@ const OfferCard = (props) => {
                                                     element.offer_id,
                                                     User,
                                                     props.location.latitude,
-                                                    props.location.longitude
+                                                    props.location.longitude,
+                                                    offerCount
                                                 );
                                             }}
                                             delay={500}
@@ -470,7 +471,8 @@ const OfferCard = (props) => {
                                                                     props.location
                                                                         .latitude,
                                                                     props.location
-                                                                        .longitude
+                                                                        .longitude,
+                                                                    offerCount
                                                                 )
                                                                 : like(
                                                                     element.offer_id,
@@ -478,7 +480,8 @@ const OfferCard = (props) => {
                                                                     props.location
                                                                         .latitude,
                                                                     props.location
-                                                                        .longitude
+                                                                        .longitude,
+                                                                    offerCount
                                                                 );
                                                         }}
                                                         style={{
