@@ -259,7 +259,7 @@ const AddOffers = ({ navigation, route }) => {
             }
 
             let addOfferDetails = {
-                offer_title: offer_title.toUpperCase(),
+                offer_title: offer_title,
                 details: details,
                 image_url: image_url,
                 post_time: new Date(),
