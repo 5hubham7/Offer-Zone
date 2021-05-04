@@ -105,7 +105,6 @@ const MyOffers = ({ navigation }) => {
         axios
             .delete(`${axiosURL}/seller/deleteOffer/${sellerID}/${offerID}`)
             .then((response) => {
-                console.log();
                 if (response.data.status === 200) {
                     stopLoading();
                     ToastAndroid.show(

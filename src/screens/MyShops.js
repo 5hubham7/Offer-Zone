@@ -85,7 +85,7 @@ const MyShops = ({ navigation }) => {
         } catch (error) {
             console.log(error);
         }
-        console.log(`${axiosURL}/seller/deleteShop/${sellerID}/${shopID}`);
+        // console.log(`${axiosURL}/seller/deleteShop/${sellerID}/${shopID}`);
         axios
             .delete(`${axiosURL}/seller/deleteShop/${sellerID}/${shopID}`)
             .then((response) => {

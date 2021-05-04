@@ -219,7 +219,6 @@ const offerFilter = (props) => {
                     </Text>
                     <Slider
                         onValueChange={(value) => {
-                            console.log(value)
                             setValue({
                                 ...value,
                                 distance: value,

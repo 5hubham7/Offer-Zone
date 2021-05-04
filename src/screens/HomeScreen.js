@@ -126,7 +126,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                         //console.log("final result", result)
                         setScrollLoder(false);
                         setOfferLike({ ...result });
@@ -240,9 +240,6 @@ const HomeScreen = ({ navigation }) => {
                     }}
                     onSubmitEditing={() => {
                         onSearchClick();
-                    }}
-                    onIconPress={() => {
-                        console.log("ico press");
                     }}
                     clearButtonMode="while-editing"
                     clearIcon={() => {

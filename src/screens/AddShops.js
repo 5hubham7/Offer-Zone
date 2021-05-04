@@ -482,8 +482,8 @@ const AddShops = ({ navigation, route }) => {
             } else {
                 return null;
             }
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -500,8 +500,8 @@ const AddShops = ({ navigation, route }) => {
             } else {
                 return null;
             }
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
         }
     };
 
