@@ -36,16 +36,15 @@ const ShopOffers = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={{ backgroundColor: colors.headerColor, height: 55, width: "100%", flexDirection: 'row' }}>
-                <Icon.Button
+                <Icon
                     name="ios-menu"
                     size={30}
                     backgroundColor={colors.headerColor}
                     color="#fff"
                     onPress={() => {
-                        console.log("hello")
                         navigation.openDrawer()
                     }}
-                ></Icon.Button>
+                ></Icon>
                 <Text style={{
                     fontWeight: "bold",
                     width: windowWidth,
