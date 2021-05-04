@@ -35,6 +35,7 @@ import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
 import AddOffers from "./src/screens/AddOffers";
 import AddShops from "./src/screens/AddShops";
+import ShopOffers from './src/screens/ShopOffers'
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -240,6 +241,10 @@ const App = () => {
                             <Drawer.Screen
                                 name="MyOffers"
                                 component={MyOffers}
+                            />
+                            <Drawer.Screen
+                                name="ShopOffers"
+                                component={ShopOffers}
                             />
                             <Drawer.Screen
                                 name="AddOffers"

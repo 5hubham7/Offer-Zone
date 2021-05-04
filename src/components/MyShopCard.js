@@ -14,6 +14,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import styles from "../styles/CardStyles";
 import { AuthContext } from "../components/context/Store";
+import axiosURL from "../helper/AxiosURL";
+import axios from "axios";
+
 
 const windowWidth = Dimensions.get("screen").width;
 
@@ -33,29 +36,35 @@ const MyShopsCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
-    const onSingleTap = (offer_id) => {
-        alert("Clicked");
-        //console.log(offer_id)
-        // startLoading();
-        // axios
-        //     .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
-        //     .then((response) => {
-        //         if (response.data.status === 200) {
-        //             //setOfferDetails(response.data.response)
-        //             stopLoading();
-        //             props.navigation.navigate("OfferDetails", {
-        //                 shopData: response.data.response,
-        //                 location: props.location,
-        //             });
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         stopLoading();
-        //         alert(error);
-        //     });
+    const onSingleTap = (shop_id, shop_name) => {
+        startLoading()
+        axios
+            .get(`${axiosURL}/seller/getShopOffers/${shop_id}`)
+            .then((response) => {
+                // console.log(response.data.response);
+                if (response.data.status === 200) {
+                    if (response.data.response.length > 0) {
+                        //setOfferData(response.data.response);
+                        stopLoading()
+                        props.navigation.navigate("ShopOffers", {
+                            offerData: response.data.response,
+                            shopName: shop_name
+                        })
+                    } else {
+                        stopLoading()
+                        props.navigation.navigate("ShopOffers", {
+                            offerData: "No Offers",
+                            shopName: shop_name
+                        })
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     useEffect(() => {
@@ -123,7 +132,7 @@ const MyShopsCard = (props) => {
                                     progressBackgroundColor={"#000"}
                                 />
                             }
-                            style={{ marginBottom: 60 }}
+                            style={{ marginBottom: 10 }}
                             animation="fadeInRightBig"
                         >
                             {props.shopData.map((element, index) => (
@@ -137,7 +146,7 @@ const MyShopsCard = (props) => {
                                 >
                                     <DoubleClick
                                         singleTap={() => {
-                                            onSingleTap(element.shop_id);
+                                            onSingleTap(element.shop_id, element.shop_name);
                                         }}
                                         delay={500}
                                     >
@@ -147,7 +156,7 @@ const MyShopsCard = (props) => {
                                                     styles.cardTitle,
                                                     { color: colors.text },
                                                 ]}
-                                                numberOfLines={1}
+                                                numberOfLines={2}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.shop_name}
@@ -167,10 +176,10 @@ const MyShopsCard = (props) => {
                                                     styles.cardSubtitle2,
                                                     { color: colors.subtext },
                                                 ]}
-                                                numberOfLines={1}
+                                                numberOfLines={2}
                                                 ellipsizeMode="tail"
                                             >
-                                                {element.shop_address}
+                                                {element.shop_address} , {element.city} , {element.state} , {element.country} , {element.zipcode}
                                             </Text>
                                             <Text
                                                 style={[
