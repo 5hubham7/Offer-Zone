@@ -327,49 +327,71 @@ const AddShops = ({ navigation, route }) => {
         let shop_id;
 
         if (!useMyLocation) {
-            //if user is not using current location
-            try {
-                locationData = await getLocationFromAddress(
-                    shopDetails.shop_address,
-                    shopDetails.city,
-                    shopDetails.zipcode
+            if (
+                shopDetails.shop_name &&
+                shopDetails.category &&
+                shopDetails.shop_address &&
+                shopDetails.city &&
+                shopDetails.zipcode
+            ) {
+                //if user is not using current location
+                try {
+                    locationData = await getLocationFromAddress(
+                        shopDetails.shop_address,
+                        shopDetails.city,
+                        shopDetails.zipcode
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+
+                latitude = await locationData.lat;
+                longitude = await locationData.lng;
+                country = shopDetails.country;
+                state = shopDetails.state;
+                city = shopDetails.city;
+                shop_address = shopDetails.shop_address;
+                zipcode = shopDetails.zipcode;
+                // latitude = shopDetails.latitude;
+                // longitude = shopDetails.longitude;
+                console.log("1");
+            } else {
+                stopLoading();
+                ToastAndroid.show(
+                    "Please fill out all the necessary fields!",
+                    ToastAndroid.LONG
                 );
-            } catch (error) {
-                console.log(error);
             }
-
-            latitude = await locationData.lat;
-            longitude = await locationData.lng;
-            country = shopDetails.country;
-            state = shopDetails.state;
-            city = shopDetails.city;
-            shop_address = shopDetails.shop_address;
-            zipcode = shopDetails.zipcode;
-            // latitude = shopDetails.latitude;
-            // longitude = shopDetails.longitude;
-            console.log("1");
         } else {
-            //user using current location
-            try {
-                locationData = await getLocationCoordinates();
-                // console.log("locationData", locationData);
-                addressData = await getAddressFromLocation(
-                    locationData.latitude,
-                    locationData.longitude
+            if (shopDetails.shop_name && shopDetails.category) {
+                //user using current location
+                try {
+                    locationData = await getLocationCoordinates();
+                    // console.log("locationData", locationData);
+                    addressData = await getAddressFromLocation(
+                        locationData.latitude,
+                        locationData.longitude
+                    );
+                    console.log(addressData);
+
+                    latitude = locationData.latitude;
+                    longitude = locationData.longitude;
+                    country = await addressData.countryName;
+                    state = await addressData.state;
+                    city = await addressData.city;
+                    shop_address = await addressData.label;
+                    zipcode = await addressData.postalCode;
+
+                    console.log("2");
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                stopLoading();
+                ToastAndroid.show(
+                    "Please fill out all the necessary fields!",
+                    ToastAndroid.LONG
                 );
-                console.log(addressData);
-
-                latitude = locationData.latitude;
-                longitude = locationData.longitude;
-                country = await addressData.countryName;
-                state = await addressData.state;
-                city = await addressData.city;
-                shop_address = await addressData.label;
-                zipcode = await addressData.postalCode;
-
-                console.log("2");
-            } catch (error) {
-                console.log(error);
             }
         }
 
