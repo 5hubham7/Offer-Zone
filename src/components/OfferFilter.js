@@ -213,8 +213,8 @@ const offerFilter = (props) => {
                         Distance
                     </Text>
                     <Slider
-                        value={value.distance}
                         onValueChange={(value) => {
+                            console.log(value)
                             setValue({
                                 ...value,
                                 distance: value,
@@ -222,14 +222,15 @@ const offerFilter = (props) => {
                                 maxDistance: 20,
                             });
                         }}
+                        value={value.distance}
                         minimumValue={1}
                         maximumValue={20}
                         step={1}
                         thumbTintColor="#00C3FF"
                         minimumTrackTintColor="#006BFF"
-                        trackStyle={{ height: 10, width: "90%" }}
+                        trackStyle={{ height: 10, width: "100%" }}
                         thumbStyle={{ width: 30, height: 30 }}
-                        style={{ marginLeft: 20 }}
+                        style={{ marginLeft: 20, width: "90%" }}
                     />
                     <View style={styles.textCon}>
                         <Text style={styles.colorGrey}>

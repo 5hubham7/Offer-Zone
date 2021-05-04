@@ -126,7 +126,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         //console.log("final result", result)
                         setScrollLoder(false);
                         setOfferLike({ ...result });

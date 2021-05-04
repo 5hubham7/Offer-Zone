@@ -239,6 +239,10 @@ const OfferCard = (props) => {
         props.getOffers(latitude, longitude, count);
     }
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+    };
+
     return (
         <View style={styles.container}>
             {props.offerData != null ? (
@@ -304,14 +308,18 @@ const OfferCard = (props) => {
                                     />
                                 }
                                 ref={scrollRef}
-                                onMomentumScrollEnd={() => {
-                                    setOfferCount(offerCount + 2)
-                                    onDynamicScroll(
-                                        props.location.latitude,
-                                        props.location.longitude,
-                                        offerCount
-                                    )
+                                onScroll={({ nativeEvent }) => {
+                                    if (isCloseToBottom(nativeEvent)) {
+
+                                        setOfferCount(offerCount + 2)
+                                        onDynamicScroll(
+                                            props.location.latitude,
+                                            props.location.longitude,
+                                            offerCount
+                                        )
+                                    }
                                 }}
+                                //scrollEventThrottle={400}
                                 style={{ marginBottom: 60 }}
                                 animation="fadeInRightBig"
                             >
