@@ -39,7 +39,7 @@ try {
         appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
         measurementId: "G-J3L3F4N1BX",
     });
-} catch (err) {}
+} catch (err) { }
 
 const AddOffers = ({ navigation, route }) => {
     const defaultImage =
@@ -259,7 +259,7 @@ const AddOffers = ({ navigation, route }) => {
             }
 
             let addOfferDetails = {
-                offer_title: offer_title.toUpperCase(),
+                offer_title: offer_title,
                 details: details,
                 image_url: image_url,
                 post_time: new Date(),
@@ -529,11 +529,11 @@ const AddOffers = ({ navigation, route }) => {
                                     styles.textInput,
                                     image
                                         ? {
-                                              color: colors.text,
-                                          }
+                                            color: colors.text,
+                                        }
                                         : {
-                                              color: "#666666",
-                                          },
+                                            color: "#666666",
+                                        },
                                 ]}
                                 onPress={pickImage}
                             >

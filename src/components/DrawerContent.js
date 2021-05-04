@@ -109,22 +109,7 @@ export function DrawerContent(props) {
                             pressColor="#006064"
                         />
                         {userRole === "Customer" ? (
-                            <View>
-                                <DrawerItem
-                                    icon={({ color, size }) => (
-                                        <MaterialCommunityIcons
-                                            name="account-outline"
-                                            color="#006064"
-                                            size={size}
-                                        />
-                                    )}
-                                    label="PROFILE"
-                                    onPress={() => {
-                                        props.navigation.navigate("profile");
-                                    }}
-                                    pressColor="#006064"
-                                />
-                            </View>
+                            null
                         ) : (
                             <View>
                                 <View>
