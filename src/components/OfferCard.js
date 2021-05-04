@@ -126,20 +126,20 @@ const OfferCard = (props) => {
     }, []);
 
     const onDoubleTap = React.useCallback(
-        (offer_id, User, latitude, longitude) => {
+        (offer_id, User, latitude, longitude, offerCount) => {
             setLikeDobleTap(offer_id);
-            like(offer_id, User, latitude, longitude);
+            like(offer_id, User, latitude, longitude, offerCount);
             wait(2000).then(() => setLikeDobleTap(null));
         },
         []
     );
 
-    const like = (offer_id, cust_id, latitude, longitude) => {
+    const like = (offer_id, cust_id, latitude, longitude, offerCount) => {
         axios
             .post(`${axiosURL}/customer/like/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
+                    props.getOffers(latitude, longitude, offerCount);
                 }
             });
     };
@@ -156,14 +156,14 @@ const OfferCard = (props) => {
             });
     };
 
-    const disLike = (offer_id, cust_id, latitude, longitude) => {
+    const disLike = (offer_id, cust_id, latitude, longitude, offerCount) => {
         setofferDislike(offer_id);
         wait(2000).then(() => setofferDislike(null));
         axios
             .post(`${axiosURL}/customer/disLike/${offer_id}/${cust_id}`)
             .then((response) => {
                 if (response.data.status === 200) {
-                    props.getOffers(latitude, longitude);
+                    props.getOffers(latitude, longitude, offerCount);
                 }
             });
     };
@@ -235,9 +235,12 @@ const OfferCard = (props) => {
     const onDynamicScroll = (latitude, longitude, count) => {
         //console.log(latitude, longitude, count) 
         props.setScrollLoder(true)
-        setUpScroll(true)
         props.getOffers(latitude, longitude, count);
     }
+
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+    };
 
     return (
         <View style={styles.container}>
@@ -304,14 +307,19 @@ const OfferCard = (props) => {
                                     />
                                 }
                                 ref={scrollRef}
-                                onMomentumScrollEnd={() => {
-                                    setOfferCount(offerCount + 2)
-                                    onDynamicScroll(
-                                        props.location.latitude,
-                                        props.location.longitude,
-                                        offerCount
-                                    )
+                                onScroll={({ nativeEvent }) => {
+                                    setUpScroll(false)
+                                    if (isCloseToBottom(nativeEvent)) {
+                                        setUpScroll(true)
+                                        setOfferCount(offerCount + 2)
+                                        onDynamicScroll(
+                                            props.location.latitude,
+                                            props.location.longitude,
+                                            offerCount
+                                        )
+                                    }
                                 }}
+                                //scrollEventThrottle={400}
                                 style={{ marginBottom: 60 }}
                                 animation="fadeInRightBig"
                             >
@@ -333,7 +341,8 @@ const OfferCard = (props) => {
                                                     element.offer_id,
                                                     User,
                                                     props.location.latitude,
-                                                    props.location.longitude
+                                                    props.location.longitude,
+                                                    offerCount
                                                 );
                                             }}
                                             delay={500}
@@ -462,7 +471,8 @@ const OfferCard = (props) => {
                                                                     props.location
                                                                         .latitude,
                                                                     props.location
-                                                                        .longitude
+                                                                        .longitude,
+                                                                    offerCount
                                                                 )
                                                                 : like(
                                                                     element.offer_id,
@@ -470,7 +480,8 @@ const OfferCard = (props) => {
                                                                     props.location
                                                                         .latitude,
                                                                     props.location
-                                                                        .longitude
+                                                                        .longitude,
+                                                                    offerCount
                                                                 );
                                                         }}
                                                         style={{

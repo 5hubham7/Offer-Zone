@@ -126,7 +126,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         //console.log("final result", result)
                         setScrollLoder(false);
                         setOfferLike({ ...result });
@@ -296,7 +296,10 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             {ToggelSearchAndOffers ? (
-                <SearchResultCard SearchQueryData={SearchQueryData} />
+                <SearchResultCard
+                    SearchQueryData={SearchQueryData}
+                    navigation={navigation}
+                />
             ) : (
                 <OfferCard
                     offerData={currentOffers}

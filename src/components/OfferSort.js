@@ -194,7 +194,7 @@ const offerSort = (props) => {
 
     const onResetPress = (latitude, longitude) => {
         setActiveButton(null);
-        props.getOffers(latitude, longitude);
+        props.getOffers(latitude, longitude, 2);
         props.toggleModal();
     };
 
