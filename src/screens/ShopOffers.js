@@ -41,6 +41,10 @@ const ShopOffers = ({ navigation, route }) => {
                     size={30}
                     backgroundColor={colors.headerColor}
                     color="#fff"
+                    style={{
+                        marginTop: 10,
+                        marginLeft: 4
+                    }}
                     onPress={() => {
                         navigation.openDrawer()
                     }}
@@ -52,7 +56,7 @@ const ShopOffers = ({ navigation, route }) => {
                     color: "#fff",
                     marginTop: 12,
                     textAlign: 'center',
-                    marginLeft: -50
+                    marginLeft: -30
                 }}
                 >
                     {route.params.shopName}
