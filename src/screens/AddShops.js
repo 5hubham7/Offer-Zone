@@ -68,7 +68,8 @@ const AddShops = ({ navigation, route }) => {
         country: "",
         state: "",
         city: "",
-        address: "",
+        shop_address: "",
+        zipcode: "",
         latitude: "",
         longitude: "",
         offer: [],
@@ -100,6 +101,8 @@ const AddShops = ({ navigation, route }) => {
         { label: "Other", value: "Other" },
     ];
 
+    const API_KEY = "2EY6fpjGBazAZQZC4mxkugIYBa5MfS-IUdZTJveKvxA";
+
     const handelShopNameChange = (val) => {
         setShopDetails({ ...shopDetails, shop_name: val });
     };
@@ -123,7 +126,11 @@ const AddShops = ({ navigation, route }) => {
     };
 
     const handelAddressChange = (val) => {
-        setShopDetails({ ...shopDetails, address: val });
+        setShopDetails({ ...shopDetails, shop_address: val });
+    };
+
+    const handelZipcodeChange = (val) => {
+        setShopDetails({ ...shopDetails, zipcode: val });
     };
 
     const getToken = async () => {
@@ -285,51 +292,79 @@ const AddShops = ({ navigation, route }) => {
     // adding offer:
 
     const onAddShopPress = async () => {
-        alert("TODO");
-        /*
         startLoading();
-        let sellerID;
 
+        let position;
+        try {
+            position = await getLocationCoordinets(
+                shopDetails.shop_address,
+                shopDetails.city,
+                shopDetails.zipcode
+            );
+        } catch (error) {
+            console.log(error);
+        }
+
+        let sellerID;
         try {
             sellerID = await AsyncStorage.getItem("userToken");
         } catch (error) {
             console.log(error);
         }
 
-        let shop_name = shopName;
-        let offer_title = shopDetails.offer_title;
-        let image_url = "../images/offer.jpg";
-        let details = shopDetails.details;
-        let offer_id = sellerID + "_" + generateShopID(10);
+        if (position) {
+            shopDetails.latitude = await position.lat;
+            shopDetails.longitude = await position.lng;
+        }
 
-        // uploadImage(image_url, offer_id);
+        let shop_name = shopDetails.shop_name;
+        let category = shopDetails.category;
+        let country = shopDetails.country;
+        let state = shopDetails.state;
+        let city = shopDetails.city;
+        let shop_address = shopDetails.shop_address;
+        let zipcode = shopDetails.zipcode;
+        let latitude = shopDetails.latitude;
+        let longitude = shopDetails.longitude;
+        let offer = shopDetails.offer;
+        let shop_id = sellerID + "_s_" + generateShopID(10);
 
-        stopLoading();
-        if (shop_name && offer_title && details) {
+        console.log(shopDetails);
+
+        if (
+            shop_name &&
+            category &&
+            country &&
+            state &&
+            city &&
+            shop_address &&
+            zipcode
+        ) {
             let addShopDetails = {
-                shop_name: "",
-                category: "",
-                country: "",
-                state: "",
-                city: "",
-                address: "",
-                latitude: "",
-                longitude: "",
-                offer: [],
-                shop_id: "",
+                shop_name: shop_name,
+                category: category,
+                country: country,
+                state: state,
+                city: city,
+                shop_address: shop_address,
+                zipcode: zipcode,
+                latitude: latitude,
+                longitude: longitude,
+                offer: offer,
+                shop_id: shop_id,
             };
+            // console.log(addShopDetails);
 
             axios
-                .post(`${AxiosURL}/seller/addShop/${sellerID}/`, addShopDetails)
+                .post(`${AxiosURL}/seller/addShop/${sellerID}`, addShopDetails)
                 .then((response) => {
                     if (response.data.status === 200) {
-                        console.log(response.data);
                         stopLoading();
                         ToastAndroid.show(
-                            "Offer added successfully!",
+                            "Shop added successfully!",
                             ToastAndroid.LONG
                         );
-                        navigation.navigate("MyOffers");
+                        navigation.navigate("MyShops");
                     } else {
                         ToastAndroid.show(
                             "Something went wrong!",
@@ -348,7 +383,6 @@ const AddShops = ({ navigation, route }) => {
                 ToastAndroid.LONG
             );
         }
-        */
     };
 
     // helper functions:
@@ -365,6 +399,24 @@ const AddShops = ({ navigation, route }) => {
         }
 
         return result;
+    };
+
+    const getLocationCoordinets = async (shop_address, city, zipcode) => {
+        // console.log(`ADDRESS:", ${shop_address} ${city} ${zipcode}`);
+        let URL = `https://geocode.search.hereapi.com/v1/geocode?q=${shop_address} ${city} ${zipcode}&apiKey=${API_KEY}`;
+        try {
+            let response = await axios.get(URL);
+            if (response.data.items[0].position) {
+                // console.log(response.data.items[0].position);
+                return response.data.items[0].position;
+            } else {
+                return null;
+            }
+
+            return position;
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // getting media access permission and getting shops of current user
@@ -405,7 +457,8 @@ const AddShops = ({ navigation, route }) => {
                 country: "",
                 state: "",
                 city: "",
-                address: "",
+                shop_address: "",
+                zipcode: "",
                 latitude: "",
                 longitude: "",
                 offer: [],
@@ -475,6 +528,7 @@ const AddShops = ({ navigation, route }) => {
                                 onChangeText={(val) =>
                                     handelShopNameChange(val)
                                 }
+                                autoCompleteType="postal-code"
                             />
                             <Entypo
                                 name="shop"
@@ -625,6 +679,7 @@ const AddShops = ({ navigation, route }) => {
                         <View style={styles.action}>
                             <TextInput
                                 placeholder="Enter the Shop Address..."
+                                multiline={true}
                                 placeholderTextColor="#666666"
                                 style={[
                                     styles.textInput,
@@ -633,14 +688,45 @@ const AddShops = ({ navigation, route }) => {
                                     },
                                 ]}
                                 autoCapitalize="none"
-                                value={shopDetails.address}
+                                value={shopDetails.shop_address}
                                 onChangeText={(val) => handelAddressChange(val)}
                             />
                             <Entypo
                                 name="address"
                                 size={25}
                                 color={
-                                    shopDetails.address
+                                    shopDetails.shop_address
+                                        ? colors.formIcon
+                                        : "#666666"
+                                }
+                                style={{ marginRight: 10 }}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.inputBox}>
+                        <View style={styles.action}>
+                            <TextInput
+                                placeholder="Enter the Zipcode..."
+                                placeholderTextColor="#666666"
+                                style={[
+                                    styles.textInput,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
+                                autoCapitalize="none"
+                                textContentType="postalCode"
+                                maxLength={6}
+                                keyboardType="numeric"
+                                value={shopDetails.zipcode}
+                                onChangeText={(val) => handelZipcodeChange(val)}
+                            />
+                            <Entypo
+                                name="location-pin"
+                                size={25}
+                                color={
+                                    shopDetails.shop_address
                                         ? colors.formIcon
                                         : "#666666"
                                 }

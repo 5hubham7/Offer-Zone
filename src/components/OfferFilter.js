@@ -57,7 +57,12 @@ const offerFilter = (props) => {
         axios.get(`${axiosURL}/customer/getAllCatogories`).then((response) => {
             if (response.data.status == 200) {
                 response.data.response.map((element) => {
-                    if (!allCategories.includes({ label: element, value: element }))
+                    if (
+                        !allCategories.includes({
+                            label: element,
+                            value: element,
+                        })
+                    )
                         allCategories.push({ label: element, value: element });
                 });
             }

@@ -245,7 +245,7 @@ const AddOffers = ({ navigation, route }) => {
         let offer_title = offerDetails.offer_title;
         let image_url = defaultImage; //default image if user don't upload image
         let details = offerDetails.details;
-        let offer_id = sellerID + "_" + generateOfferID(10);
+        let offer_id = sellerID + "_o_" + generateOfferID(10);
 
         if (shop_name && offer_title && details) {
             if (image) {
