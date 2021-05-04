@@ -8,10 +8,12 @@ import {
     ScrollView,
     Platform,
     ToastAndroid,
+    Switch,
+    Button,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import Entypo from "react-native-vector-icons/Entypo";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from "react-native-picker-select";
@@ -62,6 +64,7 @@ const AddShops = ({ navigation, route }) => {
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
+    const [liveLocation, setLiveLocation] = useState([]);
     const [shopDetails, setShopDetails] = useState({
         shop_name: "",
         category: "",
@@ -101,6 +104,15 @@ const AddShops = ({ navigation, route }) => {
         { label: "Other", value: "Other" },
     ];
 
+    const [useMyLocation, setMyLocation] = useState(false);
+    const toggleUseLocation = () => {
+        setMyLocation((previousState) => !previousState);
+        shopDetails.country = "";
+        shopDetails.state = "";
+        shopDetails.city = "";
+        shopDetails.shop_address = "";
+        shopDetails.zipcode = "";
+    };
     const API_KEY = "2EY6fpjGBazAZQZC4mxkugIYBa5MfS-IUdZTJveKvxA";
 
     const handelShopNameChange = (val) => {
@@ -293,18 +305,6 @@ const AddShops = ({ navigation, route }) => {
 
     const onAddShopPress = async () => {
         startLoading();
-
-        let position;
-        try {
-            position = await getLocationCoordinets(
-                shopDetails.shop_address,
-                shopDetails.city,
-                shopDetails.zipcode
-            );
-        } catch (error) {
-            console.log(error);
-        }
-
         let sellerID;
         try {
             sellerID = await AsyncStorage.getItem("userToken");
@@ -312,24 +312,73 @@ const AddShops = ({ navigation, route }) => {
             console.log(error);
         }
 
-        if (position) {
-            shopDetails.latitude = await position.lat;
-            shopDetails.longitude = await position.lng;
+        let locationData;
+        let addressData;
+        let shop_name;
+        let category;
+        let country;
+        let state;
+        let city;
+        let shop_address;
+        let zipcode;
+        let latitude;
+        let longitude;
+        let offer;
+        let shop_id;
+
+        if (!useMyLocation) {
+            //if user is not using current location
+            try {
+                locationData = await getLocationFromAddress(
+                    shopDetails.shop_address,
+                    shopDetails.city,
+                    shopDetails.zipcode
+                );
+            } catch (error) {
+                console.log(error);
+            }
+
+            latitude = await locationData.lat;
+            longitude = await locationData.lng;
+            country = shopDetails.country;
+            state = shopDetails.state;
+            city = shopDetails.city;
+            shop_address = shopDetails.shop_address;
+            zipcode = shopDetails.zipcode;
+            // latitude = shopDetails.latitude;
+            // longitude = shopDetails.longitude;
+            console.log("1");
+        } else {
+            //user using current location
+            try {
+                locationData = await getLocationCoordinates();
+                // console.log("locationData", locationData);
+                addressData = await getAddressFromLocation(
+                    locationData.latitude,
+                    locationData.longitude
+                );
+                console.log(addressData);
+
+                latitude = locationData.latitude;
+                longitude = locationData.longitude;
+                country = await addressData.countryName;
+                state = await addressData.state;
+                city = await addressData.city;
+                shop_address = await addressData.label;
+                zipcode = await addressData.postalCode;
+
+                console.log("2");
+            } catch (error) {
+                console.log(error);
+            }
         }
 
-        let shop_name = shopDetails.shop_name;
-        let category = shopDetails.category;
-        let country = shopDetails.country;
-        let state = shopDetails.state;
-        let city = shopDetails.city;
-        let shop_address = shopDetails.shop_address;
-        let zipcode = shopDetails.zipcode;
-        let latitude = shopDetails.latitude;
-        let longitude = shopDetails.longitude;
-        let offer = shopDetails.offer;
-        let shop_id = sellerID + "_s_" + generateShopID(10);
+        shop_name = shopDetails.shop_name;
+        category = shopDetails.category;
+        offer = shopDetails.offer;
+        shop_id = sellerID + "_s_" + generateShopID(10);
 
-        console.log(shopDetails);
+        // console.log("shopDetails::", shopDetails);
 
         if (
             shop_name &&
@@ -376,6 +425,8 @@ const AddShops = ({ navigation, route }) => {
                     stopLoading();
                     console.log(error);
                 });
+
+            stopLoading();
         } else {
             stopLoading();
             ToastAndroid.show(
@@ -401,7 +452,7 @@ const AddShops = ({ navigation, route }) => {
         return result;
     };
 
-    const getLocationCoordinets = async (shop_address, city, zipcode) => {
+    const getLocationFromAddress = async (shop_address, city, zipcode) => {
         // console.log(`ADDRESS:", ${shop_address} ${city} ${zipcode}`);
         let URL = `https://geocode.search.hereapi.com/v1/geocode?q=${shop_address} ${city} ${zipcode}&apiKey=${API_KEY}`;
         try {
@@ -412,10 +463,46 @@ const AddShops = ({ navigation, route }) => {
             } else {
                 return null;
             }
-
-            return position;
         } catch (err) {
             console.log(err);
+        }
+    };
+
+    const getAddressFromLocation = async (latitude, longitude) => {
+        // console.log(
+        //     `API: https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${API_KEY}`
+        // );
+        let URL = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${API_KEY}`;
+        try {
+            let response = await axios.get(URL);
+            if (response.data.items[0].position) {
+                // console.log(response.data.items[0]);
+                return response.data.items[0].address;
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const getLocationCoordinates = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+            alert("Permission to access location was denied!");
+            getLocationCoordinates();
+        }
+        let data = await Location.getCurrentPositionAsync({
+            enableHighAccuracy: true,
+            accuracy: Location.LocationAccuracy.BestForNavigation,
+        });
+        console.log("COORDS:", data.coords.latitude, data.coords.longitude);
+        // shopDetails.latitude = data.coords.latitude;
+        // shopDetails.longitude = data.coords.longitude;
+        if (data.coords) {
+            return data.coords;
+        } else {
+            return null;
         }
     };
 
@@ -576,164 +663,207 @@ const AddShops = ({ navigation, route }) => {
                         />
                     </View>
 
-                    <View style={styles.picker}>
-                        <RNPickerSelect
-                            placeholder={{
-                                label: "Select the Country...",
-                                value: null,
-                            }}
-                            value={shopDetails.country}
-                            items={countries}
-                            onValueChange={(value) => {
-                                handelCountryChange(value);
-                            }}
-                            style={pickerSelectStyles}
-                            useNativeAndroidPickerStyle={false}
-                            Icon={() => {
-                                return (
-                                    <FontAwesome5
-                                        name="angle-down"
-                                        size={25}
-                                        color={
-                                            shopDetails.country
-                                                ? colors.formIcon
-                                                : "#666666"
-                                        }
-                                        style={{
-                                            marginTop: 10,
-                                            marginRight: 15,
-                                        }}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.picker}>
-                        <RNPickerSelect
-                            placeholder={{
-                                label: "Select the state...",
-                                value: null,
-                            }}
-                            value={shopDetails.state}
-                            items={states}
-                            onValueChange={(value) => {
-                                handelStateChange(value);
-                            }}
-                            style={pickerSelectStyles}
-                            useNativeAndroidPickerStyle={false}
-                            Icon={() => {
-                                return (
-                                    <FontAwesome5
-                                        name="angle-down"
-                                        size={25}
-                                        color={
-                                            shopDetails.state
-                                                ? colors.formIcon
-                                                : "#666666"
-                                        }
-                                        style={{
-                                            marginTop: 10,
-                                            marginRight: 15,
-                                        }}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.picker}>
-                        <RNPickerSelect
-                            placeholder={{
-                                label: "Select the City...",
-                                value: null,
-                            }}
-                            value={shopDetails.city}
-                            items={cities}
-                            onValueChange={(value) => {
-                                handelCityChange(value);
-                            }}
-                            style={pickerSelectStyles}
-                            useNativeAndroidPickerStyle={false}
-                            Icon={() => {
-                                return (
-                                    <FontAwesome5
-                                        name="angle-down"
-                                        size={25}
-                                        color={
-                                            shopDetails.city
-                                                ? colors.formIcon
-                                                : "#666666"
-                                        }
-                                        style={{
-                                            marginTop: 10,
-                                            marginRight: 15,
-                                        }}
-                                    />
-                                );
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.inputBox}>
-                        <View style={styles.action}>
-                            <TextInput
-                                placeholder="Enter the Shop Address..."
-                                multiline={true}
-                                placeholderTextColor="#666666"
-                                style={[
-                                    styles.textInput,
-                                    {
-                                        color: colors.text,
-                                    },
-                                ]}
-                                autoCapitalize="none"
-                                value={shopDetails.shop_address}
-                                onChangeText={(val) => handelAddressChange(val)}
-                            />
-                            <Entypo
-                                name="address"
-                                size={25}
-                                color={
-                                    shopDetails.shop_address
+                    <View style={styles.action}>
+                        <Text
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: useMyLocation
                                         ? colors.formIcon
-                                        : "#666666"
-                                }
-                                style={{ marginRight: 10 }}
-                            />
-                        </View>
+                                        : "#666666",
+                                },
+                            ]}
+                        >
+                            {useMyLocation ? "Using " : "Use "}
+                            my Location as Address...
+                        </Text>
+
+                        <Switch
+                            trackColor={{
+                                false: "#616161",
+                                true: "#757575",
+                            }}
+                            thumbColor={useMyLocation ? "#006064" : "#BDBDBD"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleUseLocation}
+                            value={useMyLocation}
+                            style={{ marginRight: 10 }}
+                        />
+
+                        <MaterialIcons
+                            name="my-location"
+                            size={25}
+                            color={useMyLocation ? colors.formIcon : "#666666"}
+                            style={{ marginRight: 10 }}
+                        />
                     </View>
 
-                    <View style={styles.inputBox}>
-                        <View style={styles.action}>
-                            <TextInput
-                                placeholder="Enter the Zipcode..."
-                                placeholderTextColor="#666666"
-                                style={[
-                                    styles.textInput,
-                                    {
-                                        color: colors.text,
-                                    },
-                                ]}
-                                autoCapitalize="none"
-                                textContentType="postalCode"
-                                maxLength={6}
-                                keyboardType="numeric"
-                                value={shopDetails.zipcode}
-                                onChangeText={(val) => handelZipcodeChange(val)}
-                            />
-                            <Entypo
-                                name="location-pin"
-                                size={25}
-                                color={
-                                    shopDetails.shop_address
-                                        ? colors.formIcon
-                                        : "#666666"
-                                }
-                                style={{ marginRight: 10 }}
-                            />
+                    {!useMyLocation && (
+                        <View>
+                            <View style={styles.picker}>
+                                <RNPickerSelect
+                                    placeholder={{
+                                        label: "Select the Country...",
+                                        value: null,
+                                    }}
+                                    value={shopDetails.country}
+                                    items={countries}
+                                    onValueChange={(value) => {
+                                        handelCountryChange(value);
+                                    }}
+                                    style={pickerSelectStyles}
+                                    useNativeAndroidPickerStyle={false}
+                                    Icon={() => {
+                                        return (
+                                            <FontAwesome5
+                                                name="angle-down"
+                                                size={25}
+                                                color={
+                                                    shopDetails.country
+                                                        ? colors.formIcon
+                                                        : "#666666"
+                                                }
+                                                style={{
+                                                    marginTop: 10,
+                                                    marginRight: 15,
+                                                }}
+                                            />
+                                        );
+                                    }}
+                                />
+                            </View>
+
+                            <View style={styles.picker}>
+                                <RNPickerSelect
+                                    placeholder={{
+                                        label: "Select the state...",
+                                        value: null,
+                                    }}
+                                    value={shopDetails.state}
+                                    items={states}
+                                    onValueChange={(value) => {
+                                        handelStateChange(value);
+                                    }}
+                                    style={pickerSelectStyles}
+                                    useNativeAndroidPickerStyle={false}
+                                    Icon={() => {
+                                        return (
+                                            <FontAwesome5
+                                                name="angle-down"
+                                                size={25}
+                                                color={
+                                                    shopDetails.state
+                                                        ? colors.formIcon
+                                                        : "#666666"
+                                                }
+                                                style={{
+                                                    marginTop: 10,
+                                                    marginRight: 15,
+                                                }}
+                                            />
+                                        );
+                                    }}
+                                />
+                            </View>
+
+                            <View style={styles.picker}>
+                                <RNPickerSelect
+                                    placeholder={{
+                                        label: "Select the City...",
+                                        value: null,
+                                    }}
+                                    disabled={useMyLocation}
+                                    value={shopDetails.city}
+                                    items={cities}
+                                    onValueChange={(value) => {
+                                        handelCityChange(value);
+                                    }}
+                                    style={pickerSelectStyles}
+                                    useNativeAndroidPickerStyle={false}
+                                    Icon={() => {
+                                        return (
+                                            <FontAwesome5
+                                                name="angle-down"
+                                                size={25}
+                                                color={
+                                                    shopDetails.city
+                                                        ? colors.formIcon
+                                                        : "#666666"
+                                                }
+                                                style={{
+                                                    marginTop: 10,
+                                                    marginRight: 15,
+                                                }}
+                                            />
+                                        );
+                                    }}
+                                />
+                            </View>
+                            <View style={styles.inputBox}>
+                                <View style={styles.action}>
+                                    <TextInput
+                                        placeholder="Enter the Shop Address..."
+                                        multiline={true}
+                                        placeholderTextColor="#666666"
+                                        style={[
+                                            styles.textInput,
+                                            {
+                                                color: colors.text,
+                                            },
+                                        ]}
+                                        autoCapitalize="none"
+                                        value={shopDetails.shop_address}
+                                        onChangeText={(val) =>
+                                            handelAddressChange(val)
+                                        }
+                                    />
+
+                                    <Entypo
+                                        name="address"
+                                        size={25}
+                                        color={
+                                            shopDetails.shop_address
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
+                                        style={{ marginRight: 10 }}
+                                    />
+                                </View>
+                            </View>
+                            <View style={styles.inputBox}>
+                                <View style={styles.action}>
+                                    <TextInput
+                                        placeholder="Enter the Zipcode..."
+                                        placeholderTextColor="#666666"
+                                        style={[
+                                            styles.textInput,
+                                            {
+                                                color: colors.text,
+                                            },
+                                        ]}
+                                        autoCapitalize="none"
+                                        textContentType="postalCode"
+                                        maxLength={6}
+                                        keyboardType="numeric"
+                                        value={shopDetails.zipcode}
+                                        onChangeText={(val) =>
+                                            handelZipcodeChange(val)
+                                        }
+                                    />
+                                    <Entypo
+                                        name="location-pin"
+                                        size={25}
+                                        color={
+                                            shopDetails.shop_address
+                                                ? colors.formIcon
+                                                : "#666666"
+                                        }
+                                        style={{ marginRight: 10 }}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                    </View>
+                    )}
 
                     <TouchableOpacity
                         onPress={() => {
