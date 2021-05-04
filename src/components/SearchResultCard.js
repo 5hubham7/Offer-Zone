@@ -14,12 +14,16 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/SearchResultCardStyle";
 import { useTheme } from "@react-navigation/native";
+import { AuthContext } from "../components/context/Store";
+import axios from "axios";
+import axiosURL from "../helper/AxiosURL";
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
 
 const SearchResultCard = (props) => {
     const { colors } = useTheme();
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
 
     useEffect(() => {
         // console.log(props)
@@ -46,6 +50,25 @@ const SearchResultCard = (props) => {
 
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const onSingleTap = (offer_id) => {
+        startLoading();
+        axios
+            .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
+            .then((response) => {
+                if (response.data.status === 200) {
+                    //setOfferDetails(response.data.response)
+                    stopLoading();
+                    props.navigation.navigate("OfferDetailsWithoutMap", {
+                        offerData: response.data.response,
+                    });
+                }
+            })
+            .catch((error) => {
+                stopLoading();
+                alert(error);
+            });
     };
 
     return (
@@ -76,64 +99,69 @@ const SearchResultCard = (props) => {
                             animation="fadeInRightBig"
                         >
                             {props.SearchQueryData.map((element, index) => (
-                                <View
-                                    style={[
-                                        styles.cardView,
-                                        {
-                                            flexDirection: "row",
-                                            backgroundColor: colors.offerCard,
-                                        },
-                                    ]}
+                                <TouchableOpacity
+                                    onPress={() => { onSingleTap(element.offer_id) }}
+                                    activeOpacity={0.8}
                                     key={index}
                                 >
-                                    <View>
-                                        <ImageBackground
-                                            source={{
-                                                uri: element.image_url,
-                                            }}
-                                            style={styles.cardImage}
-                                        >
-                                            <LinearGradient
-                                                locations={[0, 0]}
-                                                colors={[
-                                                    "rgba(0,0,0,0.00)",
-                                                    "rgba(0,0,0,0.30)",
+                                    <View
+                                        style={[
+                                            styles.cardView,
+                                            {
+                                                flexDirection: "row",
+                                                backgroundColor: colors.offerCard,
+                                            },
+                                        ]}
+                                    >
+                                        <View>
+                                            <ImageBackground
+                                                source={{
+                                                    uri: element.image_url,
+                                                }}
+                                                style={styles.cardImage}
+                                            >
+                                                <LinearGradient
+                                                    locations={[0, 0]}
+                                                    colors={[
+                                                        "rgba(0,0,0,0.00)",
+                                                        "rgba(0,0,0,0.30)",
+                                                    ]}
+                                                    style={styles.linearGradient}
+                                                ></LinearGradient>
+                                            </ImageBackground>
+                                        </View>
+                                        <View>
+                                            <Text
+                                                style={[
+                                                    styles.cardTitle,
+                                                    { color: colors.text },
                                                 ]}
-                                                style={styles.linearGradient}
-                                            ></LinearGradient>
-                                        </ImageBackground>
-                                    </View>
-                                    <View>
-                                        <Text
-                                            style={[
-                                                styles.cardTitle,
-                                                { color: colors.text },
-                                            ]}
-                                        >
-                                            {element.offer_title}
-                                        </Text>
-                                        <Text
-                                            style={[
-                                                styles.cardSubtitle,
-                                                { color: colors.text },
-                                            ]}
-                                        >
-                                            {element.shop_name}{" "}
-                                        </Text>
-                                        <Text
-                                            style={[
-                                                styles.cardSubtitle2,
-                                                { color: colors.subtext },
-                                            ]}
-                                        >
-                                            {dateFormatter(element.post_time)} •{" "}
-                                            {numberWithCommas(
-                                                element.likes.length
-                                            )}{" "}
+                                            >
+                                                {element.offer_title}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.cardSubtitle,
+                                                    { color: colors.text },
+                                                ]}
+                                            >
+                                                {element.shop_name}{" "}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.cardSubtitle2,
+                                                    { color: colors.subtext },
+                                                ]}
+                                            >
+                                                {dateFormatter(element.post_time)} •{" "}
+                                                {numberWithCommas(
+                                                    element.likes.length
+                                                )}{" "}
                                             Likes{" "}
-                                        </Text>
+                                            </Text>
+                                        </View>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </ScrollView>
                     )}

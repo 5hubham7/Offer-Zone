@@ -29,6 +29,7 @@ import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
+import OfferDetailsWithoutMap from "./src/screens/OfferDetailsWithoutMap";
 import MyOffers from "./src/screens/MyOffers";
 import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
@@ -231,6 +232,10 @@ const App = () => {
                             <Drawer.Screen
                                 name="OfferDetails"
                                 component={OfferDetails}
+                            />
+                            <Drawer.Screen
+                                name="OfferDetailsWithoutMap"
+                                component={OfferDetailsWithoutMap}
                             />
                             <Drawer.Screen
                                 name="MyOffers"

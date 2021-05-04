@@ -296,7 +296,10 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             {ToggelSearchAndOffers ? (
-                <SearchResultCard SearchQueryData={SearchQueryData} />
+                <SearchResultCard
+                    SearchQueryData={SearchQueryData}
+                    navigation={navigation}
+                />
             ) : (
                 <OfferCard
                     offerData={currentOffers}

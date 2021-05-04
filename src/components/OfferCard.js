@@ -235,7 +235,6 @@ const OfferCard = (props) => {
     const onDynamicScroll = (latitude, longitude, count) => {
         //console.log(latitude, longitude, count) 
         props.setScrollLoder(true)
-        setUpScroll(true)
         props.getOffers(latitude, longitude, count);
     }
 
@@ -309,8 +308,9 @@ const OfferCard = (props) => {
                                 }
                                 ref={scrollRef}
                                 onScroll={({ nativeEvent }) => {
+                                    setUpScroll(false)
                                     if (isCloseToBottom(nativeEvent)) {
-
+                                        setUpScroll(true)
                                         setOfferCount(offerCount + 2)
                                         onDynamicScroll(
                                             props.location.latitude,

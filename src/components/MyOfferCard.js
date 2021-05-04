@@ -45,29 +45,26 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (offer_id) => {
-        alert("Offer clicked!");
-        //console.log(offer_id)
-        // startLoading();
-        // axios
-        //     .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
-        //     .then((response) => {
-        //         if (response.data.status === 200) {
-        //             //setOfferDetails(response.data.response)
-        //             stopLoading();
-        //             props.navigation.navigate("OfferDetails", {
-        //                 offerData: response.data.response,
-        //                 location: props.location,
-        //             });
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         stopLoading();
-        //         alert(error);
-        //     });
+        startLoading();
+        axios
+            .get(`${axiosURL}/customer/getOffersById/${offer_id}`)
+            .then((response) => {
+                if (response.data.status === 200) {
+                    //setOfferDetails(response.data.response)
+                    stopLoading();
+                    props.navigation.navigate("OfferDetailsWithoutMap", {
+                        offerData: response.data.response,
+                    });
+                }
+            })
+            .catch((error) => {
+                stopLoading();
+                alert(error);
+            });
     };
 
     useEffect(() => {
