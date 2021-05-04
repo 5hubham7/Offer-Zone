@@ -17,7 +17,6 @@ import { AuthContext } from "../components/context/Store";
 import axiosURL from "../helper/AxiosURL";
 import axios from "axios";
 
-
 const windowWidth = Dimensions.get("screen").width;
 
 const wait = (timeout) => {
@@ -36,11 +35,11 @@ const MyShopsCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const onSingleTap = (shop_id, shop_name) => {
-        startLoading()
+        startLoading();
         axios
             .get(`${axiosURL}/seller/getShopOffers/${shop_id}`)
             .then((response) => {
@@ -48,17 +47,17 @@ const MyShopsCard = (props) => {
                 if (response.data.status === 200) {
                     if (response.data.response.length > 0) {
                         //setOfferData(response.data.response);
-                        stopLoading()
+                        stopLoading();
                         props.navigation.navigate("ShopOffers", {
                             offerData: response.data.response,
-                            shopName: shop_name
-                        })
+                            shopName: shop_name,
+                        });
                     } else {
-                        stopLoading()
+                        stopLoading();
                         props.navigation.navigate("ShopOffers", {
                             offerData: "No Offers",
-                            shopName: shop_name
-                        })
+                            shopName: shop_name,
+                        });
                     }
                 }
             })
@@ -132,7 +131,7 @@ const MyShopsCard = (props) => {
                                     progressBackgroundColor={"#000"}
                                 />
                             }
-                            style={{ marginBottom: 10 }}
+                            style={{ marginBottom: 10, marginTop: 5 }}
                             animation="fadeInRightBig"
                         >
                             {props.shopData.map((element, index) => (
@@ -146,7 +145,10 @@ const MyShopsCard = (props) => {
                                 >
                                     <DoubleClick
                                         singleTap={() => {
-                                            onSingleTap(element.shop_id, element.shop_name);
+                                            onSingleTap(
+                                                element.shop_id,
+                                                element.shop_name
+                                            );
                                         }}
                                         delay={500}
                                     >
@@ -179,17 +181,18 @@ const MyShopsCard = (props) => {
                                                 numberOfLines={2}
                                                 ellipsizeMode="tail"
                                             >
-                                                {element.shop_address} , {element.city} , {element.state} , {element.country} , {element.zipcode}
+                                                {element.shop_address},{" "}
+                                                {element.city}, {element.state},{" "}
+                                                {element.country},{" "}
+                                                {element.zipcode}
                                             </Text>
                                             <Text
                                                 style={[
-                                                    styles.offerLikeCount,
+                                                    styles.cardFooter,
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                {element.offer.length}
-                                                {"  "}
-                                                Offers
+                                                {element.offer.length} Offers
                                             </Text>
                                             <View style={styles.line} />
                                             <View
@@ -238,6 +241,11 @@ const MyShopsCard = (props) => {
                                                                 colors.deleteIcon
                                                             }
                                                             size={25}
+                                                            onPress={() => {
+                                                                props.deleteShopHandler(
+                                                                    element.shop_id
+                                                                );
+                                                            }}
                                                         />
                                                     </View>
                                                 </TouchableOpacity>

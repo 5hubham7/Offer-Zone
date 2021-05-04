@@ -354,7 +354,6 @@ const AddShops = ({ navigation, route }) => {
                 zipcode = shopDetails.zipcode;
                 // latitude = shopDetails.latitude;
                 // longitude = shopDetails.longitude;
-                console.log("1");
             } else {
                 stopLoading();
                 ToastAndroid.show(
@@ -381,8 +380,6 @@ const AddShops = ({ navigation, route }) => {
                     city = await addressData.city;
                     shop_address = await addressData.label;
                     zipcode = await addressData.postalCode;
-
-                    console.log("2");
                 } catch (error) {
                     console.log(error);
                 }
@@ -463,7 +460,7 @@ const AddShops = ({ navigation, route }) => {
     const generateShopID = (length) => {
         const characters =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = " ";
+        let result = "";
         const charactersLength = characters.length;
         for (let i = 0; i < length; i++) {
             result += characters.charAt(
@@ -518,9 +515,8 @@ const AddShops = ({ navigation, route }) => {
             enableHighAccuracy: true,
             accuracy: Location.LocationAccuracy.BestForNavigation,
         });
-        console.log("COORDS:", data.coords.latitude, data.coords.longitude);
-        // shopDetails.latitude = data.coords.latitude;
-        // shopDetails.longitude = data.coords.longitude;
+        // console.log("COORDS:", data.coords.latitude, data.coords.longitude);
+
         if (data.coords) {
             return data.coords;
         } else {

@@ -29,13 +29,13 @@ import { firebase } from "./src/helper/FirebaseConfig";
 import styles from "./src/styles/AppStyles";
 import HomeScreen from "./src/screens/HomeScreen";
 import OfferDetails from "./src/screens/OfferDetails";
-import OfferDetailsWithoutMap from "./src/screens/OfferDetailsWithoutMap";
+import MyOfferDetails from "./src/screens/MyOfferDetails";
 import MyOffers from "./src/screens/MyOffers";
 import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
 import AddOffers from "./src/screens/AddOffers";
 import AddShops from "./src/screens/AddShops";
-import ShopOffers from './src/screens/ShopOffers'
+import ShopOffers from "./src/screens/ShopOffers";
 
 LogBox.ignoreLogs([
     "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.",
@@ -235,8 +235,8 @@ const App = () => {
                                 component={OfferDetails}
                             />
                             <Drawer.Screen
-                                name="OfferDetailsWithoutMap"
-                                component={OfferDetailsWithoutMap}
+                                name="MyOfferDetails"
+                                component={MyOfferDetails}
                             />
                             <Drawer.Screen
                                 name="MyOffers"

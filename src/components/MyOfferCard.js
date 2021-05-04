@@ -45,7 +45,7 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const onSingleTap = (offer_id) => {
@@ -56,7 +56,7 @@ const MyOfferCard = (props) => {
                 if (response.data.status === 200) {
                     //setOfferDetails(response.data.response)
                     stopLoading();
-                    props.navigation.navigate("OfferDetailsWithoutMap", {
+                    props.navigation.navigate("MyOfferDetails", {
                         offerData: response.data.response,
                     });
                 }
@@ -155,7 +155,7 @@ const MyOfferCard = (props) => {
                                     progressBackgroundColor={"#000"}
                                 />
                             }
-                            style={{ marginBottom: 10 }}
+                            style={{ marginBottom: 10, marginTop: 5 }}
                             animation="fadeInRightBig"
                         >
                             {props.offerData.map((element, index) => (
@@ -323,6 +323,11 @@ const MyOfferCard = (props) => {
                                                                 colors.deleteIcon
                                                             }
                                                             size={25}
+                                                            onPress={() => {
+                                                                props.deleteOfferHandler(
+                                                                    element.offer_id
+                                                                );
+                                                            }}
                                                         />
                                                     </View>
                                                 </TouchableOpacity>

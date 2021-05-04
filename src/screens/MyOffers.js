@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Dimensions, Platform } from "react-native";
+import { View, Dimensions, Platform, ToastAndroid, Alert } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { FAB, Searchbar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,9 +11,11 @@ import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Entypo from "react-native-vector-icons/Entypo";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import styles from "../styles/HomeScreenStyles";
 import MyOfferCard from "../components/MyOfferCard";
 import axiosURL from "../helper/AxiosURL";
+import { AuthContext } from "../components/context/Store";
 
 const windowWidth = Dimensions.get("screen").width;
 const MyOffersStack = createStackNavigator();
@@ -25,6 +27,7 @@ const MyOffers = ({ navigation }) => {
         latitude: "",
         longitude: "",
     });
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [errorMessage, setErrorMessage] = React.useState(null);
     const [offerLike, setOfferLike] = React.useState({
         1234: false,
@@ -75,6 +78,52 @@ const MyOffers = ({ navigation }) => {
         navigation.navigate("AddOffers");
     };
 
+    const deleteOfferHandler = (offerID) => {
+        Alert.alert(
+            "Delete Offer",
+            "Are you sure you want to delete this Offer?",
+            [
+                {
+                    text: "Cancel",
+                    style: "Cancel",
+                },
+                { text: "Delete", onPress: () => deleteOffer(offerID) },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const deleteOffer = async (offerID) => {
+        startLoading();
+        let sellerID = "";
+        try {
+            sellerID = await AsyncStorage.getItem("userToken");
+        } catch (error) {
+            console.log(error);
+        }
+        // console.log(`${axiosURL}/seller/deleteOffer/${sellerID}/${offerID}`);
+        axios
+            .delete(`${axiosURL}/seller/deleteOffer/${sellerID}/${offerID}`)
+            .then((response) => {
+                console.log();
+                if (response.data.status === 200) {
+                    stopLoading();
+                    ToastAndroid.show(
+                        "Offer deleted successfully!",
+                        ToastAndroid.LONG
+                    );
+                    getMyOffers(sellerID);
+                } else {
+                    ToastAndroid.show("Failed!", ToastAndroid.LONG);
+                }
+            })
+            .catch((error) => {
+                stopLoading();
+                ToastAndroid.show("Failed!", ToastAndroid.LONG);
+                console.log(error);
+            });
+    };
+
     const theme = useTheme();
 
     useEffect(() => {
@@ -110,31 +159,10 @@ const MyOffers = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    width: "100%",
-                    backgroundColor: colors.headerColor,
-                    height: 50,
-                }}
-                animation="fadeInRight"
-            >
-                <Searchbar
-                    placeholder="Search offers..."
-                    style={{
-                        width: windowWidth * 0.9,
-                        height: 40,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        borderRadius: 10,
-                    }}
-                    //onChangeText={(text) => (alert(text))}
-                    clearButtonMode="while-editing"
-                />
-            </View>
-
             <MyOfferCard
                 offerData={offerData}
                 getMyOffers={getMyOffers}
+                deleteOfferHandler={deleteOfferHandler}
                 navigation={navigation}
                 location={location}
             />

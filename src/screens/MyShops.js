@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, ToastAndroid, Alert } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { FAB } from "react-native-paper";
 import axios from "axios";
@@ -7,9 +7,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Entypo from "react-native-vector-icons/Entypo";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/Ionicons";
+
 import styles from "../styles/HomeScreenStyles";
 import MyShopCard from "../components/MyShopCard";
 import axiosURL from "../helper/AxiosURL";
+import { AuthContext } from "../components/context/Store";
 
 const MyShopsStack = createStackNavigator();
 
@@ -17,15 +19,13 @@ const windowWidth = Dimensions.get("screen").width;
 
 const MyShops = ({ navigation }) => {
     const { colors } = useTheme();
-
+    const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [shopData, setShopData] = React.useState(null);
 
     const getMyShops = (seller_id) => {
         var data = [];
         var options = [];
-        // console.log(
-        //     `${axiosURL}/seller/getMyOffers/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`
-        // );
+
         axios
             // .get(`${axiosURL}/seller/getMyShops/WjDIA3uLVkPU5eUg3Ql4r3XpFkh2`)
             .get(`${axiosURL}/seller/getMyShops/${seller_id}`)
@@ -47,7 +47,7 @@ const MyShops = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                            {});
+                        {});
                     } else {
                         setShopData("No Shops");
                     }
@@ -59,8 +59,53 @@ const MyShops = ({ navigation }) => {
     };
 
     const addShop = () => {
-        // alert("Add Shop");
         navigation.navigate("AddShops");
+    };
+
+    const deleteShopHandler = (shopID) => {
+        Alert.alert(
+            "Delete Shop",
+            "Are you sure you want to delete this Shop?",
+            [
+                {
+                    text: "Cancel",
+                    style: "Cancel",
+                },
+                { text: "Delete", onPress: () => deleteShop(shopID) },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const deleteShop = async (shopID) => {
+        startLoading();
+        let sellerID = "";
+        try {
+            sellerID = await AsyncStorage.getItem("userToken");
+        } catch (error) {
+            console.log(error);
+        }
+        console.log(`${axiosURL}/seller/deleteShop/${sellerID}/${shopID}`);
+        axios
+            .delete(`${axiosURL}/seller/deleteShop/${sellerID}/${shopID}`)
+            .then((response) => {
+                console.log();
+                if (response.data.status === 200) {
+                    stopLoading();
+                    ToastAndroid.show(
+                        "Shop deleted successfully!",
+                        ToastAndroid.LONG
+                    );
+                    getMyShops(sellerID);
+                } else {
+                    ToastAndroid.show("Failed!", ToastAndroid.LONG);
+                }
+            })
+            .catch((error) => {
+                stopLoading();
+                ToastAndroid.show("Failed!", ToastAndroid.LONG);
+                console.log(error);
+            });
     };
 
     useEffect(() => {
@@ -86,6 +131,7 @@ const MyShops = ({ navigation }) => {
             <MyShopCard
                 shopData={shopData}
                 getMyShops={getMyShops}
+                deleteShopHandler={deleteShopHandler}
                 navigation={navigation}
             />
             <FAB

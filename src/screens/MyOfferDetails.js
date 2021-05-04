@@ -17,7 +17,7 @@ import { useTheme } from "react-native-paper";
 
 import styles from "../styles/OfferDetailsStyles";
 
-const OfferDetails = ({ navigation, route }) => {
+const MyOfferDetails = ({ navigation, route }) => {
     const { colors } = useTheme();
     const [HideDetails, setHideDetails] = React.useState(false);
     const [HideShopDetails, setHideShopDetails] = React.useState(false);
@@ -290,7 +290,10 @@ const OfferDetails = ({ navigation, route }) => {
                                         ]}
                                         lineBreakMode="tail"
                                     >
-                                        {route.params.offerData.shop_address} , {route.params.offerData.city} , {route.params.offerData.state} , {route.params.offerData.country}
+                                        {route.params.offerData.shop_address},{" "}
+                                        {route.params.offerData.city},{" "}
+                                        {route.params.offerData.state},{" "}
+                                        {route.params.offerData.country}
                                     </Text>
                                 </Text>
                             </View>
@@ -381,4 +384,4 @@ const OfferDetails = ({ navigation, route }) => {
     );
 };
 
-export default OfferDetails;
+export default MyOfferDetails;

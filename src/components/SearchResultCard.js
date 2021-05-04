@@ -60,7 +60,7 @@ const SearchResultCard = (props) => {
                 if (response.data.status === 200) {
                     //setOfferDetails(response.data.response)
                     stopLoading();
-                    props.navigation.navigate("OfferDetailsWithoutMap", {
+                    props.navigation.navigate("MyOfferDetails", {
                         offerData: response.data.response,
                     });
                 }
@@ -100,7 +100,9 @@ const SearchResultCard = (props) => {
                         >
                             {props.SearchQueryData.map((element, index) => (
                                 <TouchableOpacity
-                                    onPress={() => { onSingleTap(element.offer_id) }}
+                                    onPress={() => {
+                                        onSingleTap(element.offer_id);
+                                    }}
                                     activeOpacity={0.8}
                                     key={index}
                                 >
@@ -109,7 +111,8 @@ const SearchResultCard = (props) => {
                                             styles.cardView,
                                             {
                                                 flexDirection: "row",
-                                                backgroundColor: colors.offerCard,
+                                                backgroundColor:
+                                                    colors.offerCard,
                                             },
                                         ]}
                                     >
@@ -126,7 +129,9 @@ const SearchResultCard = (props) => {
                                                         "rgba(0,0,0,0.00)",
                                                         "rgba(0,0,0,0.30)",
                                                     ]}
-                                                    style={styles.linearGradient}
+                                                    style={
+                                                        styles.linearGradient
+                                                    }
                                                 ></LinearGradient>
                                             </ImageBackground>
                                         </View>
@@ -153,11 +158,14 @@ const SearchResultCard = (props) => {
                                                     { color: colors.subtext },
                                                 ]}
                                             >
-                                                {dateFormatter(element.post_time)} •{" "}
+                                                {dateFormatter(
+                                                    element.post_time
+                                                )}{" "}
+                                                •{" "}
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}{" "}
-                                            Likes{" "}
+                                                Likes{" "}
                                             </Text>
                                         </View>
                                     </View>
