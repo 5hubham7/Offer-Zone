@@ -51,7 +51,7 @@ const OfferDetails = ({ navigation, route }) => {
                     <ImageBackground
                         source={{
                             uri:
-                                "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                                route.params.offerData.offer.image_url,
                         }}
                         style={styles.backgroundImage}
                     >
@@ -393,8 +393,8 @@ const OfferDetails = ({ navigation, route }) => {
                                     <MapView
                                         style={styles.map}
                                         region={{
-                                            latitude: 20.042818069458008,
-                                            longitude: 74.48754119873047,
+                                            latitude: route.params.offerData.latitude,
+                                            longitude: route.params.offerData.longitude,
                                             latitudeDelta: 0.0022,
                                             longitudeDelta: 0.0021,
                                         }}
@@ -408,8 +408,8 @@ const OfferDetails = ({ navigation, route }) => {
                                     >
                                         <Marker
                                             coordinate={{
-                                                latitude: 20.042818069458008,
-                                                longitude: 74.48754119873047,
+                                                latitude: route.params.offerData.latitude,
+                                                longitude: route.params.offerData.longitude,
                                             }}
                                             title={
                                                 route.params.offerData.shop_name

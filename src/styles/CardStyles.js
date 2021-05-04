@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     cardImageView: {
-        height: windowHeight * 0.17,
         width: windowWidth * 0.9,
         overflow: "hidden",
     },

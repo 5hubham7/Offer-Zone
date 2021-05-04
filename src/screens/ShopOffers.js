@@ -15,23 +15,8 @@ import MyOfferCard from "../components/MyOfferCard";
 
 const windowWidth = Dimensions.get("screen").width;
 const ShopOffersStack = createStackNavigator();
-var offers = []
 const ShopOffers = ({ navigation, route }) => {
     const { colors } = useTheme();
-
-    const [location, setLocation] = React.useState({
-        latitude: "",
-        longitude: "",
-    });
-    const [errorMessage, setErrorMessage] = React.useState(null);
-    const [offerLike, setOfferLike] = React.useState({
-        1234: false,
-    });
-
-    useEffect(() => {
-        console.log(navigation)
-    }, [])
-    const theme = useTheme();
 
     return (
         <View style={styles.container}>

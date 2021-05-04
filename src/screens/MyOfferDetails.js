@@ -47,8 +47,7 @@ const MyOfferDetails = ({ navigation, route }) => {
                 <View>
                     <ImageBackground
                         source={{
-                            uri:
-                                "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg",
+                            uri: route.params.offerData.offer.image_url,
                         }}
                         style={styles.backgroundImage}
                     >
@@ -379,8 +378,9 @@ const MyOfferDetails = ({ navigation, route }) => {
                         </View>
                     </ScrollView>
                 </View>
-            ) : null}
-        </View>
+            ) : null
+            }
+        </View >
     );
 };
 
