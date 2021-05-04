@@ -372,7 +372,7 @@ const AddShops = ({ navigation, route }) => {
                         locationData.latitude,
                         locationData.longitude
                     );
-                    console.log(addressData);
+                    // console.log(addressData);
 
                     latitude = locationData.latitude;
                     longitude = locationData.longitude;
