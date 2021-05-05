@@ -171,7 +171,7 @@ const OfferCard = (props) => {
             .then((response) => {
                 if (response.data.status === 200) {
                     getUserData(user);
-                    notifyMessage("Offer Added to save list.");
+                    notifyMessage("Offer Added to Wishlist.");
                 }
             });
     };
@@ -182,7 +182,7 @@ const OfferCard = (props) => {
             .then((response) => {
                 if (response.data.status === 200) {
                     getUserData(user);
-                    notifyMessage("Offer Deleted from save list.");
+                    notifyMessage("Offer Deleted from Wishlist.");
                 }
             });
     };
