@@ -46,23 +46,6 @@ const AddOffers = ({ navigation, route }) => {
         "https://img.freepik.com/free-vector/special-offer-sale-discount-banner_180786-46.jpg?size=626&ext=jpg";
 
     const { colors } = useTheme();
-    const pickerSelectStyles = {
-        inputIOS: {
-            fontSize: 18,
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            color: colors.text,
-            paddingRight: 30, // to ensure the text is never behind the icon
-        },
-        inputAndroid: {
-            fontSize: 18,
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            color: colors.text,
-            paddingRight: 30, // to ensure the text is never behind the icon
-        },
-        placeholder: { color: "#666666", fontSize: 18 },
-    };
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [shops, setShops] = useState([]);
@@ -85,6 +68,24 @@ const AddOffers = ({ navigation, route }) => {
         offer_id: "",
         uid: "",
     });
+
+    const pickerSelectStyles = {
+        inputIOS: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: offerDetails.shop_name ? colors.formIcon : "#666666",
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        inputAndroid: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: offerDetails.shop_name ? colors.formIcon : "#666666",
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        placeholder: { color: "#666666", fontSize: 18 },
+    };
 
     // date handlers:
 
@@ -471,7 +472,9 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: colors.text,
+                                        color: offerDetails.offer_title
+                                            ? colors.formIcon
+                                            : "#666666",
                                     },
                                 ]}
                                 autoCapitalize="none"
@@ -502,7 +505,9 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: colors.text,
+                                        color: offerDetails.details
+                                            ? colors.formIcon
+                                            : "#666666",
                                     },
                                 ]}
                                 autoCapitalize="none"
@@ -529,7 +534,7 @@ const AddOffers = ({ navigation, route }) => {
                                     styles.textInput,
                                     image
                                         ? {
-                                              color: colors.text,
+                                              color: colors.formIcon,
                                           }
                                         : {
                                               color: "#666666",
@@ -565,7 +570,9 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: colors.text,
+                                        color: startDate
+                                            ? colors.formIcon
+                                            : "#666666",
                                     },
                                 ]}
                                 onPress={showStartDatepicker}
@@ -606,7 +613,9 @@ const AddOffers = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: colors.text,
+                                        color: endDate
+                                            ? colors.formIcon
+                                            : "#666666",
                                     },
                                 ]}
                                 onPress={showEndDatepicker}
@@ -641,6 +650,12 @@ const AddOffers = ({ navigation, route }) => {
                             onChange={onEndDateSelect}
                         />
                     )}
+
+                    <Text style={{ color: colors.text }}>
+                        NOTE: You can set offer period to maximum 7 days only.
+                        After 7 days offer will be removed automatically from
+                        homescreen.
+                    </Text>
 
                     <TouchableOpacity
                         onPress={() => {
