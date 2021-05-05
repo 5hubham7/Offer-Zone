@@ -10,7 +10,7 @@ import {
     ImageBackground,
     ToastAndroid,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -44,25 +44,22 @@ const OfferCard = (props) => {
     const [offerCount, setOfferCount] = React.useState(2);
     const [upScroll, setUpScroll] = React.useState(false);
     const numberTest = (n) => {
-        var result = (n - Math.floor(n)) !== 0;
+        var result = n - Math.floor(n) !== 0;
 
-        if (result)
-            return 'decimal number';
-        else
-            return 'whole number';
-    }
+        if (result) return "decimal number";
+        else return "whole number";
+    };
 
     const showDistance = (distance) => {
-        let str = numberTest(distance)
-        if (str === 'decimal number') {
+        let str = numberTest(distance);
+        if (str === "decimal number") {
             var text = distance.toFixed(3).toString();
-            var parts = text.split('.');
-            return parts[1] + " Meter"
+            var parts = text.split(".");
+            return parts[1] + " Meter";
+        } else if (str === "whole number") {
+            return distance + " Km";
         }
-        else if (str === 'whole number') {
-            return distance + " Km"
-        }
-    }
+    };
 
     const _retrieveData = async () => {
         try {
@@ -190,9 +187,13 @@ const OfferCard = (props) => {
             });
     };
 
-    const share = (data) => {
+    const share = (offer_title, details, start_date, end_date) => {
         var shareOption = {
-            message: `This is ${data} offer`,
+            message: `Hey look at this amazing offer...${
+                "\n\nOffer Title: " + offer_title
+            }${"\nDetails: " + details}${"\nStart Date: " + start_date}${
+                "\nEnd Date: " + end_date
+            }${"\n\nDownload Offer Zone app to view this offer. "}`,
         };
         try {
             const ShareResponse = Share.share(shareOption);
@@ -225,21 +226,27 @@ const OfferCard = (props) => {
     const scrollRef = React.useRef();
 
     const onPressUpArrow = () => {
-        setUpScroll(false)
+        setUpScroll(false);
         scrollRef.current?.scrollTo({
             y: 0,
             animated: true,
         });
-    }
+    };
 
     const onDynamicScroll = (latitude, longitude, count) => {
-        //console.log(latitude, longitude, count) 
-        props.setScrollLoder(true)
+        //console.log(latitude, longitude, count)
+        props.setScrollLoder(true);
         props.getOffers(latitude, longitude, count);
-    }
+    };
 
-    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+    const isCloseToBottom = ({
+        layoutMeasurement,
+        contentOffset,
+        contentSize,
+    }) => {
+        return (
+            layoutMeasurement.height + contentOffset.y >= contentSize.height - 1
+        );
     };
 
     return (
@@ -301,22 +308,21 @@ const OfferCard = (props) => {
                                                 props.User
                                             );
                                         }}
-
                                         colors={["#fff", "red", "yellow"]}
                                         progressBackgroundColor={"#000"}
                                     />
                                 }
                                 ref={scrollRef}
                                 onScroll={({ nativeEvent }) => {
-                                    setUpScroll(false)
+                                    setUpScroll(false);
                                     if (isCloseToBottom(nativeEvent)) {
-                                        setUpScroll(true)
-                                        setOfferCount(offerCount + 2)
+                                        setUpScroll(true);
+                                        setOfferCount(offerCount + 2);
                                         onDynamicScroll(
                                             props.location.latitude,
                                             props.location.longitude,
                                             offerCount
-                                        )
+                                        );
                                     }
                                 }}
                                 //scrollEventThrottle={400}
@@ -327,7 +333,10 @@ const OfferCard = (props) => {
                                     <View
                                         style={[
                                             styles.cardView,
-                                            { backgroundColor: colors.offerCard },
+                                            {
+                                                backgroundColor:
+                                                    colors.offerCard,
+                                            },
                                         ]}
                                         elevation={3}
                                         key={index}
@@ -350,8 +359,7 @@ const OfferCard = (props) => {
                                             <View style={styles.cardImageView}>
                                                 <ImageBackground
                                                     source={{
-                                                        uri:
-                                                            element.image_url
+                                                        uri: element.image_url,
                                                     }}
                                                     style={styles.cardImage}
                                                 >
@@ -370,38 +378,52 @@ const OfferCard = (props) => {
                                                                 styles.cardImageTitle
                                                             }
                                                         >
-                                                            {element.offer_title}
+                                                            {
+                                                                element.offer_title
+                                                            }
                                                         </Text>
                                                     </LinearGradient>
                                                 </ImageBackground>
                                             </View>
-                                            {likeDoubleTap == element.offer_id ? (
+                                            {likeDoubleTap ==
+                                            element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
-                                                    style={{ alignItems: "center" }}
+                                                    style={{
+                                                        alignItems: "center",
+                                                    }}
                                                 >
                                                     <FontAwesome
                                                         name="heart"
                                                         color="#FF0000"
-                                                        size={windowHeight * 0.1}
+                                                        size={
+                                                            windowHeight * 0.1
+                                                        }
                                                         style={{
-                                                            position: "absolute",
+                                                            position:
+                                                                "absolute",
                                                             marginTop: -30,
                                                         }}
                                                     />
                                                 </Animatable.View>
                                             ) : null}
-                                            {offerDislike == element.offer_id ? (
+                                            {offerDislike ==
+                                            element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
-                                                    style={{ alignItems: "center" }}
+                                                    style={{
+                                                        alignItems: "center",
+                                                    }}
                                                 >
                                                     <FontAwesome5
                                                         name="heart-broken"
                                                         color="#FF0000"
-                                                        size={windowHeight * 0.1}
+                                                        size={
+                                                            windowHeight * 0.1
+                                                        }
                                                         style={{
-                                                            position: "absolute",
+                                                            position:
+                                                                "absolute",
                                                             marginTop: -30,
                                                         }}
                                                     />
@@ -431,14 +453,17 @@ const OfferCard = (props) => {
                                                 <Text
                                                     style={[
                                                         styles.cardSubtitle2,
-                                                        { color: colors.subtext },
+                                                        {
+                                                            color:
+                                                                colors.subtext,
+                                                        },
                                                     ]}
                                                 >
                                                     {dateFormatter(
                                                         element.post_time
                                                     )}{" "}
-                                                ago
-                                            </Text>
+                                                    ago
+                                                </Text>
                                                 <Text
                                                     style={[
                                                         styles.cardFooter,
@@ -449,9 +474,10 @@ const OfferCard = (props) => {
                                                         element.likes.length
                                                     )}
                                                     {"  "}
-                                                Likes  •  {
-                                                        showDistance(element.distance)
-                                                    }
+                                                    Likes •{" "}
+                                                    {showDistance(
+                                                        element.distance
+                                                    )}
                                                 </Text>
                                                 <View style={styles.line} />
                                                 <View
@@ -466,27 +492,32 @@ const OfferCard = (props) => {
                                                                 User
                                                             )
                                                                 ? disLike(
-                                                                    element.offer_id,
-                                                                    User,
-                                                                    props.location
-                                                                        .latitude,
-                                                                    props.location
-                                                                        .longitude,
-                                                                    offerCount
-                                                                )
+                                                                      element.offer_id,
+                                                                      User,
+                                                                      props
+                                                                          .location
+                                                                          .latitude,
+                                                                      props
+                                                                          .location
+                                                                          .longitude,
+                                                                      offerCount
+                                                                  )
                                                                 : like(
-                                                                    element.offer_id,
-                                                                    User,
-                                                                    props.location
-                                                                        .latitude,
-                                                                    props.location
-                                                                        .longitude,
-                                                                    offerCount
-                                                                );
+                                                                      element.offer_id,
+                                                                      User,
+                                                                      props
+                                                                          .location
+                                                                          .latitude,
+                                                                      props
+                                                                          .location
+                                                                          .longitude,
+                                                                      offerCount
+                                                                  );
                                                         }}
                                                         style={{
                                                             marginLeft:
-                                                                windowWidth * 0.03,
+                                                                windowWidth *
+                                                                0.03,
                                                         }}
                                                     >
                                                         {element.likes.includes(
@@ -528,17 +559,18 @@ const OfferCard = (props) => {
                                                                 element.offer_id
                                                             )
                                                                 ? removeOffer(
-                                                                    element.offer_id,
-                                                                    props.User
-                                                                )
+                                                                      element.offer_id,
+                                                                      props.User
+                                                                  )
                                                                 : saveOffer(
-                                                                    element.offer_id,
-                                                                    props.User
-                                                                );
+                                                                      element.offer_id,
+                                                                      props.User
+                                                                  );
                                                         }}
                                                         style={{
                                                             marginLeft:
-                                                                windowWidth * 0.09,
+                                                                windowWidth *
+                                                                0.09,
                                                         }}
                                                     >
                                                         {saveList.includes(
@@ -576,11 +608,17 @@ const OfferCard = (props) => {
 
                                                     <TouchableOpacity
                                                         onPress={() => {
-                                                            share("First");
+                                                            share(
+                                                                element.offer_title,
+                                                                element.details,
+                                                                element.start_date,
+                                                                element.end_date
+                                                            );
                                                         }}
                                                         style={{
                                                             marginLeft:
-                                                                windowWidth * 0.09,
+                                                                windowWidth *
+                                                                0.09,
                                                         }}
                                                     >
                                                         <View
@@ -604,27 +642,36 @@ const OfferCard = (props) => {
                                     </View>
                                 ))}
                                 <View>
-                                    {props.scrollLoder ?
+                                    {props.scrollLoder ? (
                                         <View style={styles.scrollLodaer}>
-                                            <ActivityIndicator size="large" color="red" />
+                                            <ActivityIndicator
+                                                size="large"
+                                                color="red"
+                                            />
                                         </View>
-                                        :
-                                        null
-                                    }
+                                    ) : null}
                                 </View>
                             </ScrollView>
 
-                            {upScroll ?
+                            {upScroll ? (
                                 <FAB
-                                    style={[styles.upButtonStyle, { backgroundColor: colors.headerColor }]}
+                                    style={[
+                                        styles.upButtonStyle,
+                                        { backgroundColor: colors.headerColor },
+                                    ]}
                                     icon={({ color, size }) => (
-                                        <AntDesign name="caretup" color={color} size={size} />
+                                        <AntDesign
+                                            name="caretup"
+                                            color={color}
+                                            size={size}
+                                        />
                                     )}
                                     animated="true"
-                                    onPress={() => { onPressUpArrow() }}
+                                    onPress={() => {
+                                        onPressUpArrow();
+                                    }}
                                 ></FAB>
-                                : null
-                            }
+                            ) : null}
                         </View>
                     )}
                 </View>
