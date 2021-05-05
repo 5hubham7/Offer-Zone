@@ -5,7 +5,7 @@ import {
     ScrollView,
     TouchableOpacity,
     ImageBackground,
-    StatusBar
+    StatusBar,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -50,8 +50,7 @@ const OfferDetails = ({ navigation, route }) => {
                 <View>
                     <ImageBackground
                         source={{
-                            uri:
-                                route.params.offerData.offer.image_url,
+                            uri: route.params.offerData.offer.image_url,
                         }}
                         style={styles.backgroundImage}
                     >
@@ -293,7 +292,10 @@ const OfferDetails = ({ navigation, route }) => {
                                         ]}
                                         lineBreakMode="tail"
                                     >
-                                        {route.params.offerData.shop_address} , {route.params.offerData.city} , {route.params.offerData.state} , {route.params.offerData.country}
+                                        {route.params.offerData.shop_address} ,{" "}
+                                        {route.params.offerData.city} ,{" "}
+                                        {route.params.offerData.state} ,{" "}
+                                        {route.params.offerData.country}
                                     </Text>
                                 </Text>
                             </View>
@@ -393,8 +395,11 @@ const OfferDetails = ({ navigation, route }) => {
                                     <MapView
                                         style={styles.map}
                                         region={{
-                                            latitude: route.params.offerData.latitude,
-                                            longitude: route.params.offerData.longitude,
+                                            latitude:
+                                                route.params.offerData.latitude,
+                                            longitude:
+                                                route.params.offerData
+                                                    .longitude,
                                             latitudeDelta: 0.0022,
                                             longitudeDelta: 0.0021,
                                         }}
@@ -408,8 +413,12 @@ const OfferDetails = ({ navigation, route }) => {
                                     >
                                         <Marker
                                             coordinate={{
-                                                latitude: route.params.offerData.latitude,
-                                                longitude: route.params.offerData.longitude,
+                                                latitude:
+                                                    route.params.offerData
+                                                        .latitude,
+                                                longitude:
+                                                    route.params.offerData
+                                                        .longitude,
                                             }}
                                             title={
                                                 route.params.offerData.shop_name

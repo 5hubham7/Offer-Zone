@@ -378,9 +378,8 @@ const MyOfferDetails = ({ navigation, route }) => {
                         </View>
                     </ScrollView>
                 </View>
-            ) : null
-            }
-        </View >
+            ) : null}
+        </View>
     );
 };
 

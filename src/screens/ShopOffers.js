@@ -20,7 +20,14 @@ const ShopOffers = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{ backgroundColor: colors.headerColor, height: 55, width: "100%", flexDirection: 'row' }}>
+            <View
+                style={{
+                    backgroundColor: colors.headerColor,
+                    height: 55,
+                    width: "100%",
+                    flexDirection: "row",
+                }}
+            >
                 <Icon
                     name="ios-menu"
                     size={30}
@@ -28,21 +35,22 @@ const ShopOffers = ({ navigation, route }) => {
                     color="#fff"
                     style={{
                         marginTop: 10,
-                        marginLeft: 4
+                        marginLeft: 4,
                     }}
                     onPress={() => {
-                        navigation.openDrawer()
+                        navigation.openDrawer();
                     }}
                 ></Icon>
-                <Text style={{
-                    fontWeight: "bold",
-                    width: windowWidth,
-                    fontSize: 20,
-                    color: "#fff",
-                    marginTop: 12,
-                    textAlign: 'center',
-                    marginLeft: -30
-                }}
+                <Text
+                    style={{
+                        fontWeight: "bold",
+                        width: windowWidth,
+                        fontSize: 20,
+                        color: "#fff",
+                        marginTop: 12,
+                        textAlign: "center",
+                        marginLeft: -30,
+                    }}
                 >
                     {route.params.shopName}
                 </Text>

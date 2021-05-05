@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from "react-native";
+
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
         elevation: 3,
-        width: windowWidth * 0.95
+        width: windowWidth * 0.95,
     },
     cardImageView: {
         height: windowHeight * 0.17,
@@ -51,22 +53,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         width: windowWidth * 0.6,
-        textAlign: 'left',
+        textAlign: "left",
         marginLeft: 10,
-        marginTop: 10
+        marginTop: 10,
     },
     cardSubtitle: {
         color: "#000",
         marginTop: 5,
         marginLeft: 10,
-        fontWeight: 'bold'
+        fontWeight: "bold",
     },
     cardSubtitle2: {
         fontSize: 14,
         marginTop: 5,
         color: "#595959",
-        marginLeft: 10
-
+        marginLeft: 10,
     },
     linearGradient: {
         flex: 1,

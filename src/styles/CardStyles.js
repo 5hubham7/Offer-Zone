@@ -75,19 +75,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     upButtonStyle: {
-        position: 'absolute',
+        position: "absolute",
         width: 50,
         height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
         right: 0,
         bottom: 70,
     },
     scrollLodaer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-
+        alignItems: "center",
+        justifyContent: "center",
+    },
 });
 
 export default styles;

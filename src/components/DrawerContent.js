@@ -108,9 +108,7 @@ export function DrawerContent(props) {
                             }}
                             pressColor="#006064"
                         />
-                        {userRole === "Customer" ? (
-                            null
-                        ) : (
+                        {userRole === "Customer" ? null : (
                             <View>
                                 <View>
                                     <DrawerItem

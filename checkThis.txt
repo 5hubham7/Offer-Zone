@@ -1,0 +1,35 @@
+COMMAND TO START EMULATOR:
+
+    emulator -avd Pixel_3a_API_30_x86
+
+
+PERMISSIONS TO ADD IN app.json FILE:
+
+    ACCESS_BACKGROUND_LOCATION
+
+
+COMMAND TO INSTALL NODE MODULES
+
+    npm i --lehacy-peer-deps
+
+
+CHANGES in node_modules:
+
+    1. DoubleClick :
+
+        add activeOpacity = 0.8
+
+    2. Navigate to your node_modules/react-native/Libraries/Core/Timers/JSTimers.js file.
+
+        Look for the variable MAX_TIMER_DURATION_MS
+
+        Change its value to 10000 * 1000
+
+
+HERE.COM API CREDENTIALS:
+
+    "user-email": "5hubham7.unofficial@gmail.com"
+    "api-token": "8QZAYfUEHJdL654B_t2mTEBtu8R2XzsZmvGJk5DI-lmuXdrQjaMFT5JPi7SOWoWm0i4"
+
+
+TODO THINGS:

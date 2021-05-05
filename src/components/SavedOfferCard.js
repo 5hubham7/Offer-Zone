@@ -206,7 +206,7 @@ const SavedOfferCard = (props) => {
                                 >
                                     Sorry, you don't have any offers in your
                                     Wishlist!
-                            </Text>
+                                </Text>
                                 <Image
                                     source={require("../../assets/sad_folder.png")}
                                     style={{ width: 200, height: 200 }}
@@ -232,7 +232,10 @@ const SavedOfferCard = (props) => {
                         >
                             {props.offerData.map((element, index) => (
                                 <View
-                                    style={[styles.cardView, { backgroundColor: colors.offerCard }]}
+                                    style={[
+                                        styles.cardView,
+                                        { backgroundColor: colors.offerCard },
+                                    ]}
                                     elevation={3}
                                     key={index}
                                 >
@@ -251,8 +254,7 @@ const SavedOfferCard = (props) => {
                                         <View style={styles.cardImageView}>
                                             <ImageBackground
                                                 source={{
-                                                    uri:
-                                                        element.image_url
+                                                    uri: element.image_url,
                                                 }}
                                                 style={styles.cardImage}
                                             >
@@ -310,26 +312,42 @@ const SavedOfferCard = (props) => {
                                         ) : null}
                                         <View style={styles.cardData}>
                                             <Text
-                                                style={[styles.cardTitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardTitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.offer_title}
                                             </Text>
                                             <Text
-                                                style={[styles.cardSubtitle, { color: colors.text }]}
+                                                style={[
+                                                    styles.cardSubtitle,
+                                                    { color: colors.text },
+                                                ]}
                                                 numberOfLines={1}
                                                 ellipsizeMode="tail"
                                             >
                                                 {element.details}
                                             </Text>
-                                            <Text style={[styles.cardSubtitle2, { color: colors.subtext }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardSubtitle2,
+                                                    { color: colors.subtext },
+                                                ]}
+                                            >
                                                 {dateFormatter(
                                                     element.post_time
                                                 )}{" "}
                                                 ago
                                             </Text>
-                                            <Text style={[styles.cardFooter, { color: colors.text }]}>
+                                            <Text
+                                                style={[
+                                                    styles.cardFooter,
+                                                    { color: colors.text },
+                                                ]}
+                                            >
                                                 {numberWithCommas(
                                                     element.likes.length
                                                 )}
@@ -349,13 +367,13 @@ const SavedOfferCard = (props) => {
                                                             User
                                                         )
                                                             ? disLike(
-                                                                element.offer_id,
-                                                                props.User
-                                                            )
+                                                                  element.offer_id,
+                                                                  props.User
+                                                              )
                                                             : like(
-                                                                element.offer_id,
-                                                                props.User
-                                                            );
+                                                                  element.offer_id,
+                                                                  props.User
+                                                              );
                                                     }}
                                                     style={{
                                                         marginLeft:
@@ -386,7 +404,9 @@ const SavedOfferCard = (props) => {
                                                         >
                                                             <FontAwesome
                                                                 name="heart-o"
-                                                                color={colors.icon}
+                                                                color={
+                                                                    colors.icon
+                                                                }
                                                                 size={25}
                                                             />
                                                         </View>
@@ -409,7 +429,9 @@ const SavedOfferCard = (props) => {
                                                     >
                                                         <FontAwesome5
                                                             name="share-alt"
-                                                            color={colors.shareIcon}
+                                                            color={
+                                                                colors.shareIcon
+                                                            }
                                                             size={25}
                                                         />
                                                     </View>

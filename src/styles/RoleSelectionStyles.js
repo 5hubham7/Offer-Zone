@@ -3,6 +3,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+
 const { height } = Dimensions.get("screen");
 
 const height_logo = height * 0.25;

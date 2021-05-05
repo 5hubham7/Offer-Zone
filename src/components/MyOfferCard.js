@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     ImageBackground,
     Image,
+    Share,
 } from "react-native";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -65,6 +66,21 @@ const MyOfferCard = (props) => {
                 stopLoading();
                 alert(error);
             });
+    };
+
+    const share = (offer_title, details, start_date, end_date) => {
+        var shareOption = {
+            message: `Hey look at this amazing offer...${
+                "\n\nOffer Title: " + offer_title
+            }${"\nDetails: " + details}${"\nStart Date: " + start_date}${
+                "\nEnd Date: " + end_date
+            }${"\n\nDownload Offer Zone app to view this offer. "}`,
+        };
+        try {
+            Share.share(shareOption);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
@@ -336,6 +352,14 @@ const MyOfferCard = (props) => {
                                                     style={{
                                                         marginLeft:
                                                             windowWidth * 0.11,
+                                                    }}
+                                                    onPress={() => {
+                                                        share(
+                                                            element.offer_title,
+                                                            element.details,
+                                                            element.start_date,
+                                                            element.end_date
+                                                        );
                                                     }}
                                                 >
                                                     <View

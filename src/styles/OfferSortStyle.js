@@ -1,6 +1,5 @@
-import { StyleSheet, Dimensions } from "react-native";
-const windowWidth = Dimensions.get("screen").width;
-const windowHeight = Dimensions.get("screen").height;
+import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
     header: {
         backgroundColor: "#006064",

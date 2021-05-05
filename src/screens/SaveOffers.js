@@ -24,7 +24,7 @@ const SaveOffers = ({ navigation }) => {
                 setUser(value);
                 getSaveOffers(value);
             }
-        } catch (error) { }
+        } catch (error) {}
     };
 
     const getSaveOffers = (user) => {
@@ -57,7 +57,7 @@ const SaveOffers = ({ navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", async () => {
-            _retrieveData()
+            _retrieveData();
         });
     }, [navigation]);
 
@@ -72,7 +72,6 @@ const SaveOffers = ({ navigation }) => {
         </View>
     );
 };
-
 
 const SaveOfferStackScreen = ({ navigation }) => {
     const { colors } = useTheme();
@@ -109,6 +108,6 @@ const SaveOfferStackScreen = ({ navigation }) => {
                 }}
             />
         </SaveOffersStack.Navigator>
-    )
+    );
 };
 export default SaveOfferStackScreen;
