@@ -49,6 +49,7 @@ const HomeScreen = ({ navigation }) => {
     const [isModalVisible1, setModalVisible1] = React.useState(true);
     const [emailVerified, setEmailVerified] = React.useState(true);
     const [scrollLoder, setScrollLoder] = React.useState(false);
+    const [scrollMethodCall, setScrollMethodCall] = React.useState(true)
     const [ToggelSearchAndOffers, setToggelSearchAndOffers] = React.useState(
         false
     );
@@ -127,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         //console.log("final result", result)
                         setScrollLoder(false);
                         setOfferLike({ ...result });
@@ -166,29 +167,6 @@ const HomeScreen = ({ navigation }) => {
         emailVerification();
     }, []);
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener("focus", async () => {
-    //         _retrieveData();
-    //         if (Platform.OS === "android" && !Constants.isDevice) {
-    //             setErrorMessage(
-    //                 "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
-    //             );
-    //             return;
-    //         }
-    //         let { status } = await Location.requestForegroundPermissionsAsync();
-    //         if (status !== "granted") {
-    //             alert("Permission to access location was denied!");
-    //             return;
-    //         }
-
-    //         await Location.getCurrentPositionAsync({}).then((data) => {
-    //             //console.log(data)
-    //             setLocation(data.coords);
-    //             getOffers(data.coords.latitude, data.coords.longitude, 2);
-    //         });
-    //     });
-    // }, [navigation]);
-
     String.prototype.toProperCase = function () {
         return this.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -213,6 +191,18 @@ const HomeScreen = ({ navigation }) => {
                 alert("Network Error ! Please restart application.");
             });
     };
+
+    const scrollRef = React.useRef();
+    const [upScroll, setUpScroll] = React.useState(false);
+
+    const onPressUpArrow = () => {
+        setUpScroll(false);
+        scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        });
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar
@@ -307,6 +297,12 @@ const HomeScreen = ({ navigation }) => {
                     User={User}
                     setScrollLoder={setScrollLoder}
                     scrollLoder={scrollLoder}
+                    scrollMethodCall={scrollMethodCall}
+                    onPressUpArrow={onPressUpArrow}
+                    scrollRef={scrollRef}
+                    setUpScroll={setUpScroll}
+                    upScroll={upScroll}
+
                 />
             )}
 
@@ -317,6 +313,8 @@ const HomeScreen = ({ navigation }) => {
                 setCurrentOffers={setCurrentOffers}
                 location={location}
                 getOffers={getOffers}
+                setScrollMethodCall={setScrollMethodCall}
+                onScrollUp={onPressUpArrow}
             />
             <OfferSort
                 state={isModalVisible1}
@@ -325,6 +323,8 @@ const HomeScreen = ({ navigation }) => {
                 setCurrentOffers={setCurrentOffers}
                 location={location}
                 getOffers={getOffers}
+                setScrollMethodCall={setScrollMethodCall}
+                onScrollUp={onPressUpArrow}
             />
 
             <Modal

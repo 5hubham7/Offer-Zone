@@ -13,6 +13,7 @@ import Modal from "react-native-modal";
 import styles, { pickerSelectStyles } from "../styles/OfferFilterStyle";
 import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
+import SortToggleButton from "./sortToggleButton";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
 import { useTheme } from "@react-navigation/native";
@@ -22,6 +23,7 @@ const windowHeight = Dimensions.get("screen").height;
 
 const offerFilter = (props) => {
     const { colors } = useTheme();
+    const [activeButton, setActiveButton] = React.useState(null);
 
     const [allCategories, setAllCategories] = React.useState([
         { label: "All", value: "All" },
@@ -45,6 +47,8 @@ const offerFilter = (props) => {
 
     const resetFilters = () => {
         setSelectCatogory("All");
+        props.setScrollMethodCall(true)
+        setActiveButton(null);
         setSelectCity("Current");
         setValue({
             distance: 5,
@@ -86,6 +90,7 @@ const offerFilter = (props) => {
     }, []);
 
     const onApplayPress = () => {
+        props.setScrollMethodCall(false)
         filterParameter = {
             catogory: selectCatogory,
             city: selectCity,
@@ -107,6 +112,96 @@ const offerFilter = (props) => {
                 }
             });
     };
+
+    const getDateInFormat = (d) => {
+        var dt = new Date(d);
+        var dd = dt.getDate();
+        var mm = dt.getMonth() + 1;
+        var yyyy = dt.getFullYear();
+        if (dd < 10) {
+            dd = "0" + dd;
+        }
+        if (mm < 10) {
+            mm = "0" + mm;
+        }
+        return yyyy + "-" + mm + "-" + dd;
+    }
+
+    /* get date array between sdate and end date */
+
+    var getDateArray = function (start, end) {
+        var arr = new Array(),
+            dt = new Date(start);
+
+        while (dt <= end) {
+            arr.push(getDateInFormat(new Date(dt)));
+            dt.setDate(dt.getDate() + 1);
+        }
+        return arr;
+    };
+
+    const onGoingSort = () => {
+        props.setScrollMethodCall(false)
+        var onGoingOffers = [];
+        var today = new Date();
+        props.currentOffers.forEach((element) => {
+            var start_date = new Date(element.start_date);
+            var end_date = new Date(element.end_date);
+            if (
+                getDateArray(start_date, end_date).includes(
+                    getDateInFormat(today)
+                )
+            )
+                onGoingOffers.push(element);
+        });
+        if (onGoingOffers.length > 0) props.setCurrentOffers(onGoingOffers);
+        else props.setCurrentOffers("No Offers");
+        props.onScrollUp()
+        props.toggleModal();
+    };
+
+    const exporingSoonSort = () => {
+        props.setScrollMethodCall(false)
+        var exporingSoonOffers = [];
+        var curr = new Date();
+        var today = new Date();
+        var lastday = new Date(
+            today.setDate(today.getDate() - today.getDay() + 6)
+        );
+        let currentWeek = getDateArray(curr, lastday);
+        props.currentOffers.forEach((element) => {
+            var end_date = new Date(element.end_date);
+            if (currentWeek.includes(getDateInFormat(end_date)))
+                exporingSoonOffers.push(element);
+        });
+        if (exporingSoonOffers.length > 0)
+            props.setCurrentOffers(exporingSoonOffers);
+        else props.setCurrentOffers("No Offers");
+        props.onScrollUp()
+        props.toggleModal();
+    };
+
+    const todaySort = () => {
+        props.setScrollMethodCall(false)
+        var todaysOffers = [];
+        var today = new Date();
+        props.currentOffers.forEach((element) => {
+            var start_date = new Date(element.start_date);
+            var end_date = new Date(element.end_date);
+            if (
+                getDateArray(start_date, end_date).includes(
+                    getDateInFormat(today)
+                )
+            )
+                todaysOffers.push(element);
+        });
+        if (todaysOffers.length > 0) props.setCurrentOffers(todaysOffers);
+        else props.setCurrentOffers("No Offers");
+        props.onScrollUp()
+        props.toggleModal();
+    };
+
+
     return (
         <Modal
             isVisible={!props.state}
@@ -246,6 +341,61 @@ const offerFilter = (props) => {
                         <Text style={styles.colorGrey}>
                             {value.maxDistance} km
                         </Text>
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={[styles.subTitle, { color: colors.text }]}>
+                        Offers
+                    </Text>
+                    <View
+                        style={{
+                            width: "90%",
+                            marginLeft: 20,
+                            flexWrap: "wrap",
+                            flexDirection: "row",
+                        }}
+                    >
+                        <SortToggleButton
+                            value="Today"
+                            status={
+                                activeButton === "Today"
+                                    ? "checked"
+                                    : "unchecked"
+                            }
+                            onPress={(value) => {
+                                setActiveButton("Today");
+                                todaySort();
+                            }}
+                        />
+
+                        <SortToggleButton
+                            value="On Going"
+                            status={
+                                activeButton === "On Going"
+                                    ? "checked"
+                                    : "unchecked"
+                            }
+                            onPress={(value) => {
+                                setActiveButton("On Going");
+                                onGoingSort();
+                            }}
+                        />
+
+                        <SortToggleButton
+                            value="Expiring Soon"
+                            status={
+                                activeButton === "Expiring Soon"
+                                    ? "checked"
+                                    : "unchecked"
+                            }
+                            onPress={(value) => {
+                                setActiveButton("Expiring Soon");
+                                exporingSoonSort();
+                            }}
+                        />
+
+
                     </View>
                 </View>
 
