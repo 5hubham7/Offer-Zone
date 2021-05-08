@@ -24,6 +24,9 @@ const OfferDetails = ({ navigation, route }) => {
     const { colors } = useTheme();
     const [HideDetails, setHideDetails] = React.useState(false);
     const [HideShopDetails, setHideShopDetails] = React.useState(false);
+    const [state, setstate] = React.useState({
+        marginBottom: 0
+    })
     const dateFormatter = (postdate) => {
         //console.log(route.params.offerData)
         const today = new Date();
@@ -43,6 +46,10 @@ const OfferDetails = ({ navigation, route }) => {
         else if (hours >= 0 && days >= 1) return `${days} days ${hours} hrs`;
         else return `${seconds} sec`;
     };
+
+    React.useEffect(() => {
+        console.log(route)
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -393,32 +400,36 @@ const OfferDetails = ({ navigation, route }) => {
                             <View style={{ alignItems: "center" }}>
                                 <View style={styles.mapView}>
                                     <MapView
-                                        style={styles.map}
+                                        style={[styles.map, state]}
                                         region={{
                                             latitude:
-                                                route.params.offerData.latitude,
+                                                parseFloat(route.params.offerData.latitude),
                                             longitude:
-                                                route.params.offerData
-                                                    .longitude,
+                                                parseFloat(route.params.offerData.longitude),
                                             latitudeDelta: 0.0022,
                                             longitudeDelta: 0.0021,
                                         }}
-                                        followsUserLocation={true}
+                                        onMapReady={() => {
+                                            setstate({
+                                                marginBottom: 2
+                                            })
+                                        }}
                                         zoomEnabled={true}
-                                        pitchEnabled={true}
                                         showsCompass={true}
                                         showsBuildings={true}
                                         showsTraffic={true}
+                                        showsIndoorLevelPicker={true}
+                                        showsMyLocationButton={true}
+                                        showsUserLocation={true}
                                         showsIndoors={true}
+                                        followsUserLocation={true}
                                     >
                                         <Marker
                                             coordinate={{
                                                 latitude:
-                                                    route.params.offerData
-                                                        .latitude,
+                                                    parseFloat(route.params.offerData.latitude),
                                                 longitude:
-                                                    route.params.offerData
-                                                        .longitude,
+                                                    parseFloat(route.params.offerData.longitude),
                                             }}
                                             title={
                                                 route.params.offerData.shop_name
@@ -428,18 +439,7 @@ const OfferDetails = ({ navigation, route }) => {
                                                     .offer_title
                                             }
                                         />
-                                        <Marker
-                                            coordinate={{
-                                                latitude:
-                                                    route.params.location
-                                                        .latitude,
-                                                longitude:
-                                                    route.params.location
-                                                        .longitude,
-                                            }}
-                                            title="You"
-                                            image={require("../../assets/user.png")}
-                                        />
+
                                     </MapView>
                                 </View>
                             </View>

@@ -44,7 +44,7 @@ const OfferCard = (props) => {
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [User, setUser] = React.useState(null);
     const [offerCount, setOfferCount] = React.useState(2);
-    const [upScroll, setUpScroll] = React.useState(false);
+
     const numberTest = (n) => {
         var result = n - Math.floor(n) !== 0;
 
@@ -57,7 +57,10 @@ const OfferCard = (props) => {
         if (str === "decimal number") {
             var text = distance.toFixed(3).toString();
             var parts = text.split(".");
-            return parts[1] + " Meter";
+            if (parts[0] === "0")
+                return parts[1] + " Meter";
+            else
+                return text + " Km";
         } else if (str === "whole number") {
             return distance + " Km";
         }
@@ -87,7 +90,6 @@ const OfferCard = (props) => {
 
     useEffect(() => {
         _retrieveData().then((response) => {
-            //console.log(response)
             setUser(response);
             getUserData(response);
         });
@@ -191,11 +193,9 @@ const OfferCard = (props) => {
 
     const share = (offer_title, details, start_date, end_date) => {
         var shareOption = {
-            message: `Hey look at this amazing offer...${
-                "\n\nOffer Title: " + offer_title
-            }${"\nDetails: " + details}${"\nStart Date: " + start_date}${
-                "\nEnd Date: " + end_date
-            }${"\n\nDownload Offer Zone app to view this offer. "}`,
+            message: `Hey look at this amazing offer...${"\n\nOffer Title: " + offer_title
+                }${"\nDetails: " + details}${"\nStart Date: " + start_date}${"\nEnd Date: " + end_date
+                }${"\n\nDownload Offer Zone app to view this offer. "}`,
         };
         try {
             Share.share(shareOption);
@@ -225,15 +225,7 @@ const OfferCard = (props) => {
             });
     };
 
-    const scrollRef = React.useRef();
 
-    const onPressUpArrow = () => {
-        setUpScroll(false);
-        scrollRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-        });
-    };
 
     const onDynamicScroll = (latitude, longitude, count) => {
         //console.log(latitude, longitude, count)
@@ -314,17 +306,19 @@ const OfferCard = (props) => {
                                         progressBackgroundColor={"#000"}
                                     />
                                 }
-                                ref={scrollRef}
+                                ref={props.scrollRef}
                                 onScroll={({ nativeEvent }) => {
-                                    setUpScroll(false);
-                                    if (isCloseToBottom(nativeEvent)) {
-                                        setUpScroll(true);
-                                        setOfferCount(offerCount + 2);
-                                        onDynamicScroll(
-                                            props.location.latitude,
-                                            props.location.longitude,
-                                            offerCount
-                                        );
+                                    if (props.scrollMethodCall) {
+                                        props.setUpScroll(false);
+                                        if (isCloseToBottom(nativeEvent)) {
+                                            props.setUpScroll(true);
+                                            setOfferCount(offerCount + 2);
+                                            onDynamicScroll(
+                                                props.location.latitude,
+                                                props.location.longitude,
+                                                offerCount
+                                            );
+                                        }
                                     }
                                 }}
                                 //scrollEventThrottle={400}
@@ -388,7 +382,7 @@ const OfferCard = (props) => {
                                                 </ImageBackground>
                                             </View>
                                             {likeDoubleTap ==
-                                            element.offer_id ? (
+                                                element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
                                                     style={{
@@ -410,7 +404,7 @@ const OfferCard = (props) => {
                                                 </Animatable.View>
                                             ) : null}
                                             {offerDislike ==
-                                            element.offer_id ? (
+                                                element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
                                                     style={{
@@ -494,27 +488,27 @@ const OfferCard = (props) => {
                                                                 User
                                                             )
                                                                 ? disLike(
-                                                                      element.offer_id,
-                                                                      User,
-                                                                      props
-                                                                          .location
-                                                                          .latitude,
-                                                                      props
-                                                                          .location
-                                                                          .longitude,
-                                                                      offerCount
-                                                                  )
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props
+                                                                        .location
+                                                                        .latitude,
+                                                                    props
+                                                                        .location
+                                                                        .longitude,
+                                                                    offerCount
+                                                                )
                                                                 : like(
-                                                                      element.offer_id,
-                                                                      User,
-                                                                      props
-                                                                          .location
-                                                                          .latitude,
-                                                                      props
-                                                                          .location
-                                                                          .longitude,
-                                                                      offerCount
-                                                                  );
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props
+                                                                        .location
+                                                                        .latitude,
+                                                                    props
+                                                                        .location
+                                                                        .longitude,
+                                                                    offerCount
+                                                                );
                                                         }}
                                                         style={{
                                                             marginLeft:
@@ -561,13 +555,13 @@ const OfferCard = (props) => {
                                                                 element.offer_id
                                                             )
                                                                 ? removeOffer(
-                                                                      element.offer_id,
-                                                                      props.User
-                                                                  )
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                )
                                                                 : saveOffer(
-                                                                      element.offer_id,
-                                                                      props.User
-                                                                  );
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                );
                                                         }}
                                                         style={{
                                                             marginLeft:
@@ -655,7 +649,7 @@ const OfferCard = (props) => {
                                 </View>
                             </ScrollView>
 
-                            {upScroll ? (
+                            {props.upScroll ? (
                                 <FAB
                                     style={[
                                         styles.upButtonStyle,
@@ -670,7 +664,7 @@ const OfferCard = (props) => {
                                     )}
                                     animated="true"
                                     onPress={() => {
-                                        onPressUpArrow();
+                                        props.onPressUpArrow();
                                     }}
                                 ></FAB>
                             ) : null}
