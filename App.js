@@ -10,7 +10,6 @@ import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
     DarkTheme as NavigationDarkTheme,
-    useTheme,
 } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -20,6 +19,7 @@ import {
     DefaultTheme as PaperDefaultTheme,
     DarkTheme as PaperDarkTheme,
 } from "react-native-paper";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerContent } from "./src/components/DrawerContent";
 import NoInternetError from "./src/components/NoInternetError";
@@ -34,6 +34,7 @@ import MyOffers from "./src/screens/MyOffers";
 import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
 import AddOffers from "./src/screens/AddOffers";
+import UpdateOffers from "./src/screens/UpdateOffers";
 import AddShops from "./src/screens/AddShops";
 import ShopOffers from "./src/screens/ShopOffers";
 
@@ -49,8 +50,6 @@ const App = () => {
     const [Network, setNetwork] = React.useState();
 
     const unsubscribe = NetInfo.addEventListener((state) => {
-        //console.log('Connection type', state.type);
-        //console.log('Is connected?', state.isConnected);
         return state.isConnected;
     });
 
@@ -249,6 +248,10 @@ const App = () => {
                             <Drawer.Screen
                                 name="AddOffers"
                                 component={AddOffers}
+                            />
+                            <Drawer.Screen
+                                name="UpdateOffers"
+                                component={UpdateOffers}
                             />
                             <Drawer.Screen name="MyShops" component={MyShops} />
                             <Drawer.Screen

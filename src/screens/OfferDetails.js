@@ -24,6 +24,7 @@ const OfferDetails = ({ navigation, route }) => {
     const { colors } = useTheme();
     const [HideDetails, setHideDetails] = React.useState(false);
     const [HideShopDetails, setHideShopDetails] = React.useState(false);
+
     const dateFormatter = (postdate) => {
         //console.log(route.params.offerData)
         const today = new Date();

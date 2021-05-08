@@ -14,7 +14,6 @@ import {
 import * as Animatable from "react-native-animatable";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import * as firebase from "firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
@@ -25,19 +24,6 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { AuthContext } from "../components/context/Store";
 import styles from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
-
-try {
-    firebase.initializeApp({
-        apiKey: "AIzaSyCzx4aZ64zF4Ocicz_fluGCb5zrLwrOtqU",
-        authDomain: "offeer-zone.firebaseapp.com",
-        databaseURL: "https://offeer-zone-default-rtdb.firebaseio.com",
-        projectId: "offeer-zone",
-        storageBucket: "offeer-zone.appspot.com",
-        messagingSenderId: "946405576296",
-        appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
-        measurementId: "G-J3L3F4N1BX",
-    });
-} catch (err) {}
 
 const AddShops = ({ navigation, route }) => {
     const { colors } = useTheme();

@@ -21,25 +21,12 @@ import { useTheme } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Entypo from "react-native-vector-icons/Entypo";
 import * as ImageManipulator from "expo-image-manipulator";
-import * as firebase from "firebase";
 import axios from "axios";
 
 import { AuthContext } from "../components/context/Store";
 import styles from "../styles/AddOffersStyles";
 import AxiosURL from "../helper/AxiosURL";
-
-try {
-    firebase.initializeApp({
-        apiKey: "AIzaSyCzx4aZ64zF4Ocicz_fluGCb5zrLwrOtqU",
-        authDomain: "offeer-zone.firebaseapp.com",
-        databaseURL: "https://offeer-zone-default-rtdb.firebaseio.com",
-        projectId: "offeer-zone",
-        storageBucket: "offeer-zone.appspot.com",
-        messagingSenderId: "946405576296",
-        appId: "1:946405576296:web:801d05fd337ac8e4f3b5dd",
-        measurementId: "G-J3L3F4N1BX",
-    });
-} catch (err) {}
+import { firebase } from "../helper/FirebaseConfig";
 
 const AddOffers = ({ navigation, route }) => {
     const defaultImage =
