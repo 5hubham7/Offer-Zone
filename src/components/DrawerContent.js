@@ -34,6 +34,9 @@ export function DrawerContent(props) {
                 if (response.data.status === 200) {
                     setUserRole(response.data.response.role);
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
             });
     };
     React.useEffect(() => {

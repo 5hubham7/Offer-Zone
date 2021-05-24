@@ -24,7 +24,7 @@ const SaveOffers = ({ navigation }) => {
                 setUser(value);
                 getSaveOffers(value);
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const getSaveOffers = (user) => {
@@ -47,6 +47,9 @@ const SaveOffers = ({ navigation }) => {
                     } else {
                         setCurrentOffers("No Offers");
                     }
+                }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
                 }
             });
     };

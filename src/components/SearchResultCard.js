@@ -64,6 +64,10 @@ const SearchResultCard = (props) => {
                         offerData: response.data.response,
                     });
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             })
             .catch((error) => {
                 stopLoading();

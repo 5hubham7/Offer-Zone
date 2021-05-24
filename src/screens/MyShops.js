@@ -47,11 +47,15 @@ const MyShops = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                     } else {
                         setShopData("No Shops");
                     }
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
+
             })
             .catch((error) => {
                 console.log(error);

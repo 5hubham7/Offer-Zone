@@ -280,6 +280,9 @@ const UpdateShops = ({ navigation, route }) => {
                         setShops([]);
                     }
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
                 setShops(data);
             })
             .catch((error) => {

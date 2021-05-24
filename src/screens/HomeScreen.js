@@ -136,6 +136,10 @@ const HomeScreen = ({ navigation }) => {
                         setCurrentOffers("No Offers");
                     }
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
+
             })
             .catch((err) => {
                 alert("Network Error ! Please restart application.");
@@ -185,6 +189,9 @@ const HomeScreen = ({ navigation }) => {
                     if (response.data.response.length > 0)
                         setSearchQueryData(response.data.response);
                     else setSearchQueryData("No data");
+                }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
                 }
             })
             .catch((err) => {

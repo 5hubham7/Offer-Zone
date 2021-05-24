@@ -115,6 +115,10 @@ const SavedOfferCard = (props) => {
                 if (response.data.status === 200) {
                     props.getSaveOffers(cust_id);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -127,6 +131,10 @@ const SavedOfferCard = (props) => {
                 if (response.data.status === 200) {
                     props.getSaveOffers(cust_id);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -138,6 +146,10 @@ const SavedOfferCard = (props) => {
                     notifyMessage("Offer Deleted from save list.");
                     props.getSaveOffers(user);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -166,6 +178,10 @@ const SavedOfferCard = (props) => {
                         location: location,
                     });
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             })
             .catch((error) => {
                 stopLoading();
@@ -367,13 +383,13 @@ const SavedOfferCard = (props) => {
                                                             User
                                                         )
                                                             ? disLike(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              )
+                                                                element.offer_id,
+                                                                props.User
+                                                            )
                                                             : like(
-                                                                  element.offer_id,
-                                                                  props.User
-                                                              );
+                                                                element.offer_id,
+                                                                props.User
+                                                            );
                                                     }}
                                                     style={{
                                                         marginLeft:

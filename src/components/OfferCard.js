@@ -140,6 +140,10 @@ const OfferCard = (props) => {
                 if (response.data.status === 200) {
                     props.getOffers(latitude, longitude, offerCount);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -152,6 +156,10 @@ const OfferCard = (props) => {
                 if (response.data.status === 200) {
                     setSaveList(response.data.response.saveList);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -164,6 +172,10 @@ const OfferCard = (props) => {
                 if (response.data.status === 200) {
                     props.getOffers(latitude, longitude, offerCount);
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -175,6 +187,10 @@ const OfferCard = (props) => {
                     getUserData(user);
                     notifyMessage("Offer Added to the Wishlist!");
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
@@ -186,16 +202,18 @@ const OfferCard = (props) => {
                     getUserData(user);
                     notifyMessage("Offer Deleted from the Wishlist!");
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 
     const share = (offer_title, details, start_date, end_date) => {
         var shareOption = {
-            message: `Hey look at this amazing offer...${
-                "\n\nOffer Title: " + offer_title
-            }${"\nDetails: " + details}${"\nStart Date: " + start_date}${
-                "\nEnd Date: " + end_date
-            }${"\n\nDownload Offer Zone app to view this offer. "}`,
+            message: `Hey look at this amazing offer...${"\n\nOffer Title: " + offer_title
+                }${"\nDetails: " + details}${"\nStart Date: " + start_date}${"\nEnd Date: " + end_date
+                }${"\n\nDownload Offer Zone app to view this offer. "}`,
         };
         try {
             Share.share(shareOption);
@@ -218,6 +236,10 @@ const OfferCard = (props) => {
                         location: props.location,
                     });
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             })
             .catch((error) => {
                 stopLoading();
@@ -380,7 +402,7 @@ const OfferCard = (props) => {
                                                 </ImageBackground>
                                             </View>
                                             {likeDoubleTap ==
-                                            element.offer_id ? (
+                                                element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
                                                     style={{
@@ -402,7 +424,7 @@ const OfferCard = (props) => {
                                                 </Animatable.View>
                                             ) : null}
                                             {offerDislike ==
-                                            element.offer_id ? (
+                                                element.offer_id ? (
                                                 <Animatable.View
                                                     animation="bounceIn"
                                                     style={{
@@ -485,27 +507,27 @@ const OfferCard = (props) => {
                                                                 User
                                                             )
                                                                 ? disLike(
-                                                                      element.offer_id,
-                                                                      User,
-                                                                      props
-                                                                          .location
-                                                                          .latitude,
-                                                                      props
-                                                                          .location
-                                                                          .longitude,
-                                                                      offerCount
-                                                                  )
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props
+                                                                        .location
+                                                                        .latitude,
+                                                                    props
+                                                                        .location
+                                                                        .longitude,
+                                                                    offerCount
+                                                                )
                                                                 : like(
-                                                                      element.offer_id,
-                                                                      User,
-                                                                      props
-                                                                          .location
-                                                                          .latitude,
-                                                                      props
-                                                                          .location
-                                                                          .longitude,
-                                                                      offerCount
-                                                                  );
+                                                                    element.offer_id,
+                                                                    User,
+                                                                    props
+                                                                        .location
+                                                                        .latitude,
+                                                                    props
+                                                                        .location
+                                                                        .longitude,
+                                                                    offerCount
+                                                                );
                                                         }}
                                                         style={{
                                                             marginLeft:
@@ -552,13 +574,13 @@ const OfferCard = (props) => {
                                                                 element.offer_id
                                                             )
                                                                 ? removeOffer(
-                                                                      element.offer_id,
-                                                                      props.User
-                                                                  )
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                )
                                                                 : saveOffer(
-                                                                      element.offer_id,
-                                                                      props.User
-                                                                  );
+                                                                    element.offer_id,
+                                                                    props.User
+                                                                );
                                                         }}
                                                         style={{
                                                             marginLeft:

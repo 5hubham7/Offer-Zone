@@ -62,12 +62,16 @@ const MyOffers = ({ navigation }) => {
                             result[data[index]] = field;
                             return result;
                         },
-                        {});
+                            {});
                         setOfferLike({ ...result });
                     } else {
                         setOfferData("No Offers");
                     }
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
+
             })
             .catch((error) => {
                 console.log(error);

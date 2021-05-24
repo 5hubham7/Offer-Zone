@@ -70,6 +70,10 @@ const offerFilter = (props) => {
                         allCategories.push({ label: element, value: element });
                 });
             }
+            else {
+                alert("Something went wrong,please try after some time.")
+            }
+
         });
     };
 
@@ -81,6 +85,10 @@ const offerFilter = (props) => {
                         allCities.push({ label: element, value: element });
                 });
             }
+            else {
+                alert("Something went wrong,please try after some time.")
+            }
+
         });
     };
 
@@ -110,6 +118,10 @@ const offerFilter = (props) => {
                         props.toggleModal();
                     }
                 }
+                else {
+                    alert("Something went wrong,please try after some time.")
+                }
+
             });
     };
 

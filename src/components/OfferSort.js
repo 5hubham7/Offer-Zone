@@ -11,8 +11,6 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from "react-native-modal";
 import styles from "../styles/OfferSortStyle";
-import axios from "axios";
-import axiosURL from "../helper/AxiosURL";
 import SortToggleButton from "./SortToggleButton";
 import { useTheme } from "@react-navigation/native";
 

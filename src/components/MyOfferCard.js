@@ -46,7 +46,7 @@ const MyOfferCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (offer_id) => {
@@ -61,6 +61,9 @@ const MyOfferCard = (props) => {
                         offerData: response.data.response,
                     });
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
             })
             .catch((error) => {
                 stopLoading();
@@ -70,11 +73,9 @@ const MyOfferCard = (props) => {
 
     const share = (offer_title, details, start_date, end_date) => {
         var shareOption = {
-            message: `Hey look at this amazing offer...${
-                "\n\nOffer Title: " + offer_title
-            }${"\nDetails: " + details}${"\nStart Date: " + start_date}${
-                "\nEnd Date: " + end_date
-            }${"\n\nDownload Offer Zone app to view this offer. "}`,
+            message: `Hey look at this amazing offer...${"\n\nOffer Title: " + offer_title
+                }${"\nDetails: " + details}${"\nStart Date: " + start_date}${"\nEnd Date: " + end_date
+                }${"\n\nDownload Offer Zone app to view this offer. "}`,
         };
         try {
             Share.share(shareOption);

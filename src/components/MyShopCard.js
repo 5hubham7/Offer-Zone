@@ -35,7 +35,7 @@ const MyShopsCard = (props) => {
             if (value !== null) {
                 return value;
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const onSingleTap = (shop_id, shop_name) => {
@@ -60,6 +60,10 @@ const MyShopsCard = (props) => {
                         });
                     }
                 }
+                else {
+                    alert("Offer Zone server is down,you can try after some time.")
+                }
+
             })
             .catch((error) => {
                 console.log(error);
