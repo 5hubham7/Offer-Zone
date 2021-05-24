@@ -310,8 +310,8 @@ const OTPVerification = ({ navigation, route }) => {
                             firebaseConfig={firebaseConfig}
                         />
                         <View style={{ flexDirection: "row" }}>
-                            <Text style={styles.text_footer}>
-                                Please enter the verification code sent to{"  "}
+                            <Text style={styles.footerText}>
+                                Please enter the verification code sent to{" "}
                                 <Text style={{ color: "red" }}>
                                     {route.params.userData.phone}
                                 </Text>
@@ -339,7 +339,7 @@ const OTPVerification = ({ navigation, route }) => {
                         </View>
                         <View style={{ alignItems: "center", marginTop: 10 }}>
                             <View style={{ flexDirection: "row" }}>
-                                <Text>Don't recive the OTP ?</Text>
+                                <Text>Don't receive the OTP?</Text>
                                 {resendButtonDisabledTime > 0 ? (
                                     <TimerText
                                         text={" RESEND OTP in"}
