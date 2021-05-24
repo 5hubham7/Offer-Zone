@@ -50,9 +50,8 @@ const OTPVerification = ({ navigation, route }) => {
         RESEND_OTP_TIME_LIMIT
     );
 
-    const { startLoading, stopLoading, signIn, signUp } = React.useContext(
-        AuthContext
-    );
+    const { startLoading, stopLoading, signIn, signUp } =
+        React.useContext(AuthContext);
 
     // useEffect(() => {
     //     console.log("OTPVerification", route)
@@ -99,10 +98,11 @@ const OTPVerification = ({ navigation, route }) => {
             verifyOTP: async (verificationCode) => {
                 //console.log("verificationCode", verificationCode)
                 try {
-                    const credential = firebase.auth.PhoneAuthProvider.credential(
-                        verificationId,
-                        verificationCode
-                    );
+                    const credential =
+                        firebase.auth.PhoneAuthProvider.credential(
+                            verificationId,
+                            verificationCode
+                        );
                     const user = await firebase
                         .auth()
                         .signInWithCredential(credential);
@@ -124,10 +124,11 @@ const OTPVerification = ({ navigation, route }) => {
         if (route.params.method === "Signup") {
             if (route.params.SignUpViaMethod === "Google") {
                 try {
-                    const credential = firebase.auth.PhoneAuthProvider.credential(
-                        verificationId,
-                        verificationCode
-                    );
+                    const credential =
+                        firebase.auth.PhoneAuthProvider.credential(
+                            verificationId,
+                            verificationCode
+                        );
                     await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
@@ -140,10 +141,11 @@ const OTPVerification = ({ navigation, route }) => {
                         .onAuthStateChanged((firebaseUser) => {
                             unsubscribe();
                             // Build Firebase credential with the Google ID token.
-                            var credential = firebase.auth.GoogleAuthProvider.credential(
-                                googleUser.idToken,
-                                googleUser.accessToken
-                            );
+                            var credential =
+                                firebase.auth.GoogleAuthProvider.credential(
+                                    googleUser.idToken,
+                                    googleUser.accessToken
+                                );
 
                             // Sign in with credential from the Google user.
                             firebase
@@ -180,10 +182,11 @@ const OTPVerification = ({ navigation, route }) => {
                 }
             } else if (route.params.SignUpViaMethod === "Email") {
                 try {
-                    const credential = firebase.auth.PhoneAuthProvider.credential(
-                        verificationId,
-                        verificationCode
-                    );
+                    const credential =
+                        firebase.auth.PhoneAuthProvider.credential(
+                            verificationId,
+                            verificationCode
+                        );
                     await firebase.auth().signInWithCredential(credential);
 
                     firebase.auth().signOut();
@@ -288,9 +291,7 @@ const OTPVerification = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <View style={styles.header}>
                     <Animatable.View animation="fadeInDownBig" duration={1500}>
-                        <Text style={styles.text_header}>
-                            Verification Code
-                        </Text>
+                        <Text style={styles.headerText}>Verification Code</Text>
                     </Animatable.View>
                 </View>
                 <Animatable.View

@@ -144,7 +144,12 @@ const Signup = ({ navigation }) => {
                                 </LinearGradient>
                             </TouchableOpacity>
                         </View>
-                        <View style={[styles.loginText, { marginLeft: 20 }]}>
+                        <View
+                            style={[
+                                styles.loginText,
+                                { marginLeft: 20, marginTop: 15 },
+                            ]}
+                        >
                             <Text style={styles.loginTextColor}>
                                 Already have an account?
                             </Text>
@@ -157,7 +162,7 @@ const Signup = ({ navigation }) => {
                                         { fontWeight: "bold", width: 100 },
                                     ]}
                                 >
-                                    {"  "}
+                                    {" "}
                                     Log In
                                 </Text>
                             </TouchableOpacity>

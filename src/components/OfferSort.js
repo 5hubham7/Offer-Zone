@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import styles from "../styles/OfferSortStyle";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
-import SortToggleButton from "./sortToggleButton";
+import SortToggleButton from "./SortToggleButton";
 import { useTheme } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("screen").width;
@@ -39,102 +39,101 @@ const offerSort = (props) => {
     });
 
     const distanceSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.distance > b.distance ? 1 : -1
         );
         props.setCurrentOffers(sortOffers);
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const distanceSortReverse = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.distance > b.distance ? 1 : -1
         );
         props.setCurrentOffers(sortOffers.reverse());
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const startDateSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.start_date > b.start_date ? 1 : -1
         );
         props.setCurrentOffers(sortOffers);
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const startDateSortReverse = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.start_date > b.start_date ? 1 : -1
         );
         props.setCurrentOffers(sortOffers.reverse());
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const endDateSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.end_date > b.end_date ? 1 : -1
         );
         props.setCurrentOffers(sortOffers);
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const endDateSortReverse = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.end_date > b.end_date ? 1 : -1
         );
         props.setCurrentOffers(sortOffers.reverse());
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const postDateSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.post_time > b.post_time ? 1 : -1
         );
         props.setCurrentOffers(sortOffers.reverse());
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const offerTitleSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.offer_title > b.offer_title ? 1 : -1
         );
         props.setCurrentOffers(sortOffers);
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const offerTitleSortReverse = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var sortOffers = props.currentOffers.sort((a, b) =>
             a.offer_title > b.offer_title ? 1 : -1
         );
         props.setCurrentOffers(sortOffers.reverse());
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const onResetPress = (latitude, longitude) => {
         setActiveButton(null);
         props.getOffers(latitude, longitude, 2);
-        props.setScrollMethodCall(true)
-        props.onScrollUp()
+        props.setScrollMethodCall(true);
+        props.onScrollUp();
         props.toggleModal();
-
     };
 
     return (
@@ -198,7 +197,6 @@ const offerSort = (props) => {
                             flexDirection: "row",
                         }}
                     >
-
                         <SortToggleButton
                             value="Title : A to Z"
                             status={
@@ -237,7 +235,6 @@ const offerSort = (props) => {
                             flexDirection: "row",
                         }}
                     >
-
                         <SortToggleButton
                             value={ButtonNames.start_date_asc}
                             status={

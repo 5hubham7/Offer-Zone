@@ -77,6 +77,10 @@ const MyShops = ({ navigation }) => {
         );
     };
 
+    const updateShopHandler = (shopID) => {
+        navigation.navigate("UpdateShops");
+    };
+
     const deleteShop = async (shopID) => {
         startLoading();
         let sellerID = "";
@@ -132,6 +136,7 @@ const MyShops = ({ navigation }) => {
                 shopData={shopData}
                 getMyShops={getMyShops}
                 deleteShopHandler={deleteShopHandler}
+                updateShopHandler={updateShopHandler}
                 navigation={navigation}
             />
             <FAB

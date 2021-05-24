@@ -7,9 +7,8 @@ import { LoginContext } from "./context/LoginContext";
 import styles from "../styles/LoginStyles";
 
 const LoginButtons = (navigation) => {
-    const { emailLogin, phoneLogin, signInWithGoogle } = React.useContext(
-        LoginContext
-    );
+    const { emailLogin, phoneLogin, signInWithGoogle } =
+        React.useContext(LoginContext);
 
     return (
         <View>
@@ -73,7 +72,7 @@ const LoginButtons = (navigation) => {
                             { fontWeight: "bold", width: 100 },
                         ]}
                     >
-                        {"  "}
+                        {" "}
                         Sign Up
                     </Text>
                 </TouchableOpacity>

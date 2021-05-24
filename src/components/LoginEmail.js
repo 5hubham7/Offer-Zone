@@ -228,7 +228,7 @@ const LoginWithEmail = (navigation) => {
                                             size={20}
                                         />
                                         {"  "}
-                                        Continue
+                                        Log In
                                     </Text>
                                 </LinearGradient>
                             </TouchableOpacity>
@@ -250,10 +250,10 @@ const LoginWithEmail = (navigation) => {
                                 <Text
                                     style={[
                                         styles.footerText,
-                                        { fontWeight: "bold", width: 100 },
+                                        { fontWeight: "bold" },
                                     ]}
                                 >
-                                    {"  "}
+                                    {" "}
                                     Go Back
                                 </Text>
                             </TouchableOpacity>

@@ -35,6 +35,7 @@ import MyShops from "./src/screens/MyShops";
 import SaveOffers from "./src/screens/SaveOffers";
 import AddOffers from "./src/screens/AddOffers";
 import UpdateOffers from "./src/screens/UpdateOffers";
+import UpdateShops from "./src/screens/UpdateShops";
 import AddShops from "./src/screens/AddShops";
 import ShopOffers from "./src/screens/ShopOffers";
 
@@ -257,6 +258,10 @@ const App = () => {
                             <Drawer.Screen
                                 name="AddShops"
                                 component={AddShops}
+                            />
+                            <Drawer.Screen
+                                name="UpdateShops"
+                                component={UpdateShops}
                             />
                             <Drawer.Screen
                                 name="SaveOffers"
