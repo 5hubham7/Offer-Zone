@@ -274,7 +274,7 @@ const userDetails = ({ navigation, route }) => {
                                     size={20}
                                 />
                                 {"  "}
-                                Continue
+                                Sign Up
                             </Text>
                         </LinearGradient>
                     </TouchableOpacity>

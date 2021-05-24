@@ -219,6 +219,11 @@ const MyShopsCard = (props) => {
                                                                 colors.editIcon
                                                             }
                                                             size={25}
+                                                            onPress={() => {
+                                                                props.updateShopHandler(
+                                                                    element.shop_id
+                                                                );
+                                                            }}
                                                         />
                                                     </View>
                                                 </TouchableOpacity>

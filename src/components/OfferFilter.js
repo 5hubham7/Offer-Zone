@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import styles, { pickerSelectStyles } from "../styles/OfferFilterStyle";
 import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
-import SortToggleButton from "./sortToggleButton";
+import SortToggleButton from "./SortToggleButton";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
 import { useTheme } from "@react-navigation/native";
@@ -47,7 +47,7 @@ const offerFilter = (props) => {
 
     const resetFilters = () => {
         setSelectCatogory("All");
-        props.setScrollMethodCall(true)
+        props.setScrollMethodCall(true);
         setActiveButton(null);
         setSelectCity("Current");
         setValue({
@@ -90,7 +90,7 @@ const offerFilter = (props) => {
     }, []);
 
     const onApplayPress = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         filterParameter = {
             catogory: selectCatogory,
             city: selectCity,
@@ -125,7 +125,7 @@ const offerFilter = (props) => {
             mm = "0" + mm;
         }
         return yyyy + "-" + mm + "-" + dd;
-    }
+    };
 
     /* get date array between sdate and end date */
 
@@ -141,7 +141,7 @@ const offerFilter = (props) => {
     };
 
     const onGoingSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var onGoingOffers = [];
         var today = new Date();
         props.currentOffers.forEach((element) => {
@@ -156,12 +156,12 @@ const offerFilter = (props) => {
         });
         if (onGoingOffers.length > 0) props.setCurrentOffers(onGoingOffers);
         else props.setCurrentOffers("No Offers");
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const exporingSoonSort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var exporingSoonOffers = [];
         var curr = new Date();
         var today = new Date();
@@ -177,12 +177,12 @@ const offerFilter = (props) => {
         if (exporingSoonOffers.length > 0)
             props.setCurrentOffers(exporingSoonOffers);
         else props.setCurrentOffers("No Offers");
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
 
     const todaySort = () => {
-        props.setScrollMethodCall(false)
+        props.setScrollMethodCall(false);
         var todaysOffers = [];
         var today = new Date();
         props.currentOffers.forEach((element) => {
@@ -197,10 +197,9 @@ const offerFilter = (props) => {
         });
         if (todaysOffers.length > 0) props.setCurrentOffers(todaysOffers);
         else props.setCurrentOffers("No Offers");
-        props.onScrollUp()
+        props.onScrollUp();
         props.toggleModal();
     };
-
 
     return (
         <Modal
@@ -394,8 +393,6 @@ const offerFilter = (props) => {
                                 exporingSoonSort();
                             }}
                         />
-
-
                     </View>
                 </View>
 

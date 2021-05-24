@@ -195,10 +195,10 @@ const LoginPhone = (navigation) => {
                             <Text
                                 style={[
                                     styles.footerText,
-                                    { fontWeight: "bold", width: 100 },
+                                    { fontWeight: "bold" },
                                 ]}
                             >
-                                {"  "}
+                                {" "}
                                 Go Back
                             </Text>
                         </TouchableOpacity>

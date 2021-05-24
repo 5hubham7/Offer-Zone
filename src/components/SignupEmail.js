@@ -366,7 +366,7 @@ const SignupEmail = (navigation) => {
                                     { fontWeight: "bold", width: 100 },
                                 ]}
                             >
-                                {"  "}
+                                {" "}
                                 Log In
                             </Text>
                         </TouchableOpacity>

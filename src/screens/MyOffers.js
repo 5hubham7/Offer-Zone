@@ -78,6 +78,18 @@ const MyOffers = ({ navigation }) => {
         navigation.navigate("AddOffers");
     };
 
+    const editOfferHandler = async (offerID) => {
+        let sellerID = "";
+        try {
+            sellerID = await AsyncStorage.getItem("userToken");
+        } catch (error) {
+            console.log(error);
+        }
+        navigation.navigate("UpdateOffers", {
+            offerID: offerID,
+        });
+    };
+
     const deleteOfferHandler = (offerID) => {
         Alert.alert(
             "Delete Offer",
@@ -162,6 +174,7 @@ const MyOffers = ({ navigation }) => {
                 offerData={offerData}
                 getMyOffers={getMyOffers}
                 deleteOfferHandler={deleteOfferHandler}
+                editOfferHandler={editOfferHandler}
                 navigation={navigation}
                 location={location}
             />

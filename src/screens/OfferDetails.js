@@ -25,8 +25,8 @@ const OfferDetails = ({ navigation, route }) => {
     const [HideDetails, setHideDetails] = React.useState(false);
     const [HideShopDetails, setHideShopDetails] = React.useState(false);
     const [state, setstate] = React.useState({
-        marginBottom: 0
-    })
+        marginBottom: 0,
+    });
     const dateFormatter = (postdate) => {
         //console.log(route.params.offerData)
         const today = new Date();
@@ -48,8 +48,8 @@ const OfferDetails = ({ navigation, route }) => {
     };
 
     React.useEffect(() => {
-        console.log(route)
-    }, [])
+        console.log(route);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -402,17 +402,19 @@ const OfferDetails = ({ navigation, route }) => {
                                     <MapView
                                         style={[styles.map, state]}
                                         region={{
-                                            latitude:
-                                                parseFloat(route.params.offerData.latitude),
-                                            longitude:
-                                                parseFloat(route.params.offerData.longitude),
+                                            latitude: parseFloat(
+                                                route.params.offerData.latitude
+                                            ),
+                                            longitude: parseFloat(
+                                                route.params.offerData.longitude
+                                            ),
                                             latitudeDelta: 0.0022,
                                             longitudeDelta: 0.0021,
                                         }}
                                         onMapReady={() => {
                                             setstate({
-                                                marginBottom: 2
-                                            })
+                                                marginBottom: 2,
+                                            });
                                         }}
                                         zoomEnabled={true}
                                         showsCompass={true}
@@ -426,10 +428,14 @@ const OfferDetails = ({ navigation, route }) => {
                                     >
                                         <Marker
                                             coordinate={{
-                                                latitude:
-                                                    parseFloat(route.params.offerData.latitude),
-                                                longitude:
-                                                    parseFloat(route.params.offerData.longitude),
+                                                latitude: parseFloat(
+                                                    route.params.offerData
+                                                        .latitude
+                                                ),
+                                                longitude: parseFloat(
+                                                    route.params.offerData
+                                                        .longitude
+                                                ),
                                             }}
                                             title={
                                                 route.params.offerData.shop_name
@@ -439,7 +445,6 @@ const OfferDetails = ({ navigation, route }) => {
                                                     .offer_title
                                             }
                                         />
-
                                     </MapView>
                                 </View>
                             </View>

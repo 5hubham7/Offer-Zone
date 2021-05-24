@@ -317,6 +317,11 @@ const MyOfferCard = (props) => {
                                                                 colors.editIcon
                                                             }
                                                             size={25}
+                                                            onPress={() => {
+                                                                props.editOfferHandler(
+                                                                    element.offer_id
+                                                                );
+                                                            }}
                                                         />
                                                     </View>
                                                 </TouchableOpacity>
