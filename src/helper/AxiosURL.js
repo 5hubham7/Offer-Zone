@@ -1,2 +1,2 @@
-const AxiosURL = "https://offerzoneapi.herokuapp.com";
+const AxiosURL = "https://offerzonenodejsapi.herokuapp.com";
 export default AxiosURL;
