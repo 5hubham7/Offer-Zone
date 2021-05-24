@@ -11,7 +11,9 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 import Modal from "react-native-modal";
 import styles from "../styles/OfferSortStyle";
-import SortToggleButton from "./SortToggleButton";
+import axios from "axios";
+import axiosURL from "../helper/AxiosURL";
+import SortToggleButton from "../components/sortToggleButton";
 import { useTheme } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("screen").width;

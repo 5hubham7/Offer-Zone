@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import styles, { pickerSelectStyles } from "../styles/OfferFilterStyle";
 import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
-import SortToggleButton from "./SortToggleButton";
+import SortToggleButton from "../components/sortToggleButton";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
 import { useTheme } from "@react-navigation/native";
@@ -73,7 +73,6 @@ const offerFilter = (props) => {
             else {
                 alert("Something went wrong,please try after some time.")
             }
-
         });
     };
 
@@ -88,7 +87,6 @@ const offerFilter = (props) => {
             else {
                 alert("Something went wrong,please try after some time.")
             }
-
         });
     };
 
@@ -121,7 +119,6 @@ const offerFilter = (props) => {
                 else {
                     alert("Something went wrong,please try after some time.")
                 }
-
             });
     };
 
