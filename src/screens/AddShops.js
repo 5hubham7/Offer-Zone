@@ -27,23 +27,6 @@ import AxiosURL from "../helper/AxiosURL";
 
 const AddShops = ({ navigation, route }) => {
     const { colors } = useTheme();
-    const pickerSelectStyles = {
-        inputIOS: {
-            fontSize: 18,
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            color: colors.text,
-            paddingRight: 30, // to ensure the text is never behind the icon
-        },
-        inputAndroid: {
-            fontSize: 18,
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            color: colors.text,
-            paddingRight: 30, // to ensure the text is never behind the icon
-        },
-        placeholder: { color: "#666666", fontSize: 18 },
-    };
 
     const { startLoading, stopLoading } = React.useContext(AuthContext);
     const [shops, setShops] = useState([]);
@@ -64,6 +47,24 @@ const AddShops = ({ navigation, route }) => {
         offer: [],
         shop_id: "",
     });
+
+    const pickerSelectStyles = {
+        inputIOS: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: shopDetails.category ? colors.formIcon : "#666666",
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        inputAndroid: {
+            fontSize: 18,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            color: shopDetails.category ? colors.formIcon : "#666666",
+            paddingRight: 30, // to ensure the text is never behind the icon
+        },
+        placeholder: { color: "#666666", fontSize: 18 },
+    };
 
     const categories = [
         { label: "Automotive", value: "Automotive" },
@@ -515,9 +516,8 @@ const AddShops = ({ navigation, route }) => {
     useEffect(() => {
         (async () => {
             if (Platform.OS !== "android") {
-                const {
-                    status,
-                } = await Location.requestForegroundPermissionsAsync();
+                const { status } =
+                    await Location.requestForegroundPermissionsAsync();
                 if (status !== "granted") {
                     alert("Permission to access location was denied!");
                     navigation.goBack();
@@ -611,7 +611,9 @@ const AddShops = ({ navigation, route }) => {
                                 style={[
                                     styles.textInput,
                                     {
-                                        color: colors.text,
+                                        color: shopDetails.shop_name
+                                            ? colors.formIcon
+                                            : "#666666",
                                     },
                                 ]}
                                 autoCapitalize="none"
@@ -812,7 +814,9 @@ const AddShops = ({ navigation, route }) => {
                                         style={[
                                             styles.textInput,
                                             {
-                                                color: colors.text,
+                                                color: shopDetails.shop_address
+                                                    ? colors.formIcon
+                                                    : "#666666",
                                             },
                                         ]}
                                         autoCapitalize="none"
@@ -842,7 +846,9 @@ const AddShops = ({ navigation, route }) => {
                                         style={[
                                             styles.textInput,
                                             {
-                                                color: colors.text,
+                                                color: shopDetails.zipcode
+                                                    ? colors.formIcon
+                                                    : "#666666",
                                             },
                                         ]}
                                         autoCapitalize="none"
@@ -858,7 +864,7 @@ const AddShops = ({ navigation, route }) => {
                                         name="location-pin"
                                         size={25}
                                         color={
-                                            shopDetails.shop_address
+                                            shopDetails.zipcode
                                                 ? colors.formIcon
                                                 : "#666666"
                                         }

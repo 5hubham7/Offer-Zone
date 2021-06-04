@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import styles, { pickerSelectStyles } from "../styles/OfferFilterStyle";
 import Slider from "react-native-slider-x";
 import RNPickerSelect from "react-native-picker-select";
-import SortToggleButton from "../components/sortToggleButton";
+import SortToggleButton from "../components/SortToggleButton";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
 import { useTheme } from "@react-navigation/native";
@@ -69,9 +69,8 @@ const offerFilter = (props) => {
                     )
                         allCategories.push({ label: element, value: element });
                 });
-            }
-            else {
-                alert("Something went wrong,please try after some time.")
+            } else {
+                alert("Something went wrong,please try after some time.");
             }
         });
     };
@@ -83,9 +82,8 @@ const offerFilter = (props) => {
                     if (!allCities.includes({ label: element, value: element }))
                         allCities.push({ label: element, value: element });
                 });
-            }
-            else {
-                alert("Something went wrong,please try after some time.")
+            } else {
+                alert("Something went wrong,please try after some time.");
             }
         });
     };
@@ -115,9 +113,8 @@ const offerFilter = (props) => {
                         props.setCurrentOffers("No Offers");
                         props.toggleModal();
                     }
-                }
-                else {
-                    alert("Something went wrong,please try after some time.")
+                } else {
+                    alert("Something went wrong,please try after some time.");
                 }
             });
     };

@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import styles from "../styles/OfferSortStyle";
 import axios from "axios";
 import axiosURL from "../helper/AxiosURL";
-import SortToggleButton from "../components/sortToggleButton";
+import SortToggleButton from "../components/SortToggleButton";
 import { useTheme } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("screen").width;
